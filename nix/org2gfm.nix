@@ -3,7 +3,7 @@
 , findutils
 , ox-gfm
 , writeText
-, nix-project-common
+, nix-project-lib
 }:
 
 let
@@ -30,7 +30,7 @@ let
 
 in
 
-nix-project-common.writeShellChecked "org2gfm"
+nix-project-lib.writeShellChecked "org2gfm"
 ''
 set -eu
 
@@ -39,7 +39,7 @@ EVALUATE=false
 NIX_EXE=
 
 
-. "${nix-project-common.lib-sh}/bin/lib.sh"
+. "${nix-project-lib.lib-sh}/bin/lib.sh"
 
 print_usage()
 {

@@ -1,4 +1,3 @@
 with (import ./nix); {
-    lib = common;
-    inherit nix-project org2gfm;
+    inherit lib nix-project org2gfm;
 }

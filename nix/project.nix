@@ -4,10 +4,10 @@
 , gnutar
 , gzip
 , niv
-, nix-project-common
+, nix-project-lib
 }:
 
-nix-project-common.writeShellChecked "nix-project"
+nix-project-lib.writeShellChecked "nix-project"
 ''
 set -eu
 
@@ -18,7 +18,7 @@ TOKEN=~/.config/nix-project/github.token
 COMMAND=
 
 
-. "${nix-project-common.lib-sh}/bin/lib.sh"
+. "${nix-project-lib.lib-sh}/bin/lib.sh"
 
 print_usage()
 {
