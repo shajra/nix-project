@@ -7,7 +7,7 @@
 , nix-project-common
 }:
 
-nix-project-common.writeScript "nix-project"
+nix-project-common.writeShellChecked "nix-project"
 ''
 set -eu
 

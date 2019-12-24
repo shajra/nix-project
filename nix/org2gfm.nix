@@ -30,7 +30,7 @@ let
 
 in
 
-nix-project-common.writeScript "org2gfm"
+nix-project-common.writeShellChecked "org2gfm"
 ''
 set -eu
 

@@ -5,7 +5,7 @@
 
 rec {
 
-    writeScript = name: body:
+    writeShellChecked = name: body:
         (writeShellScriptBin name body).overrideAttrs (old: {
             buildCommand = ''
                 ${old.buildCommand}
@@ -13,7 +13,7 @@ rec {
             '';
         });
 
-    lib-sh = writeScript "lib.sh" ''
+    lib-sh = writeShellChecked "lib.sh" ''
         add_nix_to_path()
         {
             local nix_exe="$1"
