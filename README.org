@@ -237,7 +237,7 @@
      init                     Initialize a Nix project. Existing files won't be
 			      modified.
      add                      Add a GitHub dependency
-     show
+     show                     
      update                   Update dependencies
      modify                   Modify dependency
      drop                     Drop dependency
@@ -282,12 +282,13 @@
 
    OPTIONS:
 
-       -h, --help         print this help message
-       -e, --evaluate     evaluate all SRC blocks
-       -E, --no-evaluate  don't evaluate any SRC blocks (default)
-       -n, --nix NIX_EXE  filepath to 'nix' binary to put on PATH
-       -N, --no-nix       don't put found Nix binaries on PATH
-			  (default)
+       -h, --help          print this help message
+       -e, --evaluate      evaluate all SRC blocks
+       -E, --no-evaluate   don't evaluate any SRC blocks (default)
+       -n, --nix NIX_EXE   filepath to 'nix' binary to put on PATH
+       -N, --no-nix        don't put found Nix binaries on PATH
+			   (default)
+       -i, --ignore REGEX  ignore matched paths when searching
 
        This script is recommended for use in a clean environment
        with a PATH controlled by Nix.  This helps make executed

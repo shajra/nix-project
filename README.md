@@ -119,37 +119,37 @@ support/dependencies-upgrade --help
 ```
 
     USAGE:
-
+    
         nix-project [OPTION]... --scaffold
         nix-project [OPTION]... --upgrade
         nix-project [OPTION]... --niv -- COMMAND...
-
+    
     DESCRIPTION:
-
+    
         A wrapper of Niv for managing Nix dependencies to assure
         dependencies Niv uses are pinned with Nix.  Also provides a
         '--scaffold' command to set up an directory as a project
         using 'nix-project'.
-
+    
         If multiple commands or switches are specified, the last one
         is used.
-
+    
     COMMANDS:
-
+    
         -s, --scaffold  set up current directory with example scripts
         -u, --upgrade   upgrade dependencies with Niv
         -n, --niv       pass arguments directly to Niv
-
+    
         Note '--upgrade' runs the following in one step:
-
+    
     	niv init; niv update
-
+    
     OPTIONS:
-
+    
         -h, --help          print this help message
         -g, --github-token  file with GitHub API token
         -N, --nix           filepath of 'nix' executable to use
-
+    
         'nix-project' pins all dependencies except for Nix itself,
          which it finds on the path if possible.  Otherwise set
          '--nix'.
@@ -159,20 +159,20 @@ support/dependencies-upgrade --niv -- --help
 ```
 
     niv - dependency manager for Nix projects
-
+    
     version: 0.2.9
-
+    
     Usage: niv [-s|--sources-file FILE] COMMAND
-
+    
     Available options:
       -s,--sources-file FILE   Use FILE instead of nix/sources.json
       -h,--help                Show this help text
-
+    
     Available commands:
       init                     Initialize a Nix project. Existing files won't be
     			   modified.
       add                      Add a GitHub dependency
-      show
+      show                     
       update                   Update dependencies
       modify                   Modify dependency
       drop                     Drop dependency
@@ -192,30 +192,31 @@ support/docs-generate --help
 ```
 
     USAGE: org2gfm [OPTION]...  [FILE]...
-
+    
     DESCRIPTION:
-
+    
         Uses Emacs to convert Org-mode files to GitHub Flavored
         Markdown, which are written to sibling ".md" files.  If no
         files are specified, then all '*.org' files found recursively
         from the current working directory are used instead.
-
+    
     OPTIONS:
-
-        -h, --help         print this help message
-        -e, --evaluate     evaluate all SRC blocks
-        -E, --no-evaluate  don't evaluate any SRC blocks (default)
-        -n, --nix NIX_EXE  filepath to 'nix' binary to put on PATH
-        -N, --no-nix       don't put found Nix binaries on PATH
-    		       (default)
-
+    
+        -h, --help          print this help message
+        -e, --evaluate      evaluate all SRC blocks
+        -E, --no-evaluate   don't evaluate any SRC blocks (default)
+        -n, --nix NIX_EXE   filepath to 'nix' binary to put on PATH
+        -N, --no-nix        don't put found Nix binaries on PATH
+    			(default)
+        -i, --ignore REGEX  ignore matched paths when searching
+    
         This script is recommended for use in a clean environment
         with a PATH controlled by Nix.  This helps make executed
         source blocks more deterministic.  However, if the source
         blocks need to execute Nix commands, it's best to use the Nix
         version already installed on the system, rather than a pinned
         version.  This is what the '-n' option is for.
-
+    
         If using both '-e' and '-E' options (or similarly '-n' and
         '-N'), the last one is overriding (useful for
         automation/defaults).
