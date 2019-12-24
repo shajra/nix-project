@@ -24,13 +24,13 @@ rec {
             fi
             export PATH
         }
-        
+
         path_for()
         {
             "${coreutils}"/bin/dirname \
                 "$("${coreutils}"/bin/readlink --canonicalize "$1")"
         }
-        
+
         die()
         {
             print_usage >&2

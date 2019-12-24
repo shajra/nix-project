@@ -1,5 +1,7 @@
 let
+
     sources = import ./sources.nix;
+
     pkgs    = import sources.nixpkgs { config = {}; };
     lib  = pkgs.callPackage (import ./lib.nix) {};
     org2gfm = pkgs.callPackage (import ./org2gfm.nix) {

@@ -237,7 +237,7 @@
      init                     Initialize a Nix project. Existing files won't be
 			      modified.
      add                      Add a GitHub dependency
-     show                     
+     show
      update                   Update dependencies
      modify                   Modify dependency
      drop                     Drop dependency
