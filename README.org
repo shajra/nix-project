@@ -5,11 +5,13 @@
 
 * About this project
 
-  This project helps set up projects use the [[nix][Nix package manager]] better.
-  Specifically, it provides two scripts:
+  This project assists the setup of other projects with the [[nix][Nix package
+  manager]]. Specifically, it provides two scripts:
 
-  - =nix-project= to help scaffold a Nix-based project and update dependencies with [[niv][Niv]].
-  - =org2gfm= to generate [[gfm][GitHub Flavored Markdown (GFM)]] from [[org][Emacs Org-mode]] files.
+  - =nix-project= to help scaffold a Nix-based project and update dependencies
+    with [[niv][Niv]].
+  - =org2gfm= to generate [[gfm][GitHub Flavored Markdown (GFM)]] from [[org][Emacs Org-mode]]
+    files.
 
   You can use this project directly (the author does). But it's also not a lot
   of code. So you could just borrow ideas from it for your own projects.
@@ -21,14 +23,13 @@
    on a system.  The same applies to tools for generating documentation.
 
    Nix can build and install projects in a way that's precise, repeatable, and
-   guaranteed not to conflict with anything you already have installed in a
-   system. Nix pulls down dependencies that aren't on a system. And Nix can
+   guaranteed not to conflict with anything already installed. Nix can even
    concurrently provide multiple versions of any dependency without conflicts.
 
    Furthermore, Nix supports building a variety of languages and can provide
-   tooling to integrate them into new packages.  In many cases, Nix picks up
-   where native tooling stops, layering on top of the tools and techniques we're
-   already familiar with.
+   tooling to integrate them into new packages. In many cases, Nix picks up
+   where language-specific tooling stops, layering on top of the tools and
+   techniques we're already familiar with.
 
    All of this makes Nix an attractive tool for managing almost any software
    project.
@@ -37,17 +38,18 @@
 
    One of the benefits of Nix is that it pins our dependencies to specific
    versions. When they are downloaded, they are parity checked with an
-   explicitly provided hash. Each new dependency (or new version of a
-   dependency) requires the specification of a new hash. But these hashes can be
-   a chore to maintain when upgrading many dependencies.
+   explicitly provided hash. Because each new version of each dependency
+   requires a new hash, maintaining these hashes can be a chore, especially
+   when upgrading many dependencies to their latest versions.
 
    Fortunately, a tool called [[niv][Niv]] provides a command-line tool =niv= to make
    upgrading dependencies as simple a single command.
 
    You could use =niv= directly, but it has some dependencies it expects to be
-   pre-installed. Although not often a problem, Niv's reliance on preexisting
-   installations isn't in the spirit of Nix. We want Nix to download all
-   dependencies for us. That's why we're using Nix in the first place.
+   already installed. Although not often a problem, Niv's reliance on
+   preexisting installations isn't in the spirit of Nix. We want Nix to
+   download all dependencies for us. That's why we're using Nix in the first
+   place.
 
    The =nix-project= script provided by this project wraps =niv= such that all
    the dependencies it needs are provided by Nix. It can also help scaffold a
@@ -64,19 +66,21 @@
    The state of literate programming is not that advanced in general. However,
    [[org][Emacs' Org-mode]] has some fairly compelling features in the spirit of literate
    programming. With Org-mode, we can evaluate code blocks and inject the
-   results in blocks right below the code. And this can then be exported to the
-   format of our choice.
+   results in blocks right below the code. And this all can then be exported to
+   the format of our choice.
 
-   Manually managing an Emacs installation, including requisite plug-ins, is
+   Manually managing an Emacs installation, including requisite plugins, is
    historically hard to do consistently and portably. Fortunately, Nix can
    install in a precisely configured Emacs as a dependency without conflicting
    with any installations of Emacs already on a system.
 
    The =org2gfm= script orchestrates Nix's configuration, installation, and
-   execution of Emacs to generate our documentation. Note that as its name
-   implies =org2gfm= only generates [[gfm][GitHub Flavored Markdown (GFM)]] from
-   Org-mode files. This is currently all the author needs for projects already
-   hosted on GitHub.
+   execution of Emacs to generate our documentation. Emacs is run in a headless
+   mode by =org2gfm=, so the fact we're using Emacs at all is hidden.
+
+   Note that as its name implies =org2gfm= only generates [[gfm][GitHub Flavored
+   Markdown (GFM)]] from Org-mode files. This is currently all the author needs
+   for projects already hosted on GitHub.
 
 * Usage
 
@@ -97,7 +101,7 @@
    #+END_SRC
 
    This script will download a distribution-independent binary tarball
-   containing Nix and its dependencies, and unpack it in `/nix`.
+   containing Nix and its dependencies, and unpack it in =/nix=.
 
    If you prefer to install Nix another way, reference the [[nix-install][Nix manual]]
 
@@ -164,15 +168,18 @@
    dependencies.
 
    See the [[niv][Niv]] documentation on how to manage dependencies. You can run Niv
-   commands directly with =dependencies-upgrade=. For instance, to run the
+   commands directly with =dependencies-upgrade=. For example, to run the
    equivalent of ~niv show~ you can run
 
    #+BEGIN_SRC shell :eval no
      support/dependencies-upgrade --niv -- show
    #+END_SRC
 
-   You can also use the ~--help~ switch with both =dependencies-upgrade= and
-   =niv=:
+   You can also use =dependencies-upgrade= to see the help messages for both
+   =nix-project= and =niv=.
+
+   Using the ~--help~ switch directly with =dependencies-upgrade= shows the
+   help for =nix-project=, which it delegates to.
 
    #+BEGIN_SRC shell :results output :exports both
      support/dependencies-upgrade --help
@@ -217,6 +224,9 @@
 	'--nix'.
 
    #+end_example
+
+  Since =nix-project= can pass through commands to =niv= we can see the help
+  for Niv with the following command:
 
    #+BEGIN_SRC shell :results output :exports both
      support/dependencies-upgrade --niv -- --help
@@ -264,7 +274,7 @@
    #+END_QUOTE
 
    For reference, here's the documentation from the ~--help~ switch for
-   =docs-generate=/=org2gfm=:
+   =docs-generate= / =org2gfm=:
 
    #+BEGIN_SRC shell :results output :exports both
      support/docs-generate --help
@@ -328,24 +338,23 @@
 * Release
 
   The "master" branch of the repository on GitHub has the latest released version
-  of this code. There is currently no commitment to either forward or backwards
+  of this code. There is currently no commitment to either forward or backward
   compatibility.
 
-  The "user/shajra" branch is a personal branch that is force-pushed to. The
+  "user/shajra" branches are personal branches that may be force-pushed to. The
   "master" branch should not experience force-pushes and is recommended for
   general use.
 
 * License
 
-  All files in this "org2gfm" project are licensed under the terms of
-  GPLv3 or (at your option) any later version.
+  All files in this "nix-project" project are licensed under the terms of GPLv3
+  or (at your option) any later version.
 
   Please see the [[./COPYING.md][./COPYING.md]] file for more details.
 
 * Contribution
 
-  Feel free to file issues and submit pull requests with GitHub.  For now, this
-  script meets a very specific documentation need and doesn't have too much.
+  Feel free to file issues and submit pull requests with GitHub.
 
   There is only one author to date, so the following copyright covers all files
   in this project:

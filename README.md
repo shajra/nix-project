@@ -17,7 +17,7 @@
 
 # About this project<a id="sec-1"></a>
 
-This project helps set up projects use the [Nix package manager](https://nixos.org/nix) better. Specifically, it provides two scripts:
+This project assists the setup of other projects with the [Nix package manager](https://nixos.org/nix). Specifically, it provides two scripts:
 
 -   `nix-project` to help scaffold a Nix-based project and update dependencies with [Niv](https://github.com/nmattia/niv).
 -   `org2gfm` to generate [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/) from [Emacs Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html) files.
@@ -28,19 +28,19 @@ You can use this project directly (the author does). But it's also not a lot of 
 
 When making a new software project, wrangling dependencies can be a chore. For instance, Makefiles can call external dependencies that may or may not be on a system. The same applies to tools for generating documentation.
 
-Nix can build and install projects in a way that's precise, repeatable, and guaranteed not to conflict with anything you already have installed in a system. Nix pulls down dependencies that aren't on a system. And Nix can concurrently provide multiple versions of any dependency without conflicts.
+Nix can build and install projects in a way that's precise, repeatable, and guaranteed not to conflict with anything already installed. Nix can even concurrently provide multiple versions of any dependency without conflicts.
 
-Furthermore, Nix supports building a variety of languages and can provide tooling to integrate them into new packages. In many cases, Nix picks up where native tooling stops, layering on top of the tools and techniques we're already familiar with.
+Furthermore, Nix supports building a variety of languages and can provide tooling to integrate them into new packages. In many cases, Nix picks up where language-specific tooling stops, layering on top of the tools and techniques we're already familiar with.
 
 All of this makes Nix an attractive tool for managing almost any software project.
 
 ## Managing dependencies with Nix and Niv<a id="sec-1-2"></a>
 
-One of the benefits of Nix is that it pins our dependencies to specific versions. When they are downloaded, they are parity checked with an explicitly provided hash. Each new dependency (or new version of a dependency) requires the specification of a new hash. But these hashes can be a chore to maintain when upgrading many dependencies.
+One of the benefits of Nix is that it pins our dependencies to specific versions. When they are downloaded, they are parity checked with an explicitly provided hash. Because each new version of each dependency requires a new hash, maintaining these hashes can be a chore, especially when upgrading many dependencies to their latest versions.
 
 Fortunately, a tool called [Niv](https://github.com/nmattia/niv) provides a command-line tool `niv` to make upgrading dependencies as simple a single command.
 
-You could use `niv` directly, but it has some dependencies it expects to be pre-installed. Although not often a problem, Niv's reliance on preexisting installations isn't in the spirit of Nix. We want Nix to download all dependencies for us. That's why we're using Nix in the first place.
+You could use `niv` directly, but it has some dependencies it expects to be already installed. Although not often a problem, Niv's reliance on preexisting installations isn't in the spirit of Nix. We want Nix to download all dependencies for us. That's why we're using Nix in the first place.
 
 The `nix-project` script provided by this project wraps `niv` such that all the dependencies it needs are provided by Nix. It can also help scaffold a new project to use all the scripts provided by this project.
 
@@ -48,11 +48,13 @@ The `nix-project` script provided by this project wraps `niv` such that all the 
 
 In addition to building and distributing a project, we often want to document it as well. Good documentation often has example snippets of code and output/results. Ideally, these snippets of documentation can be generated with automation, so that they reflect the code in the project. This leads to some form of [literate programming](https://en.wikipedia.org/wiki/Literate_programming).
 
-The state of literate programming is not that advanced in general. However, [Emacs' Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html) has some fairly compelling features in the spirit of literate programming. With Org-mode, we can evaluate code blocks and inject the results in blocks right below the code. And this can then be exported to the format of our choice.
+The state of literate programming is not that advanced in general. However, [Emacs' Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html) has some fairly compelling features in the spirit of literate programming. With Org-mode, we can evaluate code blocks and inject the results in blocks right below the code. And this all can then be exported to the format of our choice.
 
-Manually managing an Emacs installation, including requisite plug-ins, is historically hard to do consistently and portably. Fortunately, Nix can install in a precisely configured Emacs as a dependency without conflicting with any installations of Emacs already on a system.
+Manually managing an Emacs installation, including requisite plugins, is historically hard to do consistently and portably. Fortunately, Nix can install in a precisely configured Emacs as a dependency without conflicting with any installations of Emacs already on a system.
 
-The `org2gfm` script orchestrates Nix's configuration, installation, and execution of Emacs to generate our documentation. Note that as its name implies `org2gfm` only generates [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/) from Org-mode files. This is currently all the author needs for projects already hosted on GitHub.
+The `org2gfm` script orchestrates Nix's configuration, installation, and execution of Emacs to generate our documentation. Emacs is run in a headless mode by `org2gfm`, so the fact we're using Emacs at all is hidden.
+
+Note that as its name implies `org2gfm` only generates [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/) from Org-mode files. This is currently all the author needs for projects already hosted on GitHub.
 
 # Usage<a id="sec-2"></a>
 
@@ -66,7 +68,7 @@ If you don't already have Nix, the official installation script should work on a
 curl https://nixos.org/nix/install | sh
 ```
 
-This script will download a distribution-independent binary tarball containing Nix and its dependencies, and unpack it in \`/nix\`.
+This script will download a distribution-independent binary tarball containing Nix and its dependencies, and unpack it in `/nix`.
 
 If you prefer to install Nix another way, reference the [Nix manual](https://nixos.org/nix/manual/#chap-installation)
 
@@ -106,13 +108,15 @@ The scripts in the `support` directory are mostly calls to `nix run`, similarly 
 
 In your newly scaffolded project, you can call `dependencies-upgrade` with no arguments to upgrade all your dependencies. But it will likely do nothing, because a freshly scaffolded project already has the latest dependencies.
 
-See the [Niv](https://github.com/nmattia/niv) documentation on how to manage dependencies. You can run Niv commands directly with `dependencies-upgrade`. For instance, to run the equivalent of `niv show` you can run
+See the [Niv](https://github.com/nmattia/niv) documentation on how to manage dependencies. You can run Niv commands directly with `dependencies-upgrade`. For example, to run the equivalent of `niv show` you can run
 
 ```shell
 support/dependencies-upgrade --niv -- show
 ```
 
-You can also use the `--help` switch with both `dependencies-upgrade` and `niv`:
+You can also use `dependencies-upgrade` to see the help messages for both `nix-project` and `niv`.
+
+Using the `--help` switch directly with `dependencies-upgrade` shows the help for `nix-project`, which it delegates to.
 
 ```shell
 support/dependencies-upgrade --help
@@ -154,6 +158,8 @@ support/dependencies-upgrade --help
          which it finds on the path if possible.  Otherwise set
          '--nix'.
 
+Since `nix-project` can pass through commands to `niv` we can see the help for Niv with the following command:
+
 ```shell
 support/dependencies-upgrade --niv -- --help
 ```
@@ -185,7 +191,7 @@ Notice that the `support/docs-generate` script includes the `pkgs.coreutils` pac
 
 > **<span class="underline">NOTE</span>**: Since `docs-generate` writes over files in-place, source control is highly recommended to protect against the loss of documentation.
 
-For reference, here's the documentation from the `--help` switch for `docs-generate=/=org2gfm`:
+For reference, here's the documentation from the `--help` switch for `docs-generate` / `org2gfm`:
 
 ```shell
 support/docs-generate --help
@@ -235,19 +241,19 @@ See the [Nix manual](https://nixos.org/nix/manual) and [Nixpkgs manual](https://
 
 # Release<a id="sec-3"></a>
 
-The "master" branch of the repository on GitHub has the latest released version of this code. There is currently no commitment to either forward or backwards compatibility.
+The "master" branch of the repository on GitHub has the latest released version of this code. There is currently no commitment to either forward or backward compatibility.
 
-The "user/shajra" branch is a personal branch that is force-pushed to. The "master" branch should not experience force-pushes and is recommended for general use.
+"user/shajra" branches are personal branches that may be force-pushed to. The "master" branch should not experience force-pushes and is recommended for general use.
 
 # License<a id="sec-4"></a>
 
-All files in this "org2gfm" project are licensed under the terms of GPLv3 or (at your option) any later version.
+All files in this "nix-project" project are licensed under the terms of GPLv3 or (at your option) any later version.
 
 Please see the [./COPYING.md](./COPYING.md) file for more details.
 
 # Contribution<a id="sec-5"></a>
 
-Feel free to file issues and submit pull requests with GitHub. For now, this script meets a very specific documentation need and doesn't have too much.
+Feel free to file issues and submit pull requests with GitHub.
 
 There is only one author to date, so the following copyright covers all files in this project:
 
