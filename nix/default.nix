@@ -3,13 +3,23 @@ let
     sources = import ./sources.nix;
 
     pkgs    = import sources.nixpkgs { config = {}; };
-    lib  = pkgs.callPackage (import ./lib.nix) {};
-    org2gfm = pkgs.callPackage (import ./org2gfm.nix) {
-        ox-gfm = sources.ox-gfm;
-        nix-project-lib = lib;
-    };
-    nix-project = pkgs.callPackage (import ./project.nix) {
+
+    nix-project-lib = pkgs.callPackage (import ./lib.nix) {};
+
+    nix-project-exe = pkgs.callPackage (import ./project.nix) {
         niv = (import sources.niv {}).niv;
-        nix-project-lib = lib;
+        inherit nix-project-lib;
     };
-in { inherit lib org2gfm nix-project pkgs; }
+
+    nix-project-org2gfm = pkgs.callPackage (import ./org2gfm.nix) {
+        ox-gfm = sources.ox-gfm;
+        inherit nix-project-lib;
+    };
+
+in {
+    inherit
+    nix-project-exe
+    nix-project-lib
+    nix-project-org2gfm
+    pkgs;
+}

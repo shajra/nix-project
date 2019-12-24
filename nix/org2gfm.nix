@@ -1,6 +1,7 @@
 { coreutils
 , emacsWithPackages
 , findutils
+, gnugrep
 , ox-gfm
 , writeText
 , nix-project-lib
@@ -36,6 +37,7 @@ set -eu
 
 
 EVALUATE=false
+IGNORE_REGEX=
 NIX_EXE=
 
 
@@ -55,12 +57,13 @@ DESCRIPTION:
 
 OPTIONS:
 
-    -h, --help         print this help message
-    -e, --evaluate     evaluate all SRC blocks
-    -E, --no-evaluate  don't evaluate any SRC blocks (default)
-    -n, --nix NIX_EXE  filepath to 'nix' binary to put on PATH
-    -N, --no-nix       don't put found Nix binaries on PATH
-                       (default)
+    -h, --help          print this help message
+    -e, --evaluate      evaluate all SRC blocks
+    -E, --no-evaluate   don't evaluate any SRC blocks (default)
+    -n, --nix NIX_EXE   filepath to 'nix' binary to put on PATH
+    -N, --no-nix        don't put found Nix binaries on PATH
+                        (default)
+    -i, --ignore REGEX  ignore matched paths when searching
 
     This script is recommended for use in a clean environment
     with a PATH controlled by Nix.  This helps make executed
@@ -101,6 +104,13 @@ main()
         -N|--no-nix)
             NIX_EXE=
             ;;
+        -i|--ignore)
+            IGNORE_REGEX="''${2:-}"
+            if [ -z "$IGNORE_REGEX" ]
+            then die "$1 requires argument"
+            fi
+            shift
+            ;;
         *)
             break
             ;;
@@ -124,9 +134,9 @@ generate_gfm_args()
 
 generate_gfm_found()
 {
-    ${findutils}/bin/find . \
-        -name '*.org' | \
-    {
+    ${findutils}/bin/find .  -name '*.org' \
+    | ignore_regex \
+    | {
         while read -r f
         do generate_gfm "$f"
         done
@@ -157,6 +167,14 @@ generate_gfm()
             --eval "(princ buffer-file-name 'external-debugging-output)" \
             --eval "(princ \"\\n\" 'external-debugging-output)" \
             --funcall org-gfm-export-to-markdown
+    fi
+}
+
+ignore_regex()
+{
+    if [ -n "$IGNORE_REGEX" ]
+    then ${gnugrep}/bin/grep -v "$IGNORE_REGEX"
+    else cat -
     fi
 }
 

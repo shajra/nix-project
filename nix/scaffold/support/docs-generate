@@ -8,6 +8,6 @@ cd "$(dirname "$0")/.."
 nix run \
     --ignore-environment \
     --file nix \
-    org2gfm \
+    nix-project-org2gfm \
     pkgs.coreutils \
     --command org2gfm --evaluate "$@"
