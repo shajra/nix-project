@@ -81,16 +81,16 @@ main()
             COMMAND=niv
             ;;
         -N|--nix)
-            if [ -z "''${2:-}" ]
-            then die "missing argument: $1"
-            else NIX_EXE="$2"
+            NIX_EXE="''${2:-}"
+            if [ -z "$NIX_EXE" ]
+            then die "$1 requires argument"
             fi
             shift
             ;;
         -g|--github-token)
-            if [ -z "''${2:-}" ]
-            then die "missing argument: $1"
-            else TOKEN="$2"
+            TOKEN="''${2:-}"
+            if [ -z "$TOKEN" ]
+            then die "$1 requires argument"
             fi
             shift
             ;;

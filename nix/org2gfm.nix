@@ -36,7 +36,7 @@ set -eu
 
 
 EVALUATE=false
-PATH_NIX=
+NIX_EXE=
 
 
 . "${nix-project-common.lib-sh}/bin/lib.sh"
@@ -92,14 +92,14 @@ main()
             EVALUATE="false"
             ;;
         -n|--nix)
-            if [ -z "''${2:-}" ]
-            then die "missing argument: $1"
-            else PATH_NIX="$2"
+            NIX_EXE="''${2:-}"
+            if [ -z "$NIX_EXE" ]
+            then die "$1 requires argument"
             fi
             shift
             ;;
         -N|--no-nix)
-            PATH_NIX=
+            NIX_EXE=
             ;;
         *)
             break
@@ -108,9 +108,7 @@ main()
         shift
     done
 
-    if [ -n "$PATH_NIX" ]
-    then add_nix_to_path "$PATH_NIX"
-    fi
+    add_nix_to_path "$NIX_EXE"
     if [ "$#" -gt 0 ]
     then generate_gfm_args "$@"
     else generate_gfm_found
@@ -136,8 +134,8 @@ generate_gfm_found()
 }
 
 generate_gfm()
-(
-    filepath="$1"
+{
+    local filepath="$1"
     if [ "$EVALUATE" = true ]
     then
         ${emacs}/bin/emacs \
@@ -160,7 +158,7 @@ generate_gfm()
             --eval "(princ \"\\n\" 'external-debugging-output)" \
             --funcall org-gfm-export-to-markdown
     fi
-)
+}
 
 
 main "$@"
