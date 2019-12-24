@@ -119,18 +119,19 @@
    #+BEGIN_SRC shell :eval no
      nix run \
          --file http://github.com/shajra/nix-project/tarball/master \
-         nix-project --ignore-environment \
+         nix-project-exe --ignore-environment \
          --command nix-project --scaffold --nix `command -v nix`
    #+END_SRC
 
    For those new to Nix, this command downloads a tarball of the project hosted
    on GitHub, and evaluates the =default.nix= file in its root. This file
-   provides some packages, and we're selecting the =nix-project= one. The
+   provides some packages, and we're selecting the =nix-project-exe= one. The
    ~--ignore-environment~ switch is extra, and just ensures that our invocation
    of ~nix run~ is sandboxed and doesn't accidentally reference binaries on our
-   ~PATH~. The =nix-project= package provides a =nix-project= script, which we
-   call with the ~--scaffold~ argument for scaffolding our empty directory. And
-   finally, we use the ~--nix~ switch to indicate which =nix= executable to
+   ~PATH~. The =nix-project-exe= package provides a =nix-project= script, which we
+   call with the arguments following the ~--command~ switch.  We tell
+   =nix-project= to scaffold our empty directory with the ~--scaffold~ switch.
+   And finally, we use the ~--nix~ switch to indicate which =nix= executable to
    use. We use Nix to pull in dependencies, but it is not recommended to use a
    different version of Nix than is installed on the system. So we allow
    references outside our sandboxed environment for just Nix itself.
