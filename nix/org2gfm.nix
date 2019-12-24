@@ -118,7 +118,9 @@ main()
         shift
     done
 
-    add_nix_to_path "$NIX_EXE"
+    if [ -n "$NIX_EXE" ]
+    then add_nix_to_path "$NIX_EXE"
+    fi
     if [ "$#" -gt 0 ]
     then generate_gfm_args "$@"
     else generate_gfm_found
