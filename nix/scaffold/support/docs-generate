@@ -7,7 +7,7 @@ cd "$(dirname "$0")/.."
 # package you like.
 nix run \
     --ignore-environment \
-    --file nix \
+    --file '@NIV_DIR@' \
     nix-project-org2gfm \
     pkgs.coreutils \
     --command org2gfm --evaluate "$@"
