@@ -38,7 +38,7 @@ All of this makes Nix an attractive tool for managing almost any software projec
 
 One of the benefits of Nix is that it pins our dependencies to specific versions. When they are downloaded, they are parity checked with an explicitly provided hash. Because each new version of each dependency requires a new hash, maintaining these hashes can be a chore, especially when upgrading many dependencies to their latest versions.
 
-Fortunately, a tool called [Niv](https://github.com/nmattia/niv) provides a command-line tool `niv` to make upgrading dependencies as simple a single command.
+Fortunately, a tool called [Niv](https://github.com/nmattia/niv) provides a command-line tool `niv` to make upgrading dependencies a single command.
 
 You could use `niv` directly, but it has some dependencies it expects to be already installed. Although not often a problem, Niv's reliance on preexisting installations isn't in the spirit of Nix. We want Nix to download all dependencies for us. That's why we're using Nix in the first place.
 
@@ -87,7 +87,7 @@ nix run \
     --command nix-project --scaffold --nix `command -v nix`
 ```
 
-For those new to Nix, this command downloads a tarball of the project hosted on GitHub, and evaluates the `default.nix` file in its root. This file provides some packages, and we're selecting the `nix-project-exe` one. The `--ignore-environment` switch is extra, and just ensures that our invocation of `nix run` is sandboxed and doesn't accidentally reference binaries on our `PATH`. The `nix-project-exe` package provides a `nix-project` script, which we call with the arguments following the `--command` switch. We tell `nix-project` to scaffold our empty directory with the `--scaffold` switch. And finally, we use the `--nix` switch to indicate which `nix` executable to use. We use Nix to pull in dependencies, but it is not recommended to use a different version of Nix than is installed on the system. So we allow references outside our sandboxed environment for just Nix itself.
+For those new to Nix, this command downloads a tarball of this project hosted on GitHub, and evaluates the `default.nix` file in its root. This file provides some packages, and we're selecting the `nix-project-exe` one. The `--ignore-environment` switch is extra, and just ensures that our invocation of `nix run` is sandboxed and doesn't accidentally reference binaries on our `PATH`. The `nix-project-exe` package provides a `nix-project` script, which we call with the arguments following the `--command` switch. We tell `nix-project` to scaffold our empty directory with the `--scaffold` switch. And finally, we use the `--nix` switch to indicate which `nix` executable to use. We use Nix to pull in dependencies, but it is not recommended to use a different version of Nix than is installed on the system. So we allow references outside our sandboxed environment for just Nix itself.
 
 In the freshly scaffolded project, you'll see the following files:
 
@@ -97,10 +97,10 @@ In the freshly scaffolded project, you'll see the following files:
     │   └── sources.nix
     ├── README.org
     └── support
-    ├── dependencies-upgrade
-    └── docs-generate
+        ├── dependencies-upgrade
+        └── docs-generate
 
-`nix/sources.json` and `nix/sources.nix` are modified directly by Niv, but the rest of the files are yours to modify as you see fit.
+`nix/sources.json` and `nix/sources.nix` are modified directly by Niv (via `nix-project` via `dependencies-upgrade`), but the rest of the files are yours to modify as you see fit.
 
 ## Managing dependencies<a id="sec-2-3"></a>
 
@@ -150,9 +150,14 @@ support/dependencies-upgrade --help
     
     OPTIONS:
     
-        -h, --help          print this help message
-        -g, --github-token  file with GitHub API token
-        -N, --nix           filepath of 'nix' executable to use
+        -h, --help             print this help message
+        -t, --target-dir DIR   directory of project to manage
+    			   (default: current directory)
+        -S, --source-dir DIR   directory relative to target for
+    			   Nix files (default: nix)
+        -g, --github-token     file with GitHub API token (default:
+    			   ~/.config/nix-project/github.token)
+        -N, --nix              filepath of 'nix' executable to use
     
         'nix-project' pins all dependencies except for Nix itself,
          which it finds on the path if possible.  Otherwise set
@@ -180,7 +185,8 @@ support/dependencies-upgrade --niv -- --help
       add                      Add a GitHub dependency
       show                     
       update                   Update dependencies
-      modify                   Modify dependency
+      modify                   Modify dependency attributes without performing an
+    			   update
       drop                     Drop dependency
 
 ## Evaluating/exporting documentation<a id="sec-2-4"></a>
