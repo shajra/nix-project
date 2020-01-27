@@ -207,7 +207,7 @@ support/docs-generate --help
     
     DESCRIPTION:
     
-        Uses Emacs to convert Org-mode files to GitHub Flavored
+        Uses Emacs to export Org-mode files to GitHub Flavored
         Markdown, which are written to sibling ".md" files.  If no
         files are specified, then all '*.org' files found recursively
         from the current working directory are used instead.
@@ -215,8 +215,8 @@ support/docs-generate --help
     OPTIONS:
     
         -h, --help          print this help message
-        -e, --evaluate      evaluate all SRC blocks
-        -E, --no-evaluate   don't evaluate any SRC blocks (default)
+        -e, --evaluate      evaluate all SRC blocks before exporting
+        -E, --no-evaluate   don't evaluate before exporting (default)
         -n, --nix NIX_EXE   filepath to 'nix' binary to put on PATH
         -N, --no-nix        don't put found Nix binaries on PATH
     			(default)
@@ -232,6 +232,9 @@ support/docs-generate --help
         If using both '-e' and '-E' options (or similarly '-n' and
         '-N'), the last one is overriding (useful for
         automation/defaults).
+    
+        Note, even with '-E', exporting will evaluate blocks not set
+        to either ':eval no' or ':eval no-export'.
 
 ## GitHub rate limiting of Niv calls<a id="sec-2-5"></a>
 

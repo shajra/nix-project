@@ -182,7 +182,7 @@
    Using the ~--help~ switch directly with =dependencies-upgrade= shows the
    help for =nix-project=, which it delegates to.
 
-   #+BEGIN_SRC shell :results output :exports both
+   #+BEGIN_SRC shell :results output :eval no-export :exports both
      support/dependencies-upgrade --help
    #+END_SRC
 
@@ -234,7 +234,7 @@
   Since =nix-project= can pass through commands to =niv= we can see the help
   for Niv with the following command:
 
-   #+BEGIN_SRC shell :results output :exports both
+   #+BEGIN_SRC shell :results output :eval no-export :exports both
      support/dependencies-upgrade --niv -- --help
    #+END_SRC
 
@@ -283,7 +283,7 @@
    For reference, here's the documentation from the ~--help~ switch for
    =docs-generate= / =org2gfm=:
 
-   #+BEGIN_SRC shell :results output :exports both
+   #+BEGIN_SRC shell :results output :eval no-export :exports both
      support/docs-generate --help
    #+END_SRC
 
@@ -293,7 +293,7 @@
 
    DESCRIPTION:
 
-       Uses Emacs to convert Org-mode files to GitHub Flavored
+       Uses Emacs to export Org-mode files to GitHub Flavored
        Markdown, which are written to sibling ".md" files.  If no
        files are specified, then all '*.org' files found recursively
        from the current working directory are used instead.
@@ -301,8 +301,8 @@
    OPTIONS:
 
        -h, --help          print this help message
-       -e, --evaluate      evaluate all SRC blocks
-       -E, --no-evaluate   don't evaluate any SRC blocks (default)
+       -e, --evaluate      evaluate all SRC blocks before exporting
+       -E, --no-evaluate   don't evaluate before exporting (default)
        -n, --nix NIX_EXE   filepath to 'nix' binary to put on PATH
        -N, --no-nix        don't put found Nix binaries on PATH
 			   (default)
@@ -318,6 +318,9 @@
        If using both '-e' and '-E' options (or similarly '-n' and
        '-N'), the last one is overriding (useful for
        automation/defaults).
+
+       Note, even with '-E', exporting will evaluate blocks not set
+       to either ':eval no' or ':eval no-export'.
 
    #+end_example
 
