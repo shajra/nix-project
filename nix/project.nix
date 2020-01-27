@@ -95,7 +95,7 @@ main()
             fi
             shift
             ;;
-        -S|--sources-dir)
+        -S|--source-dir)
             NIV_DIR="''${2:-}"
             if [ -z "$NIV_DIR" ]
             then die "$1 requires argument"
