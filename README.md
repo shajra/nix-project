@@ -135,8 +135,9 @@ support/dependencies-upgrade --help
         '--scaffold' command to set up an directory as a project
         using 'nix-project'.
     
-        If multiple commands or switches are specified, the last one
-        is used.
+        If multiple commands are specified, the last one is used.
+        Similarly, if a switch is specified multiple times, the last
+        one is used.
     
     COMMANDS:
     
