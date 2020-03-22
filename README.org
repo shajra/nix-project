@@ -1,7 +1,7 @@
 #+TITLE: Nix-based Project Tools
 #+SETUPFILE: ./support/setup.org
 
-[[https://travis-ci.org/shajra/nix-project][https://img.shields.io/travis/shajra/nix-project/master.svg?label=master]]
+[[https://github.com/shajra/nix-project/actions][https://github.com/shajra/nix-project/workflows/CI/badge.svg]]
 
 * About this project
 
@@ -255,7 +255,7 @@
      init                     Initialize a Nix project. Existing files won't be
 			      modified.
      add                      Add a GitHub dependency
-     show                     
+     show
      update                   Update dependencies
      modify                   Modify dependency attributes without performing an
 			      update

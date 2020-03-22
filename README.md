@@ -13,7 +13,7 @@
 - [License](#sec-4)
 - [Contribution](#sec-5)
 
-[![img](https://img.shields.io/travis/shajra/nix-project/master.svg?label=master)](https://travis-ci.org/shajra/nix-project)
+[![img](https://github.com/shajra/nix-project/workflows/CI/badge.svg)](https://github.com/shajra/nix-project/actions)
 
 # About this project<a id="sec-1"></a>
 

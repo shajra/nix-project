@@ -1,0 +1,29 @@
+name: "CI"
+on:
+  pull_request:
+  push:
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v8
+    - uses: cachix/cachix-action@v5
+      with:
+        name: all-hies
+        skipNixBuild: true
+    - uses: cachix/cachix-action@v5
+      with:
+        name: iohk
+        skipNixBuild: true
+    - run: |
+        echo "substituters = https://hydra.iohk.io" \
+            >> ~/.config/nix/nix.conf
+        echo "trusted-public-keys = hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" \
+            >> ~/.config/nix/nix.conf
+        cat ~/.config/nix/nix.conf
+    - uses: cachix/cachix-action@v5
+      with:
+        name: shajra
+        signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+        file: nix/ci.nix
