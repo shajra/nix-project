@@ -182,7 +182,7 @@
    Using the ~--help~ switch directly with =dependencies-upgrade= shows the
    help for =nix-project=, which it delegates to.
 
-   #+BEGIN_SRC shell :results output :eval no-export :exports both
+   #+BEGIN_SRC shell :results output
      support/dependencies-upgrade --help
    #+END_SRC
 
@@ -235,7 +235,7 @@
   Since =nix-project= can pass through commands to =niv= we can see the help
   for Niv with the following command:
 
-   #+BEGIN_SRC shell :results output :eval no-export :exports both
+   #+BEGIN_SRC shell :results output
      support/dependencies-upgrade --niv -- --help
    #+END_SRC
 
@@ -255,7 +255,7 @@
      init                     Initialize a Nix project. Existing files won't be
 			      modified.
      add                      Add a GitHub dependency
-     show
+     show                     
      update                   Update dependencies
      modify                   Modify dependency attributes without performing an
 			      update
@@ -284,7 +284,7 @@
    For reference, here's the documentation from the ~--help~ switch for
    =docs-generate= / =org2gfm=:
 
-   #+BEGIN_SRC shell :results output :eval no-export :exports both
+   #+BEGIN_SRC shell :results output
      support/docs-generate --help
    #+END_SRC
 
@@ -320,8 +320,10 @@
        '-N'), the last one is overriding (useful for
        automation/defaults).
 
-       Note, even with '-E', exporting will evaluate blocks not set
-       to either ':eval no' or ':eval no-export'.
+       Note, the '-e' switch evaluates the Org-mode file in-place.
+       No evaluation occurs during the export to Markdown, which
+       will have the same blocks as the Org-mode file.
+
 
    #+end_example
 

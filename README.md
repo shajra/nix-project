@@ -234,8 +234,9 @@ support/docs-generate --help
         '-N'), the last one is overriding (useful for
         automation/defaults).
     
-        Note, even with '-E', exporting will evaluate blocks not set
-        to either ':eval no' or ':eval no-export'.
+        Note, the '-e' switch evaluates the Org-mode file in-place.
+        No evaluation occurs during the export to Markdown, which
+        will have the same blocks as the Org-mode file.
 
 ## GitHub rate limiting of Niv calls<a id="sec-2-5"></a>
 

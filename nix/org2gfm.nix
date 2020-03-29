@@ -76,8 +76,10 @@ OPTIONS:
     '-N'), the last one is overriding (useful for
     automation/defaults).
 
-    Note, even with '-E', exporting will evaluate blocks not set
-    to either ':eval no' or ':eval no-export'.
+    Note, the '-e' switch evaluates the Org-mode file in-place.
+    No evaluation occurs during the export to Markdown, which
+    will have the same blocks as the Org-mode file.
+
 
 EOF
 }
@@ -160,7 +162,8 @@ generate_gfm()
             --file "$filepath" \
             --eval "(princ buffer-file-name 'external-debugging-output)" \
             --eval "(princ \"\\n\" 'external-debugging-output)" \
-            --eval "(org-babel-execute-buffer)" \
+            --eval "(setq-default org-export-use-babel nil)" \
+            --funcall org-babel-execute-buffer \
             --funcall save-buffer \
             --funcall org-gfm-export-to-markdown
     else
@@ -171,6 +174,7 @@ generate_gfm()
             --file "$filepath" \
             --eval "(princ buffer-file-name 'external-debugging-output)" \
             --eval "(princ \"\\n\" 'external-debugging-output)" \
+            --eval "(setq-default org-export-use-babel nil)" \
             --funcall org-gfm-export-to-markdown
     fi
 }
