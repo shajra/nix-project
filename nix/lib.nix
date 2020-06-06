@@ -5,15 +5,16 @@
 
 rec {
 
-    writeShellChecked = name: body:
+    writeShellChecked = name: desc: body:
         (writeShellScriptBin name body).overrideAttrs (old: {
+            meta.description = desc;
             buildCommand = ''
                 ${old.buildCommand}
                 ${shellcheck}/bin/shellcheck -x $out/bin/${name}
             '';
         });
 
-    lib-sh = writeShellChecked "lib.sh" ''
+    lib-sh = writeShellChecked "lib.sh" "Common shell functions" ''
         add_nix_to_path()
         {
             local nix_exe="$1"

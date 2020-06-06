@@ -4,12 +4,16 @@ cd "$(dirname "$0")/.."
 
 nix run \
     --ignore-environment \
+    --keep LANG \
+    --keep LOCALE_ARCHIVE \
     --file nix \
     nix-project-org2gfm \
+    pkgs.ansifilter \
     pkgs.coreutils \
+    pkgs.tree \
     --command \
     org2gfm \
-    --ignore 'scaffold\|support' \
+    --ignore 'scaffold\|support\|snippet' \
     --nix "$(command -v nix)" \
     --evaluate \
     "$@"

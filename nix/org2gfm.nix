@@ -20,18 +20,26 @@ let
         (require 'ob-shell)
         (require 'ox)
         (require 'ox-gfm)
+        (require 'subr-x)
         (setq-default
          org-confirm-babel-evaluate nil
+         org-babel-default-header-args
+          (cons '(:eval . "no-export")
+                (default-value 'org-babel-default-header-args))
          make-backup-files nil
          org-html-inline-image-rules
           '(("file"  . "\\.\\(jpeg\\|jpg\\|png\\|gif\\|svg\\)\\'")
             ("http"  . "\\.\\(jpeg\\|jpg\\|png\\|gif\\|svg\\)\\(\\?.*\\)?\\'")
             ("https" . "\\.\\(jpeg\\|jpg\\|png\\|gif\\|svg\\)\\(\\?.*\\)?\\'")))
+        (defun org2gfm-log (action)
+          (princ (concat "\n" action ": " buffer-file-name "\n")
+                 'external-debugging-output))
     '';
 
 in
 
 nix-project-lib.writeShellChecked "org2gfm"
+"Script to export Org-mode files to GitHub Flavored Markdown (GFM)"
 ''
 set -eu
 
@@ -39,6 +47,7 @@ set -eu
 EVALUATE=false
 IGNORE_REGEX=
 NIX_EXE=
+QUERY_ANSWER=
 
 
 . "${nix-project-lib.lib-sh}/bin/lib.sh"
@@ -60,21 +69,20 @@ OPTIONS:
     -h, --help          print this help message
     -e, --evaluate      evaluate all SRC blocks before exporting
     -E, --no-evaluate   don't evaluate before exporting (default)
-    -n, --nix NIX_EXE   filepath to 'nix' binary to put on PATH
-    -N, --no-nix        don't put found Nix binaries on PATH
-                        (default)
+    -N, --nix NIX_EXE   filepath to 'nix' binary to put on PATH
     -i, --ignore REGEX  ignore matched paths when searching
+    -y, --yes           answer "yes" to all queries for evaluation
+    -n, --no            answer "no" to all queries for evaluation
 
     This script is recommended for use in a clean environment
     with a PATH controlled by Nix.  This helps make executed
     source blocks more deterministic.  However, if the source
     blocks need to execute Nix commands, it's best to use the Nix
     version already installed on the system, rather than a pinned
-    version.  This is what the '-n' option is for.
+    version.  This is what the '-N' option is for.
 
-    If using both '-e' and '-E' options (or similarly '-n' and
-    '-N'), the last one is overriding (useful for
-    automation/defaults).
+    If using both '-e' and '-E' options the last one is overriding
+    (useful for automation/defaults).
 
     Note, the '-e' switch evaluates the Org-mode file in-place.
     No evaluation occurs during the export to Markdown, which
@@ -99,15 +107,18 @@ main()
         -E|--no-evaluate)
             EVALUATE="false"
             ;;
-        -n|--nix)
+        -N|--nix)
             NIX_EXE="''${2:-}"
             if [ -z "$NIX_EXE" ]
             then die "$1 requires argument"
             fi
             shift
             ;;
-        -N|--no-nix)
-            NIX_EXE=
+        -y|--yes)
+            QUERY_ANSWER=yes
+            ;;
+        -n|--no)
+            QUERY_ANSWER=no
             ;;
         -i|--ignore)
             IGNORE_REGEX="''${2:-}"
@@ -126,6 +137,14 @@ main()
     if [ -n "$NIX_EXE" ]
     then add_nix_to_path "$NIX_EXE"
     fi
+    if [ -n "$QUERY_ANSWER" ]
+    then yes "$QUERY_ANSWER" | generate_gfm "$@"
+    else generate_gfm "$@"
+    fi
+}
+
+generate_gfm()
+{
     if [ "$#" -gt 0 ]
     then generate_gfm_args "$@"
     else generate_gfm_found
@@ -135,22 +154,24 @@ main()
 generate_gfm_args()
 {
     for f in "$@"
-    do generate_gfm "$f"
+    do generate_gfm_file "$f"
     done
 }
 
 generate_gfm_found()
 {
-    ${findutils}/bin/find .  -name '*.org' \
-    | ignore_regex \
-    | {
-        while read -r f
-        do generate_gfm "$f"
-        done
-    }
+    {
+        ${findutils}/bin/find .  -name '*.org' \
+        | ignore_regex \
+        | {
+            while read -r f
+            do generate_gfm_file "$f" <&3
+            done
+        }
+    } 3<&0
 }
 
-generate_gfm()
+generate_gfm_file()
 {
     local filepath="$1"
     if [ "$EVALUATE" = true ]
@@ -160,11 +181,10 @@ generate_gfm()
             --kill \
             --load ${init} \
             --file "$filepath" \
-            --eval "(princ buffer-file-name 'external-debugging-output)" \
-            --eval "(princ \"\\n\" 'external-debugging-output)" \
-            --eval "(setq-default org-export-use-babel nil)" \
+            --eval "(org2gfm-log \"EVALUATING\")" \
             --funcall org-babel-execute-buffer \
             --funcall save-buffer \
+            --eval "(org2gfm-log \"EXPORTING\")" \
             --funcall org-gfm-export-to-markdown
     else
         ${emacs}/bin/emacs \
@@ -172,9 +192,7 @@ generate_gfm()
             --kill \
             --load ${init} \
             --file "$filepath" \
-            --eval "(princ buffer-file-name 'external-debugging-output)" \
-            --eval "(princ \"\\n\" 'external-debugging-output)" \
-            --eval "(setq-default org-export-use-babel nil)" \
+            --eval "(org2gfm-log \"EXPORTING\")" \
             --funcall org-gfm-export-to-markdown
     fi
 }

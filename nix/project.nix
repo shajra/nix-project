@@ -9,6 +9,7 @@
 }:
 
 nix-project-lib.writeShellChecked "nix-project"
+"Script to scaffold and maintain dependencies for a Nix project"
 ''
 set -eu
 

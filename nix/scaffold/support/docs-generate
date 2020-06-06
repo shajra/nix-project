@@ -7,6 +7,8 @@ cd "$(dirname "$0")/.."
 # package you like.
 nix run \
     --ignore-environment \
+    --keep LANG \
+    --keep LOCALE_ARCHIVE \
     --file '@NIV_DIR@' \
     nix-project-org2gfm \
     pkgs.coreutils \

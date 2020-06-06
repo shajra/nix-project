@@ -16,23 +16,20 @@
   You can use this project directly (the author does). But it's also not a lot
   of code. So you could just borrow ideas from it for your own projects.
 
-** Motivation to use Nix
+** Using Nix
 
-   When making a new software project, wrangling dependencies can be a chore.
-   For instance, Makefiles can call external dependencies that may or may not be
-   on a system.  The same applies to tools for generating documentation.
+   Dependency management is the main problem the =nix-project= and =org2gfm=
+   scripts use Nix to address. A software project can depend on a lot of
+   complicated dependencies from a variety of language ecosystems. These
+   dependencies are needed not only for the project itself, but also to support
+   things like generated documentation.
 
-   Nix can build and install projects in a way that's precise, repeatable, and
-   guaranteed not to conflict with anything already installed. Nix can even
-   concurrently provide multiple versions of any dependency without conflicts.
+   Nix has a compelling approach that gives us an extremely precise and
+   repeatable dependency management system that covers a broad set of
+   programming language ecosystems.
 
-   Furthermore, Nix supports building a variety of languages and can provide
-   tooling to integrate them into new packages. In many cases, Nix picks up
-   where language-specific tooling stops, layering on top of the tools and
-   techniques we're already familiar with.
-
-   All of this makes Nix an attractive tool for managing almost any software
-   project.
+   See [[file:doc/nix.org][the provided documentation on Nix]] for more on what Nix is, why we're
+   motivated to use it, and how to get set up with it for this project.
 
 ** Managing dependencies with Nix and Niv
 
@@ -84,31 +81,17 @@
 
 * Usage
 
-** Install Nix
+** Install and configure Nix
 
-   #+BEGIN_QUOTE
-   *_NOTE:_* You don't need this step if you're running NixOS, which comes with
-   Nix baked in.
-   #+END_QUOTE
+   Nix can manage all your dependencies, but you first need to install and
+   configure Nix itself.
 
-   If you don't already have Nix, the official installation script should work
-   on a variety of GNU/Linux distributions, and also Mac OS. The easiest way to
-   run this installation script is to execute the following shell command as a
-   user other than root:
-
-   #+BEGIN_SRC shell :eval no
-     curl https://nixos.org/nix/install | sh
-   #+END_SRC
-
-   This script will download a distribution-independent binary tarball
-   containing Nix and its dependencies, and unpack it in =/nix=.
-
-   If you prefer to install Nix another way, reference the [[nix-install][Nix manual]]
+   See the [[file:doc/nix.org::Installation and Setup][provided instructions on how to install and configure Nix]].
 
 ** Scaffolding
 
-   This project actually uses both the =nix-project= and =org2gfm= scripts
-   itself. You'll find usage of both of these scripts in the [[./support][./support]]
+   This project actually uses both the =nix-project= and =org2gfm= scripts that
+   it provides. You'll find usage of both of these scripts in the [[./support][./support]]
    directory. The =support/dependencies-upgrade= script delegates to
    =nix-project=, and =support/docs-generate= delegates to =org2gfm=.
 
@@ -182,7 +165,7 @@
    Using the ~--help~ switch directly with =dependencies-upgrade= shows the
    help for =nix-project=, which it delegates to.
 
-   #+BEGIN_SRC shell :results output
+   #+BEGIN_SRC shell :results output :exports both
      support/dependencies-upgrade --help
    #+END_SRC
 
@@ -235,7 +218,7 @@
   Since =nix-project= can pass through commands to =niv= we can see the help
   for Niv with the following command:
 
-   #+BEGIN_SRC shell :results output
+   #+BEGIN_SRC shell :results output :exports both
      support/dependencies-upgrade --niv -- --help
    #+END_SRC
 
@@ -274,17 +257,23 @@
    ~pkgs.coreutils~ package. This is the package that provides the =whoami=
    executable. You explicitly control what executables are in scope for
    evaluating your code snippets. ~pkgs~ provides all the packages that come
-   with the [[nixpkgs][Nixpkgs repository]], but you can always define your own packages.
+   with the [[nixpkgs][Nixpkgs repository]], but you can always define your own packages
+   with a Nix expression.
 
    #+BEGIN_QUOTE
    *_NOTE_*: Since =docs-generate= writes over files in-place, source control
    is highly recommended to protect against the loss of documentation.
    #+END_QUOTE
 
+   The =org2gfm= script that =docs-generate= delegates to does not support all
+   Emacs Org-mode evaluation/export features. See
+   [[file:doc/org2gfm-design.org][doc/org2gfm-design]] for a discussion of
+   =org2gfm='s design and recommended usage.
+
    For reference, here's the documentation from the ~--help~ switch for
    =docs-generate= / =org2gfm=:
 
-   #+BEGIN_SRC shell :results output
+   #+BEGIN_SRC shell :results output :exports both
      support/docs-generate --help
    #+END_SRC
 
@@ -304,21 +293,20 @@
        -h, --help          print this help message
        -e, --evaluate      evaluate all SRC blocks before exporting
        -E, --no-evaluate   don't evaluate before exporting (default)
-       -n, --nix NIX_EXE   filepath to 'nix' binary to put on PATH
-       -N, --no-nix        don't put found Nix binaries on PATH
-			   (default)
+       -N, --nix NIX_EXE   filepath to 'nix' binary to put on PATH
        -i, --ignore REGEX  ignore matched paths when searching
+       -y, --yes           answer "yes" to all queries for evaluation
+       -n, --no            answer "no" to all queries for evaluation
 
        This script is recommended for use in a clean environment
        with a PATH controlled by Nix.  This helps make executed
        source blocks more deterministic.  However, if the source
        blocks need to execute Nix commands, it's best to use the Nix
        version already installed on the system, rather than a pinned
-       version.  This is what the '-n' option is for.
+       version.  This is what the '-N' option is for.
 
-       If using both '-e' and '-E' options (or similarly '-n' and
-       '-N'), the last one is overriding (useful for
-       automation/defaults).
+       If using both '-e' and '-E' options the last one is overriding
+       (useful for automation/defaults).
 
        Note, the '-e' switch evaluates the Org-mode file in-place.
        No evaluation occurs during the export to Markdown, which
@@ -345,8 +333,9 @@
    =sources.json=. You can make more Nix expressions in this directory and
    reference them in =nix/default.nix=.
 
-   See the [[nix-manual][Nix manual]] and [[nixpkgs-manual][Nixpkgs manual]] for more information on making your
-   own Nix expressions using the Nixpkgs repository as a foundation.
+   The [[nix-learn][official Nix documentation]] is a good place to find more information on
+   making your own Nix expressions using the Nixpkgs repository as a
+   foundation, specifically the [[nix-manual][Nix manual]] and [[nixpkgs-manual][Nixpkgs manual]]
 
 * Release
 

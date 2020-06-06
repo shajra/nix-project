@@ -1,9 +1,9 @@
 - [About this project](#sec-1)
-  - [Motivation to use Nix](#sec-1-1)
+  - [Using Nix](#sec-1-1)
   - [Managing dependencies with Nix and Niv](#sec-1-2)
   - [Documenting with Emacs Org-mode](#sec-1-3)
 - [Usage](#sec-2)
-  - [Install Nix](#sec-2-1)
+  - [Install and configure Nix](#sec-2-1)
   - [Scaffolding](#sec-2-2)
   - [Managing dependencies](#sec-2-3)
   - [Evaluating/exporting documentation](#sec-2-4)
@@ -24,15 +24,13 @@ This project assists the setup of other projects with the [Nix package manager](
 
 You can use this project directly (the author does). But it's also not a lot of code. So you could just borrow ideas from it for your own projects.
 
-## Motivation to use Nix<a id="sec-1-1"></a>
+## Using Nix<a id="sec-1-1"></a>
 
-When making a new software project, wrangling dependencies can be a chore. For instance, Makefiles can call external dependencies that may or may not be on a system. The same applies to tools for generating documentation.
+Dependency management is the main problem the `nix-project` and `org2gfm` scripts use Nix to address. A software project can depend on a lot of complicated dependencies from a variety of language ecosystems. These dependencies are needed not only for the project itself, but also to support things like generated documentation.
 
-Nix can build and install projects in a way that's precise, repeatable, and guaranteed not to conflict with anything already installed. Nix can even concurrently provide multiple versions of any dependency without conflicts.
+Nix has a compelling approach that gives us an extremely precise and repeatable dependency management system that covers a broad set of programming language ecosystems.
 
-Furthermore, Nix supports building a variety of languages and can provide tooling to integrate them into new packages. In many cases, Nix picks up where language-specific tooling stops, layering on top of the tools and techniques we're already familiar with.
-
-All of this makes Nix an attractive tool for managing almost any software project.
+See [the provided documentation on Nix](doc/nix.md) for more on what Nix is, why we're motivated to use it, and how to get set up with it for this project.
 
 ## Managing dependencies with Nix and Niv<a id="sec-1-2"></a>
 
@@ -58,23 +56,15 @@ Note that as its name implies `org2gfm` only generates [GitHub Flavored Markdown
 
 # Usage<a id="sec-2"></a>
 
-## Install Nix<a id="sec-2-1"></a>
+## Install and configure Nix<a id="sec-2-1"></a>
 
-> **<span class="underline">NOTE:</span>** You don't need this step if you're running NixOS, which comes with Nix baked in.
+Nix can manage all your dependencies, but you first need to install and configure Nix itself.
 
-If you don't already have Nix, the official installation script should work on a variety of GNU/Linux distributions, and also Mac OS. The easiest way to run this installation script is to execute the following shell command as a user other than root:
-
-```shell
-curl https://nixos.org/nix/install | sh
-```
-
-This script will download a distribution-independent binary tarball containing Nix and its dependencies, and unpack it in `/nix`.
-
-If you prefer to install Nix another way, reference the [Nix manual](https://nixos.org/nix/manual/#chap-installation)
+See the [provided instructions on how to install and configure Nix](doc/nix.md).
 
 ## Scaffolding<a id="sec-2-2"></a>
 
-This project actually uses both the `nix-project` and `org2gfm` scripts itself. You'll find usage of both of these scripts in the [./support](./support) directory. The `support/dependencies-upgrade` script delegates to `nix-project`, and `support/docs-generate` delegates to `org2gfm`.
+This project actually uses both the `nix-project` and `org2gfm` scripts that it provides. You'll find usage of both of these scripts in the [./support](./support) directory. The `support/dependencies-upgrade` script delegates to `nix-project`, and `support/docs-generate` delegates to `org2gfm`.
 
 If you call `dependencies-upgrade` (no arguments needed) it will upgrade all its dependencies, which are specified in the [./nix/sources.json](./nix/sources.json) file. And similarly, if you call `docs-generate` (again with no arguments) all the Org-mode files will be re-evaluated and re-exported to GFM files.
 
@@ -194,9 +184,11 @@ support/dependencies-upgrade --niv -- --help
 
 A freshly scaffolded project will have a `README.org` file in its root. This file has an example call to `whoami` in it. When you call `support/docs-generate`, you'll see that the `README.org` file is modified in place to include the result of the `whoami` call. Additionally, a `README.md` file is exported.
 
-Notice that the `support/docs-generate` script includes the `pkgs.coreutils` package. This is the package that provides the `whoami` executable. You explicitly control what executables are in scope for evaluating your code snippets. `pkgs` provides all the packages that come with the [Nixpkgs repository](https://nixos.org/nixpkgs), but you can always define your own packages.
+Notice that the `support/docs-generate` script includes the `pkgs.coreutils` package. This is the package that provides the `whoami` executable. You explicitly control what executables are in scope for evaluating your code snippets. `pkgs` provides all the packages that come with the [Nixpkgs repository](https://nixos.org/nixpkgs), but you can always define your own packages with a Nix expression.
 
 > **<span class="underline">NOTE</span>**: Since `docs-generate` writes over files in-place, source control is highly recommended to protect against the loss of documentation.
+
+The `org2gfm` script that `docs-generate` delegates to does not support all Emacs Org-mode evaluation/export features. See [doc/org2gfm-design](doc/org2gfm-design.md) for a discussion of `org2gfm`'s design and recommended usage.
 
 For reference, here's the documentation from the `--help` switch for `docs-generate` / `org2gfm`:
 
@@ -218,21 +210,20 @@ support/docs-generate --help
         -h, --help          print this help message
         -e, --evaluate      evaluate all SRC blocks before exporting
         -E, --no-evaluate   don't evaluate before exporting (default)
-        -n, --nix NIX_EXE   filepath to 'nix' binary to put on PATH
-        -N, --no-nix        don't put found Nix binaries on PATH
-    			(default)
+        -N, --nix NIX_EXE   filepath to 'nix' binary to put on PATH
         -i, --ignore REGEX  ignore matched paths when searching
+        -y, --yes           answer "yes" to all queries for evaluation
+        -n, --no            answer "no" to all queries for evaluation
     
         This script is recommended for use in a clean environment
         with a PATH controlled by Nix.  This helps make executed
         source blocks more deterministic.  However, if the source
         blocks need to execute Nix commands, it's best to use the Nix
         version already installed on the system, rather than a pinned
-        version.  This is what the '-n' option is for.
+        version.  This is what the '-N' option is for.
     
-        If using both '-e' and '-E' options (or similarly '-n' and
-        '-N'), the last one is overriding (useful for
-        automation/defaults).
+        If using both '-e' and '-E' options the last one is overriding
+        (useful for automation/defaults).
     
         Note, the '-e' switch evaluates the Org-mode file in-place.
         No evaluation occurs during the export to Markdown, which
@@ -248,7 +239,7 @@ At this point, you can create a skeleton project with dependencies and generate 
 
 the `nix/default.nix` in the skeleton project derives packages from `sources.json`. You can make more Nix expressions in this directory and reference them in `nix/default.nix`.
 
-See the [Nix manual](https://nixos.org/nix/manual) and [Nixpkgs manual](https://nixos.org/nixpkgs/manual) for more information on making your own Nix expressions using the Nixpkgs repository as a foundation.
+The [official Nix documentation](https://nixos.org/learn.html) is a good place to find more information on making your own Nix expressions using the Nixpkgs repository as a foundation, specifically the [Nix manual](https://nixos.org/nix/manual) and [Nixpkgs manual](https://nixos.org/nixpkgs/manual)
 
 # Release<a id="sec-3"></a>
 
