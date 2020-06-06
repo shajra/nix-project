@@ -21,8 +21,6 @@
    These are some references that need to be changed to use this document in
    other projects.
 
-   #+ include: "snippet.org::*Macros" :minlevel 0 :lines "3-"
-
    #+MACRO: nix-attr nix-project-exe
    #+MACRO: nix-package-name nix-project
    #+MACRO: nix-script-name nix-project
