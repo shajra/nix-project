@@ -3,12 +3,13 @@
   - [Managing dependencies with Nix and Niv](#sec-1-2)
   - [Documenting with Emacs Org-mode](#sec-1-3)
 - [Usage](#sec-2)
-  - [Install and configure Nix](#sec-2-1)
-  - [Scaffolding](#sec-2-2)
-  - [Managing dependencies](#sec-2-3)
-  - [Evaluating/exporting documentation](#sec-2-4)
-  - [GitHub rate limiting of Niv calls](#sec-2-5)
-  - [Next steps](#sec-2-6)
+  - [Nix package manager setup](#sec-2-1)
+  - [Cache setup](#sec-2-2)
+  - [Scaffolding](#sec-2-3)
+  - [Managing dependencies](#sec-2-4)
+  - [Evaluating/exporting documentation](#sec-2-5)
+  - [GitHub rate limiting of Niv calls](#sec-2-6)
+  - [Next steps](#sec-2-7)
 - [Release](#sec-3)
 - [License](#sec-4)
 - [Contribution](#sec-5)
@@ -56,13 +57,38 @@ Note that as its name implies `org2gfm` only generates [GitHub Flavored Markdown
 
 # Usage<a id="sec-2"></a>
 
-## Install and configure Nix<a id="sec-2-1"></a>
+## Nix package manager setup<a id="sec-2-1"></a>
 
-Nix can manage all your dependencies, but you first need to install and configure Nix itself.
+> **<span class="underline">NOTE:</span>** You don't need this step if you're running NixOS, which comes with Nix baked in.
 
-See the [provided instructions on how to install and configure Nix](doc/nix.md).
+If you don't already have Nix, the official installation script should work on a variety of GNU/Linux distributions, and also Mac OS. The easiest way to run this installation script is to execute the following shell command as a user other than root:
 
-## Scaffolding<a id="sec-2-2"></a>
+```shell
+curl https://nixos.org/nix/install | sh
+```
+
+This script will download a distribution-independent binary tarball containing Nix and its dependencies, and unpack it in `/nix`.
+
+If you prefer to install Nix another way, reference the [Nix manual](https://nixos.org/nix/manual/#chap-installation)
+
+## Cache setup<a id="sec-2-2"></a>
+
+It's recommended to configure Nix to use shajra.cachix.org as a *Nix substituter*. This project pushes built Nix packages to [Cachix](https://cachix.org) as part of its continuous integration. Once configured, Nix will pull down these pre-built packages instead of building them locally.
+
+You can configure shajra.cachix.org as a substituter with the following command:
+
+```shell
+nix run \
+    --file https://cachix.org/api/v1/install \
+    cachix \
+    --command cachix use shajra
+```
+
+This will perform user-local configuration of Nix at `~/.config/nix/nix.conf`. This configuration will be available immediately, and any subsequent invocation of Nix commands will take advantage of the Cachix cache.
+
+If you're running NixOS, you can configure Cachix globally by running the above command as a root user. The command will then configure `/etc/nixos/cachix/shajra.nix`, and the output will explain how to tie this configuration into your normal NixOS configuration.
+
+## Scaffolding<a id="sec-2-3"></a>
 
 This project actually uses both the `nix-project` and `org2gfm` scripts that it provides. You'll find usage of both of these scripts in the [./support](./support) directory. The `support/dependencies-upgrade` script delegates to `nix-project`, and `support/docs-generate` delegates to `org2gfm`.
 
@@ -73,7 +99,8 @@ If you want to scaffold a new project with these scripts, you can create a new d
 ```shell
 nix run \
     --file http://github.com/shajra/nix-project/tarball/master \
-    nix-project-exe --ignore-environment \
+    nix-project-exe \
+    --ignore-environment \
     --command nix-project --scaffold --nix `command -v nix`
 ```
 
@@ -92,7 +119,7 @@ In the freshly scaffolded project, you'll see the following files:
 
 `nix/sources.json` and `nix/sources.nix` are modified directly by Niv (via `nix-project` via `dependencies-upgrade`), but the rest of the files are yours to modify as you see fit.
 
-## Managing dependencies<a id="sec-2-3"></a>
+## Managing dependencies<a id="sec-2-4"></a>
 
 The scripts in the `support` directory are mostly calls to `nix run`, similarly to what we called for scaffolding, except they reference dependencies specified in `nix/sources.json` rather than going to GitHub directly.
 
@@ -180,7 +207,7 @@ support/dependencies-upgrade --niv -- --help
     			   update
       drop                     Drop dependency
 
-## Evaluating/exporting documentation<a id="sec-2-4"></a>
+## Evaluating/exporting documentation<a id="sec-2-5"></a>
 
 A freshly scaffolded project will have a `README.org` file in its root. This file has an example call to `whoami` in it. When you call `support/docs-generate`, you'll see that the `README.org` file is modified in place to include the result of the `whoami` call. Additionally, a `README.md` file is exported.
 
@@ -229,11 +256,11 @@ support/docs-generate --help
         No evaluation occurs during the export to Markdown, which
         will have the same blocks as the Org-mode file.
 
-## GitHub rate limiting of Niv calls<a id="sec-2-5"></a>
+## GitHub rate limiting of Niv calls<a id="sec-2-6"></a>
 
 Many dependencies managed by Niv may come from GitHub. GitHub will rate limit anonymous API calls to 60/hour, which is not a lot. To increase this limit, you can make a [personal access token](https://github.com/settings/tokens) with GitHub. Then write the generated token value in the file `~/.config/nix-project/github.token`. Make sure to restrict the permissions of this file appropriately.
 
-## Next steps<a id="sec-2-6"></a>
+## Next steps<a id="sec-2-7"></a>
 
 At this point, you can create a skeleton project with dependencies and generate documentation for it. But you need to know more about Nix and the Nix expression language to build your own projects with Nix.
 

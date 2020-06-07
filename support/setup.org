@@ -1,3 +1,4 @@
+#+LINK: cachix https://cachix.org
 #+LINK: gfm https://github.github.com/gfm/
 #+LINK: github-token https://github.com/settings/tokens
 #+LINK: litprog https://en.wikipedia.org/wiki/Literate_programming

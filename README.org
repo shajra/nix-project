@@ -81,12 +81,9 @@
 
 * Usage
 
-** Install and configure Nix
+  #+INCLUDE: "doc/nix.org::*Nix package manager setup"
 
-   Nix can manage all your dependencies, but you first need to install and
-   configure Nix itself.
-
-   See the [[file:doc/nix.org::Installation and Setup][provided instructions on how to install and configure Nix]].
+  #+INCLUDE: "doc/nix.org::*Cache setup"
 
 ** Scaffolding
 
@@ -106,7 +103,8 @@
    #+BEGIN_SRC shell :eval no
      nix run \
          --file http://github.com/shajra/nix-project/tarball/master \
-         nix-project-exe --ignore-environment \
+         nix-project-exe \
+         --ignore-environment \
          --command nix-project --scaffold --nix `command -v nix`
    #+END_SRC
 
@@ -215,8 +213,8 @@
 
    #+end_example
 
-  Since =nix-project= can pass through commands to =niv= we can see the help
-  for Niv with the following command:
+   Since =nix-project= can pass through commands to =niv= we can see the help
+   for Niv with the following command:
 
    #+BEGIN_SRC shell :results output :exports both
      support/dependencies-upgrade --niv -- --help

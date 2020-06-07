@@ -148,8 +148,13 @@
 
 ** Cache setup
 
-   To benefit from pre-built packages for this project cached at Cachix, you
-   need to configure Nix to look at the shajra.cachix.org cache.
+   It's recommended to configure Nix to use shajra.cachix.org as a /Nix
+   substituter/. This project pushes built Nix packages to [[cachix][Cachix]] as part of its
+   continuous integration. Once configured, Nix will pull down these pre-built
+   packages instead of building them locally.
+
+   You can configure shajra.cachix.org as a substituter with the following
+   command:
 
    #+BEGIN_SRC shell :eval no
      nix run \
@@ -356,7 +361,7 @@
 * Next Steps
 
   This document has covered a fraction of Nix usage, hopefully enough to
-  introduce Nix in the context of this project.
+  introduce Nix in the context of [[file:../README.org][this project]].
 
   An obvious place to start learn more about Nix is [[nix-learn][the official documentation]].
   The author of this project also maintains [[nix-tutorial][a small tutorial on Nix]].

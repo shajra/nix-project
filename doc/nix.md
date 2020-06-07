@@ -53,7 +53,9 @@ If you prefer to install Nix another way, reference the [Nix manual](https://nix
 
 ## Cache setup<a id="sec-3-2"></a>
 
-To benefit from pre-built packages for this project cached at Cachix, you need to configure Nix to look at the shajra.cachix.org cache.
+It's recommended to configure Nix to use shajra.cachix.org as a *Nix substituter*. This project pushes built Nix packages to [Cachix](https://cachix.org) as part of its continuous integration. Once configured, Nix will pull down these pre-built packages instead of building them locally.
+
+You can configure shajra.cachix.org as a substituter with the following command:
 
 ```shell
 nix run \
@@ -187,7 +189,7 @@ Also, it's good to know that `nix-collect-garbage` won't delete packages referen
 
 # Next Steps<a id="sec-5"></a>
 
-This document has covered a fraction of Nix usage, hopefully enough to introduce Nix in the context of this project.
+This document has covered a fraction of Nix usage, hopefully enough to introduce Nix in the context of [this project](../README.md).
 
 An obvious place to start learn more about Nix is [the official documentation](https://nixos.org/learn.html). The author of this project also maintains [a small tutorial on Nix](https://github.com/shajra/example-nix/tree/master/tutorials/0-nix-intro).
 
