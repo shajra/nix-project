@@ -41,10 +41,16 @@
 
    #+NAME: crop
    #+BEGIN_SRC emacs-lisp :var text="" :var first-n=5 :var last-n=5 :results silent :exports none
-     (let* ((ls       (split-string text "\n"))
-            (first-ls (string-join (-take first-n ls) "\n"))
-            (last-ls  (string-join (-take-last (+ 1 last-n) ls) "\n")))
-       (concat first-ls "\n…\n" last-ls))
+     (let* ((ls         (split-string text "\n"))
+            (first-ls   (-take first-n ls))
+            (rest-first (-drop first-n ls))
+            (rest-last  (-drop-last (+ 1 last-n) rest-first))
+            (last-ls    (-take-last (+ 1 last-n) rest-first)))
+       (string-join
+        (if rest-last
+            (append first-ls '("…") last-ls)
+          (append first-ls last-ls))
+        "\n"))
    #+END_SRC
 
 ** Setup action
@@ -192,7 +198,7 @@
      nix search --file default.nix --no-cache
    #+END_SRC
 
-   #+BEGIN_SRC shell :dir .. :results output :exports results
+   #+BEGIN_SRC shell :dir .. :results output :exports results :post crop(text=*this*, first-n=6, last-n=0)
      nix search --file default.nix --no-cache | ansifilter
    #+END_SRC
 
