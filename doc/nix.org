@@ -21,16 +21,16 @@
    These are some references that need to be changed to use this document in
    other projects.
 
-   #+MACRO: nix-attr nix-project-exe
-   #+MACRO: nix-package-name nix-project
-   #+MACRO: nix-script-name nix-project
+   #+MACRO: package-attr nix-project-exe
+   #+MACRO: package-name nix-project
+   #+MACRO: package-exe =nix-project=
 
-   #+NAME: nix-attr-name
+   #+NAME: package-attr
    #+BEGIN_SRC text :eval no
      nix-project-exe
    #+END_SRC
 
-   #+NAME: nix-script-name
+   #+NAME: package-exe
    #+BEGIN_SRC text :eval no
      nix-project
    #+END_SRC
@@ -242,20 +242,20 @@
 ** Building Nix expressions
 
    From our execution of =nix search= we can see that a package named
-   "{{{nix-package-name}}}" can be accessed with the "{{{nix-attr}}}" attribute
+   "{{{package-name}}}" can be accessed with the "{{{package-attr}}}" attribute
    name in the Nix expression in the top-level =default.nix=.
 
    We can build this package with =nix build= from the top-level:
 
    #+BEGIN_SRC shell :dir .. :results silent :noweb yes
-     nix build --file . <<nix-attr-name>>
+     nix build --file . <<package-attr>>
    #+END_SRC
 
    Because =nix build= by default builds =default.nix=, you don't need the
    =--file .= argument. So our invocation could be even more simple:
 
    #+BEGIN_SRC shell :dir .. :results silent :noweb yes
-     nix build <<nix-attr-name>>
+     nix build <<package-attr>>
    #+END_SRC
 
    The positional arguments to =nix build= are attribute
@@ -279,7 +279,7 @@
 
    Following these symlinks, we can see the files the project provides:
 
-   #+BEGIN_SRC shell :dir .. :results output :exports both
+   #+BEGIN_SRC shell :dir .. :results output :exports both :post crop(text=*this*, first-n=10, last-n=0)
      tree -l result*
    #+END_SRC
 
@@ -297,14 +297,14 @@
 
    You can run a command from a package in a Nix expression with =nix run=.
 
-   For instance, to get the help message for the {{{nix-script-name}}} script
+   For instance, to get the help message for the {{{package-exe}}} executable
    with =nix run= we'd call the following:
 
    #+BEGIN_SRC shell :noweb yes :dir .. :results output :exports both :post crop(text=*this*, first-n=5, last-n=0)
      nix run \
          --file . \
-         <<nix-attr-name>> \
-         --command <<nix-script-name>> --help
+         <<package-attr>> \
+         --command <<package-exe>> --help
    #+END_SRC
 
    #+RESULTS:

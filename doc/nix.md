@@ -153,7 +153,7 @@ It's common to configure these "result" symlinks as ignored in source control to
 
 You can run a command from a package in a Nix expression with `nix run`.
 
-For instance, to get the help message for the nix-project script with `nix run` we'd call the following:
+For instance, to get the help message for the `nix-project` executable with `nix run` we'd call the following:
 
 ```shell
 nix run \
