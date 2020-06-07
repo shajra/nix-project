@@ -198,7 +198,7 @@
      nix search --file default.nix --no-cache
    #+END_SRC
 
-   #+BEGIN_SRC shell :dir .. :results output :exports results :post crop(text=*this*, first-n=6, last-n=0)
+   #+BEGIN_SRC shell :dir .. :results output :exports results :post crop(text=*this*, first-n=9, last-n=0)
      nix search --file default.nix --no-cache | ansifilter
    #+END_SRC
 
