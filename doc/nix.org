@@ -59,11 +59,6 @@
 
    #+BEGIN_SRC shell :dir .. :results silent
      rm -rf result* || true
-     #nix-store --query --requisites $(nix path-info) \
-         #    | tac \
-         #    | while read -r p
-     #        do nix-store --delete "$p"
-     #        done || true
    #+END_SRC
 
 * How this project uses Nix
