@@ -12,18 +12,16 @@
 
 * Org-mode Setup :noexport:
 
-  #+BEGIN_COMMENT
   This document is written in a project-agnostic way so it can be copied to
   other projects using Nix.
-  #+END_COMMENT
 
 ** Variables
 
    These are some references that need to be changed to use this document in
    other projects.
 
-   #+MACRO: package-attr nix-project-exe
-   #+MACRO: package-name nix-project
+   #+MACRO: package-attr "nix-project-exe"
+   #+MACRO: package-name "nix-project"
    #+MACRO: package-exe =nix-project=
 
    #+NAME: package-attr
@@ -250,7 +248,7 @@
 ** Building Nix expressions
 
    From our execution of =nix search= we can see that a package named
-   "{{{package-name}}}" can be accessed with the "{{{package-attr}}}" attribute
+   {{{package-name}}} can be accessed with the {{{package-attr}}} attribute
    name in the Nix expression in the top-level =default.nix=.
 
    We can build this package with =nix build= from the top-level:
@@ -303,10 +301,10 @@
 
 ** Running commands
 
-   You can run a command from a package in a Nix expression with =nix run=.
-
-   For instance, to get the help message for the {{{package-exe}}} executable
-   with =nix run= we'd call the following:
+   You can run a command from a package in a Nix expression with =nix run=. For
+   instance, to get the help message for the {{{package-exe}}} executable
+   selected by the {{{package-attr}}} attribute name, we can call the
+   following:
 
    #+BEGIN_SRC shell :noweb yes :dir .. :results output :exports both :post crop(text=*this*, first-n=5, last-n=0)
      nix run \
@@ -373,7 +371,7 @@
    #+END_SRC
 
    To install the {{{package-exe}}} executable, which is accessed by the
-   "{{{package-attr}}}" in our top-level =default.nix= file, we'd run the
+   {{{package-attr}}} in our top-level =default.nix= file, we'd run the
    following:
 
    #+BEGIN_SRC shell :eval no :noweb yes
@@ -399,7 +397,7 @@
    : nix-project
 
    And if we want to uninstall a program from our active profile, we do so by
-   its name, in this case "{{{package-name}}}":
+   its name, in this case {{{package-name}}}:
 
    #+BEGIN_SRC shell :eval no :noweb yes
      nix-env --uninstall <<package-name>>
@@ -411,10 +409,10 @@
    #+END_SRC
 
    Note that we've installed our package using its attribute name
-   ("{{{package-attr}}}") within the referenced Nix expression. But we
-   uninstall it using the package name ("{{{package-name}}}"), which may or may
-   not be the same as the attribute name. When a package is installed, Nix
-   keeps no reference to the expression that evaluated to the derivation of the
+   ({{{package-attr}}}) within the referenced Nix expression. But we uninstall
+   it using the package name ({{{package-name}}}), which may or may not be the
+   same as the attribute name. When a package is installed, Nix keeps no
+   reference to the expression that evaluated to the derivation of the
    installed package. The attribute name is only relevant to this expression.
    In fact, two different expressions could evaluate to the exact same
    derivation, but use different attribute names. This is why we uninstall
