@@ -154,7 +154,7 @@ It's common to configure these "result" symlinks as ignored in source control to
 
 ## Running commands<a id="sec-4-3"></a>
 
-You can run a command from a package in a Nix expression with `nix run`. For instance, to get the help message for the `nix-project` executable selected by the "nix-project-exe" attribute name, we can call the following:
+You can run a command from a package in a Nix expression with `nix run`. For instance, to get the help message for the `nix-project` executable provided by the "nix-project" package selected by the "nix-project-exe" attribute name, we can call the following:
 
 ```shell
 nix run \

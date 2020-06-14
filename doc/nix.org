@@ -303,8 +303,8 @@
 
    You can run a command from a package in a Nix expression with =nix run=. For
    instance, to get the help message for the {{{package-exe}}} executable
-   selected by the {{{package-attr}}} attribute name, we can call the
-   following:
+   provided by the {{{package-name}}} package selected by the
+   {{{package-attr}}} attribute name, we can call the following:
 
    #+BEGIN_SRC shell :noweb yes :dir .. :results output :exports both :post crop(text=*this*, first-n=5, last-n=0)
      nix run \
