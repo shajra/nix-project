@@ -37,7 +37,7 @@ See [the provided documentation on Nix](doc/nix.md) for more on what Nix is, why
 
 One of the benefits of Nix is that it pins our dependencies to specific versions. When they are downloaded, they are parity checked with an explicitly provided hash. Because each new version of each dependency requires a new hash, maintaining these hashes can be a chore, especially when upgrading many dependencies to their latest versions.
 
-Fortunately, a tool called [Niv](https://github.com/nmattia/niv) provides a command-line tool `niv` to make upgrading dependencies a single command.
+Fortunately, a tool called [Niv](https://github.com/nmattia/niv) provides a command-line tool `niv` to make upgrading dependencies a single command. Niv tracks downloaded versions of source from locations like GitHub, maintaining metadata of the latest versions and calculated hashes in a `sources.json` file. Since this project uses itself, you can have a look at [this project's `sources.json` file](nix/sources.json) as an example.
 
 You could use `niv` directly, but it has some dependencies it expects to be already installed. Although not often a problem, Niv's reliance on preexisting installations isn't in the spirit of Nix. We want Nix to download all dependencies for us. That's why we're using Nix in the first place.
 
@@ -45,13 +45,13 @@ The `nix-project` script provided by this project wraps `niv` such that all the 
 
 ## Documenting with Emacs Org-mode<a id="sec-1-3"></a>
 
-In addition to building and distributing a project, we often want to document it as well. Good documentation often has example snippets of code and output/results. Ideally, these snippets of documentation can be generated with automation, so that they reflect the code in the project. This leads to some form of [literate programming](https://en.wikipedia.org/wiki/Literate_programming).
+In addition to building and distributing a project, we often want to document it as well. Good documentation often has example snippets of code followed by the output of an evaluation/invocation. Ideally, these snippets of output are generated with automation, so that they are congruent with the code in the project. This leads to some form of [literate programming](https://en.wikipedia.org/wiki/Literate_programming).
 
-The state of literate programming is not that advanced in general. However, [Emacs' Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html) has some fairly compelling features in the spirit of literate programming. With Org-mode, we can evaluate code blocks and inject the results in blocks right below the code. And this all can then be exported to the format of our choice.
+The state of literate programming is not that advanced in general. However, [Emacs' Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html) has some compelling features in the spirit of literate programming. With Org-mode, we can evaluate code blocks and inject the results inline right below the code. And this all can then be exported to the format of our choice.
 
-Manually managing an Emacs installation, including requisite plugins, is historically hard to do consistently and portably. Fortunately, Nix can install in a precisely configured Emacs as a dependency without conflicting with any installations of Emacs already on a system.
+Manually managing an Emacs installation, including requisite plugins, is historically hard to do consistently and portably. Fortunately, Nix can install a precisely configured Emacs instance as a dependency without conflicting with any installations of Emacs already on a system.
 
-The `org2gfm` script orchestrates Nix's configuration, installation, and execution of Emacs to generate our documentation. Emacs is run in a headless mode by `org2gfm`, so the fact we're using Emacs at all is hidden.
+The `org2gfm` script orchestrates with Nix the configuration, installation, and execution of Emacs to generate our documentation. Emacs is run in a headless mode by `org2gfm`, so the fact we're using Emacs at all is hidden.
 
 Note that as its name implies `org2gfm` only generates [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/) from Org-mode files. This is currently all the author needs for projects already hosted on GitHub.
 
@@ -61,7 +61,7 @@ Note that as its name implies `org2gfm` only generates [GitHub Flavored Markdown
 
 > **<span class="underline">NOTE:</span>** You don't need this step if you're running NixOS, which comes with Nix baked in.
 
-If you don't already have Nix, the official installation script should work on a variety of GNU/Linux distributions, and also Mac OS. The easiest way to run this installation script is to execute the following shell command as a user other than root:
+If you don't already have Nix, the official installation script should work on a variety of UNIX-like operating systems. The easiest way to run this installation script is to execute the following shell command as a user other than root:
 
 ```shell
 curl https://nixos.org/nix/install | sh
@@ -69,11 +69,11 @@ curl https://nixos.org/nix/install | sh
 
 This script will download a distribution-independent binary tarball containing Nix and its dependencies, and unpack it in `/nix`.
 
-If you prefer to install Nix another way, reference the [Nix manual](https://nixos.org/nix/manual/#chap-installation)
+The Nix manual describes [other methods of installing Nix](https://nixos.org/nix/manual/#chap-installation) that may suit you more.
 
 ## Cache setup<a id="sec-2-2"></a>
 
-It's recommended to configure Nix to use shajra.cachix.org as a *Nix substituter*. This project pushes built Nix packages to [Cachix](https://cachix.org) as part of its continuous integration. Once configured, Nix will pull down these pre-built packages instead of building them locally.
+It's recommended to configure Nix to use shajra.cachix.org as a Nix *substituter*. This project pushes built Nix packages to [Cachix](https://cachix.org) as part of its continuous integration. Once configured, Nix will pull down these pre-built packages instead of building them locally.
 
 You can configure shajra.cachix.org as a substituter with the following command:
 
@@ -92,7 +92,7 @@ If you're running NixOS, you can configure Cachix globally by running the above 
 
 This project actually uses both the `nix-project` and `org2gfm` scripts that it provides. You'll find usage of both of these scripts in the [./support](./support) directory. The `support/dependencies-upgrade` script delegates to `nix-project`, and `support/docs-generate` delegates to `org2gfm`.
 
-If you call `dependencies-upgrade` (no arguments needed) it will upgrade all its dependencies, which are specified in the [./nix/sources.json](./nix/sources.json) file. And similarly, if you call `docs-generate` (again with no arguments) all the Org-mode files will be re-evaluated and re-exported to GFM files.
+If you call `dependencies-upgrade` (no arguments needed) it will upgrade all of this project's dependencies, which are specified in the [./nix/sources.json](./nix/sources.json) file. And similarly, if you call `docs-generate` (again with no arguments) all the Org-mode files will be re-evaluated and re-exported to GFM files.
 
 If you want to scaffold a new project with these scripts, you can create a new directory, go into it, and invoke the following `nix` call:
 
@@ -104,7 +104,7 @@ nix run \
     --command nix-project --scaffold --nix `command -v nix`
 ```
 
-For those new to Nix, this command downloads a tarball of this project hosted on GitHub, and evaluates the `default.nix` file in its root. This file provides some packages, and we're selecting the `nix-project-exe` one. The `--ignore-environment` switch is extra, and just ensures that our invocation of `nix run` is sandboxed and doesn't accidentally reference binaries on our `PATH`. The `nix-project-exe` package provides a `nix-project` script, which we call with the arguments following the `--command` switch. We tell `nix-project` to scaffold our empty directory with the `--scaffold` switch. And finally, we use the `--nix` switch to indicate which `nix` executable to use. We use Nix to pull in dependencies, but it is not recommended to use a different version of Nix than is installed on the system. So we allow references outside our sandboxed environment for just Nix itself.
+Note that we're using `nix run` again, similarly to how we configured shajra.cachix.org before. Even `support/dependencies-upgrade` and `support/docs-generate` are essentially calls to `nix run`. [The provided documentation on Nix](doc/nix.md) has a section explaining more of how `nix run` works.
 
 In the freshly scaffolded project, you'll see the following files:
 
@@ -117,7 +117,7 @@ In the freshly scaffolded project, you'll see the following files:
         ├── dependencies-upgrade
         └── docs-generate
 
-`nix/sources.json` and `nix/sources.nix` are modified directly by Niv (via `nix-project` via `dependencies-upgrade`), but the rest of the files are yours to modify as you see fit.
+`nix/sources.json` and `nix/sources.nix` are overwritten by calls to Niv (via `nix-project` via `dependencies-upgrade`), but the rest of the files are yours to modify as you see fit.
 
 ## Managing dependencies<a id="sec-2-4"></a>
 
@@ -266,7 +266,9 @@ At this point, you can create a skeleton project with dependencies and generate 
 
 the `nix/default.nix` in the skeleton project derives packages from `sources.json`. You can make more Nix expressions in this directory and reference them in `nix/default.nix`.
 
-The [official Nix documentation](https://nixos.org/learn.html) is a good place to find more information on making your own Nix expressions using the Nixpkgs repository as a foundation, specifically the [Nix manual](https://nixos.org/nix/manual) and [Nixpkgs manual](https://nixos.org/nixpkgs/manual)
+If you haven't looked it yet, this project provides [some documentation on Nix](doc/nix.md) to get you started.
+
+Finally, the [official Nix documentation](https://nixos.org/learn.html) is comprehensive, and can help you make your own Nix expressions using the Nixpkgs repository as a foundation. Particularly useful are the [Nix manual](https://nixos.org/nix/manual) and [Nixpkgs manual](https://nixos.org/nixpkgs/manual).
 
 # Release<a id="sec-3"></a>
 
