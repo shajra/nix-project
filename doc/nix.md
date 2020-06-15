@@ -136,7 +136,7 @@ After a successful call of `nix build`, you'll see some symlinks for each packag
 readlink result*
 ```
 
-    /nix/store/zhc6wmz51l2vzv56xr3p957vc5cbzqlc-nix-project
+    /nix/store/1dm36mbqnmzbkshgkfrz18bz7wfcr0ag-nix-project
 
 Following these symlinks, we can see the files the project provides:
 
