@@ -11,12 +11,14 @@ let
 
     emacs = emacsWithPackages (epkgs: [
         epkgs.melpaStablePackages.dash
+        epkgs.melpaStablePackages.f
         epkgs.melpaStablePackages.ox-gfm
     ]);
 
     init = writeText "init.el" ''
         (add-to-list 'load-path "${ox-gfm}")
         (require 'dash)
+        (require 'f)
         (require 'ob-shell)
         (require 'ox)
         (require 'ox-gfm)

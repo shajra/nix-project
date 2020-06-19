@@ -1,5 +1,5 @@
 #+TITLE: Nix-based Project Tools
-#+SETUPFILE: ./support/setup.org
+#+SETUPFILE: ./doc/links.org
 
 [[https://github.com/shajra/nix-project/actions][https://github.com/shajra/nix-project/workflows/CI/badge.svg]]
 
@@ -203,7 +203,7 @@
 			      Nix files (default: nix)
        -g, --github-token     file with GitHub API token (default:
 			      ~/.config/nix-project/github.token)
-       -N, --nix              filepath of 'nix' executable to use
+       -N, --nix, NIX_EXE     filepath of 'nix' executable to use
 
        'nix-project' pins all dependencies except for Nix itself,
 	which it finds on the path if possible.  Otherwise set
@@ -329,8 +329,10 @@
    =sources.json=. You can make more Nix expressions in this directory and
    reference them in =nix/default.nix=.
 
-   If you haven't looked it yet, this project provides [[file:doc/nix.org][some documentation on
-   Nix]] to get you started.
+   If you haven't looked it yet, in the [[./doc][./doc]] directory, this project provides
+
+   - [[file:doc/nix.org][some documentation on Nix]] to get you started
+   - [[file:doc/org2gfm-design.org][design and recommended usage of =org2gfm=]].
 
    Finally, the [[nix-learn][official Nix documentation]] is comprehensive, and can help you
    make your own Nix expressions using the Nixpkgs repository as a foundation.

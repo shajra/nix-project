@@ -63,7 +63,7 @@ OPTIONS:
                            Nix files (default: nix)
     -g, --github-token     file with GitHub API token (default:
                            ~/.config/nix-project/github.token)
-    -N, --nix              filepath of 'nix' executable to use
+    -N, --nix, NIX_EXE     filepath of 'nix' executable to use
 
     '$PROG' pins all dependencies except for Nix itself,
      which it finds on the path if possible.  Otherwise set

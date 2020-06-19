@@ -175,7 +175,7 @@ support/dependencies-upgrade --help
     			   Nix files (default: nix)
         -g, --github-token     file with GitHub API token (default:
     			   ~/.config/nix-project/github.token)
-        -N, --nix              filepath of 'nix' executable to use
+        -N, --nix, NIX_EXE     filepath of 'nix' executable to use
     
         'nix-project' pins all dependencies except for Nix itself,
          which it finds on the path if possible.  Otherwise set
@@ -266,7 +266,10 @@ At this point, you can create a skeleton project with dependencies and generate 
 
 the `nix/default.nix` in the skeleton project derives packages from `sources.json`. You can make more Nix expressions in this directory and reference them in `nix/default.nix`.
 
-If you haven't looked it yet, this project provides [some documentation on Nix](doc/nix.md) to get you started.
+If you haven't looked it yet, in the [./doc](./doc) directory, this project provides
+
+-   [some documentation on Nix](doc/nix.md) to get you started
+-   [design and recommended usage of `org2gfm`](doc/org2gfm-design.md).
 
 Finally, the [official Nix documentation](https://nixos.org/learn.html) is comprehensive, and can help you make your own Nix expressions using the Nixpkgs repository as a foundation. Particularly useful are the [Nix manual](https://nixos.org/nix/manual) and [Nixpkgs manual](https://nixos.org/nixpkgs/manual).
 

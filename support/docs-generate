@@ -10,10 +10,12 @@ nix run \
     nix-project-org2gfm \
     pkgs.ansifilter \
     pkgs.coreutils \
+    pkgs.gnutar \
+    pkgs.gzip \
     pkgs.tree \
     --command \
     org2gfm \
-    --ignore 'scaffold\|support\|snippet' \
+    --ignore 'links.org\|scaffold\|snippet' \
     --nix "$(command -v nix)" \
     --evaluate \
     "$@"

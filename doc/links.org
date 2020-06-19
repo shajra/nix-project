@@ -11,5 +11,9 @@
 #+LINK: nixpkgs-manual https://nixos.org/nixpkgs/manual
 #+LINK: org https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html
 #+LINK: org-blocks-src https://orgmode.org/manual/Working-with-Source-Code.html#Working-with-Source-Code
+#+LINK: org-blocks-src-eval https://orgmode.org/manual/Evaluating-Code-Blocks.html#Evaluating-Code-Blocks
+#+LINK: org-blocks-src-export https://orgmode.org/manual/Exporting-Code-Blocks.html#Exporting-Code-Blocks
+#+LINK: org-blocks-src-noweb https://orgmode.org/manual/Noweb-Reference-Syntax.html#Noweb-Reference-Syntax
+#+LINK: org-blocks-src-results https://orgmode.org/manual/Results-of-Evaluation.html
 #+LINK: org-export-settings https://orgmode.org/manual/Export-Settings.html#Export-Settings
 #+LINK: org-tags https://orgmode.org/manual/Tags.html#Tags
