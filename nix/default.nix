@@ -1,8 +1,11 @@
 let
 
-    sources = import ./sources.nix;
+    sources = import ./sources-unified.nix;
 
-    pkgs    = import sources.nixpkgs { config = {}; };
+    pkgs = import sources.nixpkgs {
+        config = {};
+        overlays = [(import ./overlay.nix)];
+    };
 
     nix-project-lib = pkgs.callPackage (import ./lib.nix) {};
 

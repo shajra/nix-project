@@ -85,6 +85,9 @@
 
 * Usage
 
+  This project should work with either GNU/Linux or MacOS operating systems.
+  Just follow the following steps.
+
   #+INCLUDE: "doc/nix.org::*Nix package manager setup"
 
   #+INCLUDE: "doc/nix.org::*Cache setup"

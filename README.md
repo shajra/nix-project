@@ -57,6 +57,8 @@ Note that as its name implies `org2gfm` only generates [GitHub Flavored Markdown
 
 # Usage<a id="sec-2"></a>
 
+This project should work with either GNU/Linux or MacOS operating systems. Just follow the following steps.
+
 ## Nix package manager setup<a id="sec-2-1"></a>
 
 > **<span class="underline">NOTE:</span>** You don't need this step if you're running NixOS, which comes with Nix baked in.
