@@ -274,7 +274,7 @@
    #+END_SRC
 
    #+RESULTS:
-   : /nix/store/1qpzg51alp8smlb7sj24bjfqgvga3rcy-nix-project
+   : /nix/store/a2av1ck8lg7ym9h7dsdx2r2szpm1rsvh-nix-project
 
    Following these symlinks, we can see the files the project provides:
 
@@ -301,7 +301,7 @@
    #+END_SRC
 
    #+RESULTS:
-   : /nix/store/1qpzg51alp8smlb7sj24bjfqgvga3rcy-nix-project
+   : /nix/store/a2av1ck8lg7ym9h7dsdx2r2szpm1rsvh-nix-project
 
 ** Running commands
 
