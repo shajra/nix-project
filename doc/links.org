@@ -7,7 +7,7 @@
 #+LINK: nix-install https://nixos.org/nix/manual/#chap-installation
 #+LINK: nix-learn https://nixos.org/learn.html
 #+LINK: nix-manual https://nixos.org/nix/manual
-#+LINK: nixpkgs https://nixos.org/nixpkgs
+#+LINK: nixpkgs https://github.com/NixOS/nixpkgs
 #+LINK: nixpkgs-manual https://nixos.org/nixpkgs/manual
 #+LINK: org https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html
 #+LINK: org-blocks-src https://orgmode.org/manual/Working-with-Source-Code.html#Working-with-Source-Code

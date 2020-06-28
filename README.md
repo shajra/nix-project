@@ -213,7 +213,7 @@ support/dependencies-upgrade --niv -- --help
 
 A freshly scaffolded project will have a `README.org` file in its root. This file has an example call to `whoami` in it. When you call `support/docs-generate`, you'll see that the `README.org` file is modified in place to include the result of the `whoami` call. Additionally, a `README.md` file is exported.
 
-Notice that the `support/docs-generate` script includes the `pkgs.coreutils` package. This is the package that provides the `whoami` executable. You explicitly control what executables are in scope for evaluating your code snippets. `pkgs` provides all the packages that come with the [Nixpkgs repository](https://nixos.org/nixpkgs), but you can always define your own packages with a Nix expression.
+Notice that the `support/docs-generate` script includes the `pkgs.coreutils` package. This is the package that provides the `whoami` executable. You explicitly control what executables are in scope for evaluating your code snippets. `pkgs` provides all the packages that come with the [Nixpkgs repository](https://github.com/NixOS/nixpkgs), but you can always define your own packages with a Nix expression.
 
 > **<span class="underline">NOTE</span>**: Since `docs-generate` writes over files in-place, source control is highly recommended to protect against the loss of documentation.
 
