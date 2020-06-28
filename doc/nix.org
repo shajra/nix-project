@@ -378,7 +378,7 @@
      nix-env --install --file . --attr <<get("package-attr")>> 2>&1
    #+END_SRC
 
-   #+BEGIN_SRC shell :dir .. :results output :exports results :noweb yes :post crop(text=*this*, first-n=0, last-n=2)
+   #+BEGIN_SRC shell :dir .. :results output :exports results :noweb yes :post crop(text=*this*, first-n=0, last-n=3)
      mkdir nix-profile
      nix-env --profile nix-profile/doc --install --file . --attr <<get("package-attr")>> 2>&1
    #+END_SRC
