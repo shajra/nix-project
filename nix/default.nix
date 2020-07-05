@@ -7,7 +7,8 @@ let
         overlays = [(import ./overlay.nix)];
     };
 
-    nix-project-lib = pkgs.callPackage (import ./lib.nix) {};
+    nix-project-lib = pkgs.recurseIntoAttrs
+        (pkgs.callPackage (import ./lib.nix) {});
 
     nix-project-exe = pkgs.callPackage (import ./project.nix) {
         niv = (import sources.niv {}).niv;
