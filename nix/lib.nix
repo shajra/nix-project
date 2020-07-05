@@ -1,9 +1,12 @@
 { coreutils
 , shellcheck
 , writeShellScriptBin
+, lib
 }:
 
 rec {
+
+    isDarwin = builtins.elem builtins.currentSystem lib.systems.doubles.darwin;
 
     writeShellChecked = name: desc: body:
         (writeShellScriptBin name body).overrideAttrs (old: {
