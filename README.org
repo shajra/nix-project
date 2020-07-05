@@ -199,14 +199,14 @@
 
    OPTIONS:
 
-       -h, --help             print this help message
-       -t, --target-dir DIR   directory of project to manage
-			      (default: current directory)
-       -S, --source-dir DIR   directory relative to target for
-			      Nix files (default: nix)
-       -g, --github-token     file with GitHub API token (default:
-			      ~/.config/nix-project/github.token)
-       -N, --nix, NIX_EXE     filepath of 'nix' executable to use
+       -h --help            print this help message
+       -t --target-dir DIR  directory of project to manage
+			     (default: current directory)
+       -S --source-dir DIR  directory relative to target for
+			     Nix files (default: nix)
+       -g --github-token    file with GitHub API token (default:
+			     ~/.config/nix-project/github.token)
+       -N --nix PATH        filepath of 'nix' executable to use
 
        'nix-project' pins all dependencies except for Nix itself,
 	which it finds on the path if possible.  Otherwise set
@@ -289,13 +289,13 @@
 
    OPTIONS:
 
-       -h, --help          print this help message
-       -e, --evaluate      evaluate all SRC blocks before exporting
-       -E, --no-evaluate   don't evaluate before exporting (default)
-       -N, --nix NIX_EXE   filepath to 'nix' binary to put on PATH
-       -i, --ignore REGEX  ignore matched paths when searching
-       -y, --yes           answer "yes" to all queries for evaluation
-       -n, --no            answer "no" to all queries for evaluation
+       -h --help          print this help message
+       -e --evaluate      evaluate all SRC blocks before exporting
+       -E --no-evaluate   don't evaluate before exporting (default)
+       -N --nix PATH      filepath to 'nix' binary to put on PATH
+       -i --ignore REGEX  ignore matched paths when searching
+       -y --yes           answer "yes" to all queries for evaluation
+       -n --no            answer "no" to all queries for evaluation
 
        This script is recommended for use in a clean environment
        with a PATH controlled by Nix.  This helps make executed

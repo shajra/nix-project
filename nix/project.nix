@@ -56,14 +56,14 @@ COMMANDS:
 
 OPTIONS:
 
-    -h, --help             print this help message
-    -t, --target-dir DIR   directory of project to manage
-                           (default: current directory)
-    -S, --source-dir DIR   directory relative to target for
-                           Nix files (default: nix)
-    -g, --github-token     file with GitHub API token (default:
-                           ~/.config/nix-project/github.token)
-    -N, --nix, NIX_EXE     filepath of 'nix' executable to use
+    -h --help            print this help message
+    -t --target-dir DIR  directory of project to manage
+                          (default: current directory)
+    -S --source-dir DIR  directory relative to target for
+                          Nix files (default: nix)
+    -g --github-token    file with GitHub API token (default:
+                          ~/.config/nix-project/github.token)
+    -N --nix PATH        filepath of 'nix' executable to use
 
     '$PROG' pins all dependencies except for Nix itself,
      which it finds on the path if possible.  Otherwise set
