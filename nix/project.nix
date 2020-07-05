@@ -46,9 +46,9 @@ DESCRIPTION:
 
 COMMANDS:
 
-    -s, --scaffold  set up current directory with example scripts
-    -u, --upgrade   upgrade dependencies with Niv
-    -n, --niv       pass arguments directly to Niv
+    -s --scaffold  set up current directory with example scripts
+    -u --upgrade   upgrade dependencies with Niv
+    -n --niv       pass arguments directly to Niv
 
     Note '--upgrade' runs the following in one step:
 
