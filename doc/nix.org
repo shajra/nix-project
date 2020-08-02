@@ -207,6 +207,9 @@
    : * nix-project-exe (nix-project)
    :   Script to scaffold and maintain dependencies for a Nix project
    : 
+   : * nix-project-lib.lib-sh (lib.sh)
+   :   Common shell functions
+   : 
    : * nix-project-org2gfm (org2gfm)
    :   Script to export Org-mode files to GitHub Flavored Markdown (GFM)
    : 
@@ -274,7 +277,7 @@
    #+END_SRC
 
    #+RESULTS:
-   : /nix/store/j4j7z4jxf3zasq500l1w6mpwh51aw24i-nix-project
+   : /nix/store/ipgzgphyn89a2pq60hlyjb06mvd6masf-nix-project
 
    Following these symlinks, we can see the files the project provides:
 
@@ -301,7 +304,7 @@
    #+END_SRC
 
    #+RESULTS:
-   : /nix/store/j4j7z4jxf3zasq500l1w6mpwh51aw24i-nix-project
+   : /nix/store/ipgzgphyn89a2pq60hlyjb06mvd6masf-nix-project
 
 ** Running commands
 

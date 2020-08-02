@@ -92,6 +92,9 @@ nix search --file default.nix --no-cache
     * nix-project-exe (nix-project)
       Script to scaffold and maintain dependencies for a Nix project
     
+    * nix-project-lib.lib-sh (lib.sh)
+      Common shell functions
+    
     * nix-project-org2gfm (org2gfm)
       Script to export Org-mode files to GitHub Flavored Markdown (GFM)
 
@@ -134,7 +137,7 @@ After a successful call of `nix build`, you'll see some symlinks for each packag
 readlink result*
 ```
 
-    /nix/store/j4j7z4jxf3zasq500l1w6mpwh51aw24i-nix-project
+    /nix/store/ipgzgphyn89a2pq60hlyjb06mvd6masf-nix-project
 
 Following these symlinks, we can see the files the project provides:
 
@@ -156,7 +159,7 @@ It's common to configure these "result" symlinks as ignored in source control to
 nix path-info --file . nix-project-exe
 ```
 
-    /nix/store/j4j7z4jxf3zasq500l1w6mpwh51aw24i-nix-project
+    /nix/store/ipgzgphyn89a2pq60hlyjb06mvd6masf-nix-project
 
 ## Running commands<a id="sec-4-3"></a>
 
