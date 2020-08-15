@@ -206,13 +206,13 @@
    #+RESULTS:
    : * nix-project-exe (nix-project)
    :   Script to scaffold and maintain dependencies for a Nix project
-   : 
+   :
    : * nix-project-lib.lib-sh (lib.sh)
    :   Common shell functions
-   : 
+   :
    : * nix-project-org2gfm (org2gfm)
    :   Script to export Org-mode files to GitHub Flavored Markdown (GFM)
-   : 
+   :
 
    If you don't get the results above, see the [[#nix-drv][section on understanding
    derivations]] for an explanation of the likely problem and a workaround.
@@ -228,13 +228,13 @@
    The output of =nix search= is formatted as
 
    #+BEGIN_EXAMPLE
-     ,* attribute-name (name-of-package)
+     ,* attribute-path (name-of-package)
        Short description of package
    #+END_EXAMPLE
 
-   /Attribute names/ are used to select values from a Nix set containing
+   /Attribute paths/ are used to select values from a Nix set containing
    multiple package derivations. If the Nix expression evaluates to a single
-   derivation (not in a container), the attribute name will be missing from the
+   derivation (not in a container), the attribute path will be missing from the
    =nix search= result.
 
    Many Nix commands evaluate Nix files. If you specify a directory instead,
@@ -252,7 +252,7 @@
 
    From our execution of =nix search= we can see that a package named
    {{{package-name}}} can be accessed with the {{{package-attr}}} attribute
-   name in the Nix expression in the top-level =default.nix=.
+   path in the Nix expression in the top-level =default.nix=.
 
    We can build this package with =nix build= from the top-level:
 
@@ -260,8 +260,9 @@
      nix build --file . <<get("package-attr")>>
    #+END_SRC
 
-   The positional arguments to =nix build= are attribute
-   names. If you supply none then all attributes are built by default.
+   The positional arguments to =nix build= are /installables/, which can be
+   referenced by attribute paths. If you supply none then all top-level
+   attributes are built by default.
 
    All packages built by Nix are stored in =/nix/store=. Nix won't rebuild
    packages found there. Once a package is built, its directory in =/nix/store=
@@ -289,7 +290,7 @@
    : result
    : └── bin
    :     └── nix-project
-   : 
+   :
    : 1 directory, 1 file
 
    It's common to configure these "result" symlinks as ignored in source
@@ -311,7 +312,7 @@
    You can run a command from a package in a Nix expression with =nix run=. For
    instance, to get the help message for the {{{package-exe}}} executable
    provided by the {{{package-name}}} package selected by the
-   {{{package-attr}}} attribute name, we can call the following:
+   {{{package-attr}}} attribute path, we can call the following:
 
    #+BEGIN_SRC shell :dir .. :results output :exports both :noweb yes :post crop(text=*this*, first-n=5, last-n=0)
      nix run \
@@ -322,7 +323,7 @@
 
    #+RESULTS:
    : USAGE:
-   : 
+   :
    :     nix-project [OPTION]... --scaffold
    :     nix-project [OPTION]... --upgrade
    :     nix-project [OPTION]... --niv -- COMMAND...
@@ -332,7 +333,7 @@
    around with the "result" symlinks. =nix run= will build the project if it's
    not yet been built.
 
-   Again, as with =nix build= attribute names are specified as positional
+   Again, as with =nix build= attribute paths are specified as positional
    arguments to select packages.
 
    The command to run is specified after the =--command= switch. =nix run= runs
@@ -416,14 +417,14 @@
    #+RESULTS:
    : uninstalling 'nix-project'
 
-   Note that we've installed our package using its attribute name
+   Note that we've installed our package using its attribute path
    ({{{package-attr}}}) within the referenced Nix expression. But we uninstall
    it using the package name ({{{package-name}}}), which may or may not be the
-   same as the attribute name. When a package is installed, Nix keeps no
+   same as the attribute path. When a package is installed, Nix keeps no
    reference to the expression that evaluated to the derivation of the
-   installed package. The attribute name is only relevant to this expression.
+   installed package. The attribute path is only relevant to this expression.
    In fact, two different expressions could evaluate to the exact same
-   derivation, but use different attribute names. This is why we uninstall
+   derivation, but use different attribute paths. This is why we uninstall
    packages by their package name.
 
    See the [[nix-env][documentation for =nix-env=]] for more details.
@@ -503,7 +504,7 @@
    We haven't made a big deal of it, but the Nix language is /lazily
    evaluated/. This allows a single Nix expression to refer to several thousand
    packages, but without requiring us to evaluate everything when selecting out
-   packages by attribute names. In fact, the entire NixOS operating system is
+   packages by attribute paths. In fact, the entire NixOS operating system is
    based heavily on a single single expression managed in a Git repository
    called [[nixpkgs][Nixpkgs]].
 
