@@ -1,5 +1,5 @@
 #+TITLE: Nix-based Project Tools
-#+SETUPFILE: ./doc/links.org
+#+SETUPFILE: doc/links.org
 
 [[https://github.com/shajra/nix-project/actions][https://github.com/shajra/nix-project/workflows/CI/badge.svg]]
 
@@ -18,11 +18,10 @@
 
 ** Using Nix
 
-   Dependency management is the main problem the =nix-project= and =org2gfm=
-   scripts use Nix to address. A software project can depend on a lot of
-   complicated dependencies from a variety of language ecosystems. These
-   dependencies are needed not only for the project itself, but also to support
-   things like generated documentation.
+   The main problem we use Nix to address is dependency management. A software
+   project can depend on a lot of complicated dependencies from a variety of
+   language ecosystems. These dependencies are needed not only for the project
+   itself, but also to support things like generated documentation.
 
    Nix has a compelling approach that gives us an extremely precise and
    repeatable dependency management system that covers a broad set of
@@ -30,6 +29,9 @@
 
    See [[file:doc/nix.org][the provided documentation on Nix]] for more on what Nix is, why we're
    motivated to use it, and how to get set up with it for this project.
+
+   Once you scaffold a new project with =nix-project=, you'll have scripts to
+   help you manage dependencies and generate documentation.
 
 ** Managing dependencies with Nix and Niv
 
@@ -40,17 +42,17 @@
    when upgrading many dependencies to their latest versions.
 
    Fortunately, a tool called [[niv][Niv]] provides a command-line tool =niv= to make
-   upgrading dependencies a single command. Niv tracks downloaded versions of
-   source from locations like GitHub, maintaining metadata of the latest
+   upgrading Nix dependencies a single command. Niv tracks downloaded versions
+   of source from locations like GitHub, maintaining metadata of the latest
    versions and calculated hashes in a =sources.json= file. Since this project
-   uses itself, you can have a look at [[file:nix/sources.json][this project's =sources.json= file]] as an
-   example.
+   uses itself, you can have a look at [[file:nix/sources.json][its =sources.json= file]] as an example.
 
-   You could use =niv= directly, but it has some dependencies it expects to be
-   already installed. Although not often a problem, Niv's reliance on
+   You could use =niv= independently, but it has some dependencies it expects
+   to be already installed. Although not often a problem, Niv's reliance on
    preexisting installations isn't in the spirit of Nix. We want Nix to
    download all dependencies for us. That's why we're using Nix in the first
-   place.
+   place. If we have Nix installed and nothing else, then a project should just
+   work.
 
    The =nix-project= script provided by this project wraps =niv= such that all
    the dependencies it needs are provided by Nix. It can also help scaffold a
@@ -64,11 +66,11 @@
    of output are generated with automation, so that they are congruent with the
    code in the project. This leads to some form of [[litprog][literate programming]].
 
-   The state of literate programming is not that advanced in general. However,
-   [[org][Emacs' Org-mode]] has some compelling features in the spirit of literate
-   programming. With Org-mode, we can evaluate code blocks and inject the
-   results inline right below the code. And this all can then be exported to
-   the format of our choice.
+   The state of literate programming is not that advanced. However, [[org][Emacs'
+   Org-mode]] has some compelling features in the spirit of literate programming.
+   With Org-mode, we can evaluate code blocks and inject the results inline
+   right below the code. And this all can then be exported to the format of our
+   choice.
 
    Manually managing an Emacs installation, including requisite plugins, is
    historically hard to do consistently and portably. Fortunately, Nix can
@@ -105,8 +107,9 @@
    with no arguments) all the Org-mode files will be re-evaluated and
    re-exported to GFM files.
 
-   If you want to scaffold a new project with these scripts, you can create a
-   new directory, go into it, and invoke the following =nix= call:
+   If you want to scaffold a new project with these scripts set up similarly,
+   you can create a new directory, go into it, and invoke the following =nix=
+   call:
 
    #+BEGIN_SRC shell :eval no
      nix run \

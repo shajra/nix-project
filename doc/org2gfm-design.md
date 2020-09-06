@@ -6,7 +6,7 @@
   - [Results of source blocks](#sec-2-2)
   - [Exporting source blocks](#sec-2-3)
 
-The `org2gfm` script provided by this script constrains the full flexibility of [Emac's Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html), particularly with respect to evaluation and exporting. This document discusses the design of `org2gfm` and how to use it as intended.
+The `org2gfm` script provided by this project constrains the full flexibility of [Emac's Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html), particularly with respect to evaluation and exporting. This document discusses the design of `org2gfm` and how to use it as intended.
 
 You should have some familiarity with Org-mode and its terminology first before reading further.
 

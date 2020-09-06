@@ -27,19 +27,21 @@ You can use this project directly (the author does). But it's also not a lot of 
 
 ## Using Nix<a id="sec-1-1"></a>
 
-Dependency management is the main problem the `nix-project` and `org2gfm` scripts use Nix to address. A software project can depend on a lot of complicated dependencies from a variety of language ecosystems. These dependencies are needed not only for the project itself, but also to support things like generated documentation.
+The main problem we use Nix to address is dependency management. A software project can depend on a lot of complicated dependencies from a variety of language ecosystems. These dependencies are needed not only for the project itself, but also to support things like generated documentation.
 
 Nix has a compelling approach that gives us an extremely precise and repeatable dependency management system that covers a broad set of programming language ecosystems.
 
 See [the provided documentation on Nix](doc/nix.md) for more on what Nix is, why we're motivated to use it, and how to get set up with it for this project.
 
+Once you scaffold a new project with `nix-project`, you'll have scripts to help you manage dependencies and generate documentation.
+
 ## Managing dependencies with Nix and Niv<a id="sec-1-2"></a>
 
 One of the benefits of Nix is that it pins our dependencies to specific versions. When they are downloaded, they are parity checked with an explicitly provided hash. Because each new version of each dependency requires a new hash, maintaining these hashes can be a chore, especially when upgrading many dependencies to their latest versions.
 
-Fortunately, a tool called [Niv](https://github.com/nmattia/niv) provides a command-line tool `niv` to make upgrading dependencies a single command. Niv tracks downloaded versions of source from locations like GitHub, maintaining metadata of the latest versions and calculated hashes in a `sources.json` file. Since this project uses itself, you can have a look at [this project's `sources.json` file](nix/sources.json) as an example.
+Fortunately, a tool called [Niv](https://github.com/nmattia/niv) provides a command-line tool `niv` to make upgrading Nix dependencies a single command. Niv tracks downloaded versions of source from locations like GitHub, maintaining metadata of the latest versions and calculated hashes in a `sources.json` file. Since this project uses itself, you can have a look at [its `sources.json` file](nix/sources.json) as an example.
 
-You could use `niv` directly, but it has some dependencies it expects to be already installed. Although not often a problem, Niv's reliance on preexisting installations isn't in the spirit of Nix. We want Nix to download all dependencies for us. That's why we're using Nix in the first place.
+You could use `niv` independently, but it has some dependencies it expects to be already installed. Although not often a problem, Niv's reliance on preexisting installations isn't in the spirit of Nix. We want Nix to download all dependencies for us. That's why we're using Nix in the first place. If we have Nix installed and nothing else, then a project should just work.
 
 The `nix-project` script provided by this project wraps `niv` such that all the dependencies it needs are provided by Nix. It can also help scaffold a new project to use all the scripts provided by this project.
 
@@ -47,7 +49,7 @@ The `nix-project` script provided by this project wraps `niv` such that all the 
 
 In addition to building and distributing a project, we often want to document it as well. Good documentation often has example snippets of code followed by the output of an evaluation/invocation. Ideally, these snippets of output are generated with automation, so that they are congruent with the code in the project. This leads to some form of [literate programming](https://en.wikipedia.org/wiki/Literate_programming).
 
-The state of literate programming is not that advanced in general. However, [Emacs' Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html) has some compelling features in the spirit of literate programming. With Org-mode, we can evaluate code blocks and inject the results inline right below the code. And this all can then be exported to the format of our choice.
+The state of literate programming is not that advanced. However, [Emacs' Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html) has some compelling features in the spirit of literate programming. With Org-mode, we can evaluate code blocks and inject the results inline right below the code. And this all can then be exported to the format of our choice.
 
 Manually managing an Emacs installation, including requisite plugins, is historically hard to do consistently and portably. Fortunately, Nix can install a precisely configured Emacs instance as a dependency without conflicting with any installations of Emacs already on a system.
 
@@ -88,7 +90,7 @@ nix run \
 
 This will perform user-local configuration of Nix at `~/.config/nix/nix.conf`. This configuration will be available immediately, and any subsequent invocation of Nix commands will take advantage of the Cachix cache.
 
-If you're running NixOS, you can configure Cachix globally by running the above command as a root user. The command will then configure `/etc/nixos/cachix/shajra.nix`, and the output will explain how to tie this configuration into your normal NixOS configuration.
+If you're running NixOS, you can configure Cachix globally by running the above command as a root user. The command will then configure `/etc/nixos/cachix/shajra.nix`, and will output instructions on how to tie this configuration into your NixOS configuration.
 
 ## Scaffolding<a id="sec-2-3"></a>
 
@@ -96,7 +98,7 @@ This project actually uses both the `nix-project` and `org2gfm` scripts that it 
 
 If you call `dependencies-upgrade` (no arguments needed) it will upgrade all of this project's dependencies, which are specified in the [./nix/sources.json](./nix/sources.json) file. And similarly, if you call `docs-generate` (again with no arguments) all the Org-mode files will be re-evaluated and re-exported to GFM files.
 
-If you want to scaffold a new project with these scripts, you can create a new directory, go into it, and invoke the following `nix` call:
+If you want to scaffold a new project with these scripts set up similarly, you can create a new directory, go into it, and invoke the following `nix` call:
 
 ```shell
 nix run \
