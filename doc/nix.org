@@ -402,7 +402,7 @@
    following:
 
    #+BEGIN_SRC shell :session env :dir .. :results output :exports both :noweb yes :post crop(text=*this*, first-n=0, last-n=3)
-     nix-env --install --file . --attr <<get("package-attr")>> 2>&1 #
+     nix-env --install --file . --attr <<get("package-attr")>> 2>&1
    #+END_SRC
 
    #+RESULTS:

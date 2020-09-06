@@ -208,7 +208,7 @@ nix-env --query
 To install the `nix-project` executable, which is accessed by the "nix-project-exe" in our top-level `default.nix` file, we'd run the following:
 
 ```shell
-nix-env --install --file . --attr nix-project-exe 2>&1 #
+nix-env --install --file . --attr nix-project-exe 2>&1
 ```
 
     installing 'nix-project'
