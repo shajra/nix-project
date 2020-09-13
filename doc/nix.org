@@ -413,7 +413,7 @@
    {{{package-attr}}} in our top-level =default.nix= file, we'd run the
    following:
 
-   #+BEGIN_SRC shell :session env :dir .. :results output :exports both :noweb yes :post crop(text=*this*, first-n=0, last-n=3)
+   #+BEGIN_SRC shell :session env :dir .. :results output :exports both :noweb yes :post crop(text=*this*, first-n=1, last-n=3)
      nix-env --install --file . --attr <<get("package-attr")>> 2>&1
    #+END_SRC
 
