@@ -119,7 +119,12 @@ In the remainder of this document, we'll use `.` instead of `default.nix` since 
 
 ## Building Nix expressions<a id="sec-4-2"></a>
 
-From our execution of `nix search` above we can see that a package named "nix-project" can be accessed with the "nix-project-exe" attribute path in the Nix expression in the project root's `default.nix`.
+The following result is returned by our prior execution of `nix search --no-cache --file .`:
+
+    * nix-project-exe (nix-project)
+      Script to scaffold and maintain dependencies for a Nix project
+
+We can see that a package named "nix-project" can be accessed with the "nix-project-exe" attribute path in the Nix expression in the project root's `default.nix`. This package provides the executable `nix-project`.
 
 We can build this package with `nix build` from the project root:
 

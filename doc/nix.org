@@ -269,9 +269,21 @@
 
 ** Building Nix expressions
 
-   From our execution of =nix search= above we can see that a package named
-   {{{package-name}}} can be accessed with the {{{package-attr}}} attribute
-   path in the Nix expression in the project root's =default.nix=.
+   The following result is returned by our prior execution of ~nix search
+   --no-cache --file .~:
+
+   #+BEGIN_SRC shell :dir .. :results output :exports results :noweb yes
+     nix search --no-cache --file . | ansifilter \
+         | grep --color=never --after-context=1 '* <<get("package-attr")>> ('
+   #+END_SRC
+
+   #+RESULTS:
+   : * nix-project-exe (nix-project)
+   :   Script to scaffold and maintain dependencies for a Nix project
+
+   We can see that a package named {{{package-name}}} can be accessed with the
+   {{{package-attr}}} attribute path in the Nix expression in the project root's
+   =default.nix=.  This package provides the executable {{{package-exe}}}.
 
    We can build this package with =nix build= from the project root:
 
