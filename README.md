@@ -193,13 +193,14 @@ support/dependencies-upgrade --niv -- --help
 
     niv - dependency manager for Nix projects
     
-    version: 0.2.16
+    version: 0.2.17
     
     Usage: niv [-s|--sources-file FILE] COMMAND
     
     Available options:
       -s,--sources-file FILE   Use FILE instead of nix/sources.json
       -h,--help                Show this help text
+      --version                Print version
     
     Available commands:
       init                     Initialize a Nix project. Existing files won't be
