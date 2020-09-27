@@ -203,7 +203,7 @@ ignore_regex()
 {
     if [ -n "$IGNORE_REGEX" ]
     then ${gnugrep}/bin/grep -v "$IGNORE_REGEX"
-    else cat -
+    else ${coreutils}/bin/cat -
     fi
 }
 
