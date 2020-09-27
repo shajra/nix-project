@@ -193,7 +193,7 @@ support/dependencies-upgrade --niv -- --help
 
     niv - dependency manager for Nix projects
     
-    version: 0.2.17
+    version: 0.2.18
     
     Usage: niv [-s|--sources-file FILE] COMMAND
     
