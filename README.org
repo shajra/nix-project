@@ -167,11 +167,12 @@
    Using the ~--help~ switch directly with =dependencies-upgrade= shows the
    help for =nix-project=, which it delegates to.
 
+   #+NAME: help-deps-plain
    #+BEGIN_SRC shell :results output :exports both
      support/dependencies-upgrade --help
    #+END_SRC
 
-   #+RESULTS:
+   #+RESULTS: help-deps-plain
    #+begin_example
    USAGE:
 
@@ -220,11 +221,12 @@
    Since =nix-project= can pass through commands to =niv= we can see the help
    for Niv with the following command:
 
+   #+NAME: help-deps-niv
    #+BEGIN_SRC shell :results output :exports both
      support/dependencies-upgrade --niv -- --help
    #+END_SRC
 
-   #+RESULTS:
+   #+RESULTS: help-deps-niv
    #+begin_example
    niv - dependency manager for Nix projects
 
@@ -276,11 +278,12 @@
    For reference, here's the documentation from the ~--help~ switch for
    =docs-generate= / =org2gfm=:
 
+   #+NAME: help-docs
    #+BEGIN_SRC shell :results output :exports both
      support/docs-generate --help
    #+END_SRC
 
-   #+RESULTS:
+   #+RESULTS: help-docs
    #+begin_example
    USAGE: org2gfm [OPTION]...  [FILE]...
 
