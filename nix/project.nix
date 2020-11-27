@@ -8,8 +8,14 @@
 , nix-project-lib
 }:
 
-nix-project-lib.writeShellChecked "nix-project"
-"Script to scaffold and maintain dependencies for a Nix project"
+let description =
+        "Script to scaffold and maintain dependencies for a Nix project";
+in
+
+nix-project-lib.writeShellCheckedExe "nix-project"
+{
+    inherit description;
+}
 ''
 set -eu
 
@@ -22,7 +28,7 @@ TOKEN=~/.config/nix-project/github.token
 COMMAND=
 
 
-. "${nix-project-lib.lib-sh}/bin/lib.sh"
+. "${nix-project-lib.lib-sh}/share/nix-project/lib.sh"
 
 print_usage()
 {

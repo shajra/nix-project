@@ -1,23 +1,56 @@
 { coreutils
-, shellcheck
-, writeShellScriptBin
 , lib
+, runtimeShell
+, shellcheck
+, stdenv
+, writeShellScriptBin
+, writeTextFile
 }:
 
 rec {
 
     isDarwin = builtins.elem builtins.currentSystem lib.systems.doubles.darwin;
 
-    writeShellChecked = name: desc: body:
-        (writeShellScriptBin name body).overrideAttrs (old: {
-            meta.description = desc;
-            buildCommand = ''
-                ${old.buildCommand}
-                ${shellcheck}/bin/shellcheck -x $out/bin/${name}
+    writeShellChecked = name:
+        { meta ? {}
+        , executable ? false
+        , destination ? ""
+        }:
+        body:
+        let checkPhase = ''
+                ${stdenv.shell} -n $out${destination}
+                "${shellcheck}/bin/shellcheck" -x "$out${destination}"
             '';
+            args = {
+                inherit name executable destination checkPhase;
+                text = body;
+            };
+        in (writeTextFile args).overrideAttrs (old: {
+            meta = old.meta or {} // meta;
         });
 
-    lib-sh = writeShellChecked "lib.sh" "Common shell functions" ''
+    writeShellCheckedExe = name: meta: body:
+        writeShellChecked name {
+            inherit meta;
+            executable = true;
+            destination = "/bin/${name}";
+        }
+        ''
+            #!${runtimeShell}
+            ${body}
+        '';
+
+    writeShellCheckedShareLib = name: packagePath: meta:
+        writeShellChecked name {
+            inherit meta;
+            executable = false;
+            destination = "/share/${packagePath}/${name}.sh";
+        };
+
+    lib-sh = writeShellCheckedShareLib "lib" "nix-project" {
+            description = "Common shell functions";
+        } ''
+        # shellcheck shell=bash
         add_nix_to_path()
         {
             local nix_exe="$1"

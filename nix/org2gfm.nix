@@ -37,11 +37,15 @@ let
           (princ (concat "\n" action ": " buffer-file-name "\n")
                  'external-debugging-output))
     '';
+    description =
+        "Script to export Org-mode files to GitHub Flavored Markdown (GFM)";
 
 in
 
-nix-project-lib.writeShellChecked "org2gfm"
-"Script to export Org-mode files to GitHub Flavored Markdown (GFM)"
+nix-project-lib.writeShellCheckedExe "org2gfm"
+{
+    inherit description;
+}
 ''
 set -eu
 
@@ -52,7 +56,7 @@ NIX_EXE=
 QUERY_ANSWER=
 
 
-. "${nix-project-lib.lib-sh}/bin/lib.sh"
+. "${nix-project-lib.lib-sh}/share/nix-project/lib.sh"
 
 print_usage()
 {
