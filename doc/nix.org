@@ -229,7 +229,7 @@
    : * nix-project-exe (nix-project)
    :   Script to scaffold and maintain dependencies for a Nix project
    : 
-   : * nix-project-lib.lib-sh (lib.sh)
+   : * nix-project-lib.lib-sh (lib)
    :   Common shell functions
    : 
    : * nix-project-org2gfm (org2gfm)
@@ -323,7 +323,7 @@
    #+END_SRC
 
    #+RESULTS: nix-build-link
-   : /nix/store/g4dxr51d3nsznhq6wkzlzpiig4xr8nzj-nix-project
+   : /nix/store/68k6r7wcfapqrwqhvcyi9l70msz8p87v-nix-project
 
    Following these symlinks, we can see the files the project provides:
 
@@ -352,7 +352,7 @@
    #+END_SRC
 
    #+RESULTS: nix-build-path
-   : /nix/store/g4dxr51d3nsznhq6wkzlzpiig4xr8nzj-nix-project
+   : /nix/store/68k6r7wcfapqrwqhvcyi9l70msz8p87v-nix-project
 
 ** Running commands
 
