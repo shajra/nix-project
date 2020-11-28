@@ -8,13 +8,13 @@
 , nix-project-lib
 }:
 
-let description =
+let meta.description =
         "Script to scaffold and maintain dependencies for a Nix project";
 in
 
 nix-project-lib.writeShellCheckedExe "nix-project"
 {
-    inherit description;
+    inherit meta;
 }
 ''
 set -eu

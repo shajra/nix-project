@@ -37,14 +37,14 @@ let
           (princ (concat "\n" action ": " buffer-file-name "\n")
                  'external-debugging-output))
     '';
-    description =
+    meta.description =
         "Script to export Org-mode files to GitHub Flavored Markdown (GFM)";
 
 in
 
 nix-project-lib.writeShellCheckedExe "org2gfm"
 {
-    inherit description;
+    inherit meta;
 }
 ''
 set -eu

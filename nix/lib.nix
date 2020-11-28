@@ -29,27 +29,37 @@ rec {
             meta = old.meta or {} // meta;
         });
 
-    writeShellCheckedExe = name: meta: body:
+    writeShellCheckedExe = name:
+        { meta ? {}
+        , exeName ? name
+        }:
+        body:
         writeShellChecked name {
             inherit meta;
             executable = true;
-            destination = "/bin/${name}";
+            destination = "/bin/${exeName}";
         }
         ''
             #!${runtimeShell}
             ${body}
         '';
 
-    writeShellCheckedShareLib = name: packagePath: meta:
+    writeShellCheckedShareLib = name: packagePath:
+        { meta ? {}
+        , baseName ? name
+        }:
         writeShellChecked name {
             inherit meta;
             executable = false;
-            destination = "/share/${packagePath}/${name}.sh";
+            destination = "/share/${packagePath}/${baseName}.sh";
         };
 
-    lib-sh = writeShellCheckedShareLib "lib" "nix-project" {
-            description = "Common shell functions";
-        } ''
+    lib-sh = writeShellCheckedShareLib
+        "nix-project-lib" "nix-project" {
+            meta.description = "Common shell functions";
+            baseName = "lib";
+        }
+        ''
         # shellcheck shell=bash
         add_nix_to_path()
         {
