@@ -124,7 +124,7 @@ The following result is returned by our prior execution of `nix search --no-cach
     * nix-project-exe (nix-project)
       Script to scaffold and maintain dependencies for a Nix project
 
-We can see that a package named "nix-project" can be accessed with the "nix-project-exe" attribute path in the Nix expression in the project root's `default.nix`. This package provides the executable `nix-project`.
+We can see that a package named "nix-project" can be accessed with the `nix-project-exe` attribute path in the Nix expression in the project root's `default.nix`. This package provides the executable `nix-project`.
 
 We can build this package with `nix build` from the project root:
 
@@ -142,7 +142,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/2crrwzq2ypira6sz8cry8h0lfv63ip25-nix-project
+    /nix/store/k571b743ds7xl01p8wkyqlmh4paq56gp-nix-project
 
 Following these symlinks, we can see the files the project provides:
 
@@ -164,11 +164,15 @@ It's common to configure these "result" symlinks as ignored in source control to
 nix path-info --file . nix-project-exe
 ```
 
-    /nix/store/2crrwzq2ypira6sz8cry8h0lfv63ip25-nix-project
+    /nix/store/k571b743ds7xl01p8wkyqlmh4paq56gp-nix-project
 
 ## Running commands<a id="sec-4-3"></a>
 
-You can run a command from a package in a Nix expression with `nix run`. For example, to get the help message for the `nix-project` executable provided by the "nix-project" package selected by the "nix-project-exe" attribute path, we can call the following:
+We can run commands in Nix-curated environments with `nix run`. Nix will take executables found in packages, put them in an environments `PATH`, and then execute a user-specified command.
+
+With `nix run`, you don't even have to build the package first with `nix build` or mess around with the "result" symlinks. `nix run` will build the project if it's not yet been built.
+
+For example, to get the help message for the `nix-project` provided by the `nix-project` package selected by the `nix-project-exe` attribute path from `.`, we can call the following:
 
 ```shell
 nix run \
@@ -184,7 +188,7 @@ nix run \
         nix-project [OPTION]... --niv -- COMMAND...
     …
 
-You don't even have to build the package first with `nix build` or mess around with the "result" symlinks. `nix run` will build the project if it's not yet been built.
+Thus far, the argument of the `--file` switch has always referenced a Nix file on our local filesystem. However, it's possible to reference a Nix expression downloaded from the internet. The Nix ecosystem is supported by a giant GitHub repository of Nix expressions called [Nixpkgs](https://github.com/NixOS/nixpkgs). Special branches of this repository are considered *channels* in the Nix ecosystem. A Nixpkgs branch of "nixos-20.09" can be referenced by "channel:nixos-20.09" for `nix` subcommands that accept a `--file` switch.
 
 Again, as with `nix build` attribute paths are specified as positional arguments to select packages.
 
@@ -210,7 +214,7 @@ We can query what's installed in the active profile with the `--query` switch:
 nix-env --query
 ```
 
-To install the `nix-project` executable, which is accessed by the "nix-project-exe" in our top-level `default.nix` file, we'd run the following:
+To install the `nix-project` executable, which is accessed by the `nix-project-exe` in our top-level `default.nix` file, we'd run the following:
 
 ```shell
 nix-env --install --file . --attr nix-project-exe 2>&1
@@ -234,7 +238,7 @@ nix-env --uninstall nix-project 2>&1
 
     uninstalling 'nix-project'
 
-Note that we've installed our package using its attribute path ("nix-project-exe") within the referenced Nix expression. But we uninstall it using the package name ("nix-project"), which may or may not be the same as the attribute path. When a package is installed, Nix keeps no reference to the expression that evaluated to the derivation of the installed package. The attribute path is only relevant to this expression. In fact, two different expressions could evaluate to the exact same derivation, but use different attribute paths. This is why we uninstall packages by their package name.
+Note that we've installed our package using its attribute path (`nix-project-exe`) within the referenced Nix expression. But we uninstall it using the package name ("nix-project"), which may or may not be the same as the attribute path. When a package is installed, Nix keeps no reference to the expression that evaluated to the derivation of the installed package. The attribute path is only relevant to this expression. In fact, two different expressions could evaluate to the exact same derivation, but use different attribute paths. This is why we uninstall packages by their package name.
 
 Also, if you look at the location for your profile, you'll see that Nix retains the symlink trees of previous generations of your profile. In fact you can even rollback to a previous profile with the `--rollback` switch. You can delete old generations of your profile with the `=--delete-generations` switch.
 

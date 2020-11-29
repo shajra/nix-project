@@ -23,9 +23,10 @@
    #+MACRO: package-type {{{get(package-type)}}}
    #+MACRO: package-target {{{get(package-target,=)}}}
    #+MACRO: run-src {{{get(run-src,=)}}}
-   #+MACRO: run-attr {{{get(run-name,=)}}}
    #+MACRO: run-attr {{{get(run-attr,=)}}}
+   #+MACRO: run-name {{{get(run-name,=)}}}
    #+MACRO: run-target {{{get(run-target,=)}}}
+   #+MACRO: nixos-release {{{get(nixos-release)}}}
 
 ** Formatting help
 
@@ -234,7 +235,7 @@
    : * nix-project-exe (nix-project)
    :   Script to scaffold and maintain dependencies for a Nix project
    : 
-   : * nix-project-lib.lib-sh (lib.sh)
+   : * nix-project-lib.lib-sh (nix-project-lib)
    :   Common shell functions
    : 
    : * nix-project-org2gfm (org2gfm)
@@ -329,7 +330,7 @@
    #+END_SRC
 
    #+RESULTS: nix-build-link
-   : /nix/store/g4dxr51d3nsznhq6wkzlzpiig4xr8nzj-nix-project
+   : /nix/store/k571b743ds7xl01p8wkyqlmh4paq56gp-nix-project
 
    Following these symlinks, we can see the files the project provides:
 
@@ -358,7 +359,7 @@
    #+END_SRC
 
    #+RESULTS: nix-build-path
-   : /nix/store/g4dxr51d3nsznhq6wkzlzpiig4xr8nzj-nix-project
+   : /nix/store/k571b743ds7xl01p8wkyqlmh4paq56gp-nix-project
 
 ** Running commands
 
@@ -395,8 +396,9 @@
    expression downloaded from the internet.  The Nix ecosystem is supported by a
    giant GitHub repository of Nix expressions called [[nixpkgs][Nixpkgs]].  Special branches
    of this repository are considered /channels/ in the Nix ecosystem.  A Nixpkgs
-   branch of "nixos-20.09" can be referenced by "channel:nixos-20.09" for =nix=
-   subcommands that accept a =--file= switch.
+   branch of "{{{nixos-release}}}" can be referenced by
+   "channel:{{{nixos-release}}}" for =nix= subcommands that accept a =--file=
+   switch.
 
    Again, as with =nix build= attribute paths are specified as positional
    arguments to select packages.
