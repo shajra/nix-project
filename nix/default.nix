@@ -1,6 +1,6 @@
 let
 
-    sources = import ./sources-unified.nix;
+    sources = import ./sources;
 
     buildOverlay = self: super: {
         niv = (import sources.niv {}).niv;
@@ -8,7 +8,7 @@ let
         inherit nix-project-lib;
     };
 
-    pkgs = import sources.nixpkgs {
+    pkgs = import sources.nixpkgs-stable {
         config = {};
         overlays = [
           (import ./overlay.nix)
