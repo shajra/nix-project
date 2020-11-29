@@ -181,7 +181,7 @@ install_scripts()
         "$support_dir/docs-generate"
     install_files ${./scaffold/support/dependencies-upgrade} \
         "$support_dir/dependencies-upgrade"
-    ${gnused}/bin/sed -i -e "s/@NIV_DIR@/$NIV_DIR/" "$support_dir"/*
+    ${gnused}/bin/sed -i -e "s|@NIV_DIR@|$NIV_DIR|" "$support_dir"/*
     install_files --mode 644 ${./scaffold}/nix/* "$(niv_dir)"
     install_files --mode 644 ${./scaffold}/*.org "$(target_dir)"
 }
