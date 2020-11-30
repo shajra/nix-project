@@ -301,8 +301,8 @@
 
    We can see that a package named {{{package-name}}} can be accessed with the
    {{{package-attr}}} attribute path in the Nix expression in the project root's
-   =default.nix=.  This package provides the {{{package-type}}}
-   {{{package-target}}}.
+   =default.nix=.  Not shown in the search results above, this package happens
+   to provide the {{{package-type}}} {{{package-target}}}.
 
    We can build this package with =nix build= from the project root:
 
@@ -364,16 +364,16 @@
 ** Running commands
 
    We can run commands in Nix-curated environments with =nix run=.  Nix will
-   take executables found in packages, put them in an environments =PATH=, and
+   take executables found in packages, put them in an environment's =PATH=, and
    then execute a user-specified command.
 
    With =nix run=, you don't even have to build the package first with =nix
    build= or mess around with the "result" symlinks. =nix run= will build the
    project if it's not yet been built.
 
-   For example, to get the help message for the {{{run-target}}} provided by the
-   {{{run-name}}} package selected by the {{{run-attr}}} attribute path from
-   {{{run-src}}}, we can call the following:
+   For example, to get the help message for the {{{run-target}}} executable
+   provided by the {{{run-name}}} package selected by the {{{run-attr}}}
+   attribute path from {{{run-src}}}, we can call the following:
 
    #+NAME: nix-run
    #+BEGIN_SRC shell :dir .. :results output :exports both :noweb yes :post crop(text=*this*, first-n=5, last-n=0)
@@ -413,11 +413,11 @@
 
 ** Installing and uninstalling programs
 
-   We've seen that we can build programs with =nix build= and then execute
-   programs using the "result" symlink (=result/bin/*=). Additionally, we've
-   seen that you can run programs with =nix run=. But these additional steps
-   and switches/arguments can feel extraneous. It would be nice if we could
-   just have the programs on our =PATH=. This is what =nix-env= is for.
+   We've seen that we can build programs with =nix build= and then execute them
+   using the "result" symlink (=result/bin/*=). Additionally, we've seen that
+   you can run programs with =nix run=. But these additional steps and
+   switches/arguments can feel extraneous. It would be nice if we could just
+   have the programs on our =PATH=. This is what =nix-env= is for.
 
    =nix-env= maintains a symlink tree, called a /profile/, of installed
    programs. The active profile is pointed to by a symlink at =~/.nix-profile=.
@@ -489,7 +489,7 @@
    retains the symlink trees of previous generations of your profile.  In fact
    you can even rollback to a previous profile with the =--rollback= switch.
    You can delete old generations of your profile with the
-   ==--delete-generations= switch.
+   =--delete-generations= switch.
 
    See the [[nix-env][documentation for =nix-env=]] for more details.
 

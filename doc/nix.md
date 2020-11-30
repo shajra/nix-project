@@ -124,7 +124,7 @@ The following result is returned by our prior execution of `nix search --no-cach
     * nix-project-exe (nix-project)
       Script to scaffold and maintain dependencies for a Nix project
 
-We can see that a package named "nix-project" can be accessed with the `nix-project-exe` attribute path in the Nix expression in the project root's `default.nix`. This package provides the executable `nix-project`.
+We can see that a package named "nix-project" can be accessed with the `nix-project-exe` attribute path in the Nix expression in the project root's `default.nix`. Not shown in the search results above, this package happens to provide the executable `nix-project`.
 
 We can build this package with `nix build` from the project root:
 
@@ -168,11 +168,11 @@ nix path-info --file . nix-project-exe
 
 ## Running commands<a id="sec-4-3"></a>
 
-We can run commands in Nix-curated environments with `nix run`. Nix will take executables found in packages, put them in an environments `PATH`, and then execute a user-specified command.
+We can run commands in Nix-curated environments with `nix run`. Nix will take executables found in packages, put them in an environment's `PATH`, and then execute a user-specified command.
 
 With `nix run`, you don't even have to build the package first with `nix build` or mess around with the "result" symlinks. `nix run` will build the project if it's not yet been built.
 
-For example, to get the help message for the `nix-project` provided by the `nix-project` package selected by the `nix-project-exe` attribute path from `.`, we can call the following:
+For example, to get the help message for the `nix-project` executable provided by the `nix-project` package selected by the `nix-project-exe` attribute path from `.`, we can call the following:
 
 ```shell
 nix run \
@@ -198,7 +198,7 @@ The command to run is specified after the `--command` switch. `nix run` runs the
 
 ## Installing and uninstalling programs<a id="sec-4-4"></a>
 
-We've seen that we can build programs with `nix build` and then execute programs using the "result" symlink (`result/bin/*`). Additionally, we've seen that you can run programs with `nix run`. But these additional steps and switches/arguments can feel extraneous. It would be nice if we could just have the programs on our `PATH`. This is what `nix-env` is for.
+We've seen that we can build programs with `nix build` and then execute them using the "result" symlink (`result/bin/*`). Additionally, we've seen that you can run programs with `nix run`. But these additional steps and switches/arguments can feel extraneous. It would be nice if we could just have the programs on our `PATH`. This is what `nix-env` is for.
 
 `nix-env` maintains a symlink tree, called a *profile*, of installed programs. The active profile is pointed to by a symlink at `~/.nix-profile`. By default, this profile points to `/nix/var/nix/profiles/per-user/$USER/profile`. But you can point your `~/.nix-profile` to any writable location with the `--switch-profile` switch:
 
@@ -240,7 +240,7 @@ nix-env --uninstall nix-project 2>&1
 
 Note that we've installed our package using its attribute path (`nix-project-exe`) within the referenced Nix expression. But we uninstall it using the package name ("nix-project"), which may or may not be the same as the attribute path. When a package is installed, Nix keeps no reference to the expression that evaluated to the derivation of the installed package. The attribute path is only relevant to this expression. In fact, two different expressions could evaluate to the exact same derivation, but use different attribute paths. This is why we uninstall packages by their package name.
 
-Also, if you look at the location for your profile, you'll see that Nix retains the symlink trees of previous generations of your profile. In fact you can even rollback to a previous profile with the `--rollback` switch. You can delete old generations of your profile with the `=--delete-generations` switch.
+Also, if you look at the location for your profile, you'll see that Nix retains the symlink trees of previous generations of your profile. In fact you can even rollback to a previous profile with the `--rollback` switch. You can delete old generations of your profile with the `--delete-generations` switch.
 
 See the [documentation for `nix-env`](https://nixos.org/nix/manual/#sec-nix-env) for more details.
 
