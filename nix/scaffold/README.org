@@ -18,6 +18,7 @@ Markdown.
 
 Here's an example source block to illustrate evaluation of =whoami=:
 
+#+NAME: whoami
 #+BEGIN_SRC shell :results output :exports both
   whoami
 #+END_SRC
