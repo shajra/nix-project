@@ -60,8 +60,8 @@ QUERY_ANSWER=
 
 print_usage()
 {
-    ${coreutils}/bin/cat - <<EOF
-USAGE: $(${coreutils}/bin/basename "$0") [OPTION]...  [FILE]...
+    "${coreutils}/bin/cat" - <<EOF
+USAGE: $("${coreutils}/bin/basename" "$0") [OPTION]...  [FILE]...
 
 DESCRIPTION:
 
@@ -144,7 +144,7 @@ main()
     then add_nix_to_path "$NIX_EXE"
     fi
     if [ -n "$QUERY_ANSWER" ]
-    then yes "$QUERY_ANSWER" | generate_gfm "$@"
+    then "${coreutils}/bin/yes" "$QUERY_ANSWER" | generate_gfm "$@"
     else generate_gfm "$@"
     fi
 }
@@ -167,7 +167,7 @@ generate_gfm_args()
 generate_gfm_found()
 {
     {
-        ${findutils}/bin/find .  -name '*.org' \
+        "${findutils}/bin/find" .  -name '*.org' \
         | ignore_regex \
         | {
             while read -r f
@@ -182,7 +182,7 @@ generate_gfm_file()
     local filepath="$1"
     if [ "$EVALUATE" = true ]
     then
-        ${emacs}/bin/emacs \
+        "${emacs}/bin/emacs" \
             --batch \
             --kill \
             --load ${init} \
@@ -193,7 +193,7 @@ generate_gfm_file()
             --eval "(org2gfm-log \"EXPORTING\")" \
             --funcall org-gfm-export-to-markdown
     else
-        ${emacs}/bin/emacs \
+        "${emacs}/bin/emacs" \
             --batch \
             --kill \
             --load ${init} \
@@ -206,8 +206,8 @@ generate_gfm_file()
 ignore_regex()
 {
     if [ -n "$IGNORE_REGEX" ]
-    then ${gnugrep}/bin/grep -v "$IGNORE_REGEX"
-    else ${coreutils}/bin/cat -
+    then "${gnugrep}/bin/grep" -v "$IGNORE_REGEX"
+    else "${coreutils}/bin/cat" -
     fi
 }
 

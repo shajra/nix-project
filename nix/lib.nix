@@ -65,7 +65,7 @@ rec {
         {
             local nix_exe="$1"
             if [ -x "$nix_exe" ] \
-                && [ "$(${coreutils}/bin/basename "$nix_exe")" = "nix" ]
+                && [ "$("${coreutils}/bin/basename" "$nix_exe")" = "nix" ]
             then PATH="$(path_for "$nix_exe"):$PATH"
             else die "invalid filepath of 'nix' executable: $nix_exe"
             fi
@@ -74,8 +74,8 @@ rec {
 
         path_for()
         {
-            "${coreutils}"/bin/dirname \
-                "$("${coreutils}"/bin/readlink --canonicalize "$1")"
+            "${coreutils}/bin/dirname" \
+                "$("${coreutils}/bin/readlink" --canonicalize "$1")"
         }
 
         die()

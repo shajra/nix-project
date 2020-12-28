@@ -20,7 +20,7 @@ nix-project-lib.writeShellCheckedExe "nix-project"
 set -eu
 
 
-PROG="$(${coreutils}/bin/basename "$0")"
+PROG="$("${coreutils}/bin/basename" "$0")"
 NIX_EXE="$(command -v nix || true)"
 TARGET_DIR="$(pwd)"
 NIV_DIR="nix"
@@ -32,7 +32,7 @@ COMMAND=
 
 print_usage()
 {
-    ${coreutils}/bin/cat - <<EOF
+    "${coreutils}/bin/cat" - <<EOF
 USAGE:
 
     $PROG [OPTION]... --scaffold
@@ -146,7 +146,7 @@ setup_env()
     export PATH="${gzip}/bin:$PATH"
     if [ -r "$TOKEN" ]
     then
-        GITHUB_TOKEN="$(${coreutils}/bin/cat "$TOKEN")"
+        GITHUB_TOKEN="$("${coreutils}/bin/cat" "$TOKEN")"
         export GITHUB_TOKEN
     fi
 }
@@ -175,13 +175,13 @@ install_scripts()
 {
     local support_dir; support_dir="$(target_dir)/support"
     if ! [ -e "$support_dir" ]
-    then ${coreutils}/bin/mkdir "$support_dir"
+    then "${coreutils}/bin/mkdir" "$support_dir"
     fi
     install_files ${./scaffold/support/docs-generate} \
         "$support_dir/docs-generate"
     install_files ${./scaffold/support/dependencies-upgrade} \
         "$support_dir/dependencies-upgrade"
-    ${gnused}/bin/sed -i -e "s|@NIV_DIR@|$NIV_DIR|" "$support_dir"/*
+    "${gnused}/bin/sed" -i -e "s|@NIV_DIR@|$NIV_DIR|" "$support_dir"/*
     install_files --mode 644 ${./scaffold}/nix/* "$(niv_dir)"
     install_files --mode 644 ${./scaffold}/*.org "$(target_dir)"
 }
@@ -195,22 +195,22 @@ add_nix_project()
 
 install_files()
 {
-    ${coreutils}/bin/install --compare --backup "$@"
+    "${coreutils}/bin/install" --compare --backup "$@"
 }
 
 niv_init()
 {
     local dest; dest="$(niv_dir)"
-    local tmp; tmp="$(${coreutils}/bin/mktemp -d)"
+    local tmp; tmp="$("${coreutils}/bin/mktemp" -d)"
     trap '${coreutils}/bin/rm -rf "'"$tmp"'"' EXIT
     (
         cd "$tmp"
         "${niv}/bin/niv" init
     ) > /dev/null
-    ${coreutils}/bin/mkdir -p "$dest"
-    ${coreutils}/bin/cp "$tmp/nix/sources.nix" "$dest"
+    "${coreutils}/bin/mkdir" -p "$dest"
+    "${coreutils}/bin/cp" "$tmp/nix/sources.nix" "$dest"
     if ! [ -e "$dest/sources.json" ]
-    then ${coreutils}/bin/cp "$tmp/nix/sources.json" "$dest"
+    then "${coreutils}/bin/cp" "$tmp/nix/sources.json" "$dest"
     fi
 }
 
@@ -221,7 +221,7 @@ run_niv()
 
 target_dir()
 {
-    ${coreutils}/bin/readlink --canonicalize "$TARGET_DIR"
+    "${coreutils}/bin/readlink" --canonicalize "$TARGET_DIR"
 }
 
 niv_dir()
