@@ -142,7 +142,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/rf1w0hfmvq7s792gqfk2wb1m6afisqln-nix-project
+    /nix/store/qyk0vwpyp0xhapgxnw7s0pchwkxc6l8c-nix-project
 
 Following these symlinks, we can see the files the project provides:
 
@@ -164,7 +164,7 @@ It's common to configure these "result" symlinks as ignored in source control to
 nix path-info --file . nix-project-exe
 ```
 
-    /nix/store/rf1w0hfmvq7s792gqfk2wb1m6afisqln-nix-project
+    /nix/store/qyk0vwpyp0xhapgxnw7s0pchwkxc6l8c-nix-project
 
 ## Running commands<a id="sec-4-3"></a>
 
