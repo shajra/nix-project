@@ -338,7 +338,7 @@
    #+END_SRC
 
    #+RESULTS: nix-build-link
-   : /nix/store/177nz1ilyxizhd72ps4ivv0j45g5xl8h-nix-project
+   : /nix/store/mn6zmw7f6swv5anz0nin8azxl20ql3x6-nix-project
 
    Following these symlinks, we can see the files the project provides:
 
@@ -367,7 +367,7 @@
    #+END_SRC
 
    #+RESULTS: nix-build-path
-   : /nix/store/177nz1ilyxizhd72ps4ivv0j45g5xl8h-nix-project
+   : /nix/store/mn6zmw7f6swv5anz0nin8azxl20ql3x6-nix-project
 
 ** Running commands
 
@@ -461,6 +461,7 @@
 
    #+RESULTS: nix-env-install
    : installing 'nix-project'
+   : trace: Warning: `stdenv.lib` is deprecated and will be removed in the next release. Please use `lib` instead. For more information see https://github.com/NixOS/nixpkgs/issues/108938
 
    We can see this installation by querying what's been installed:
 
