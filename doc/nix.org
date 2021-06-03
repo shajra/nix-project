@@ -338,7 +338,7 @@
    #+END_SRC
 
    #+RESULTS: nix-build-link
-   : /nix/store/mn6zmw7f6swv5anz0nin8azxl20ql3x6-nix-project
+   : /nix/store/m6959ddx46qq9w6jr1jpmyi42zdh6v0v-nix-project
 
    Following these symlinks, we can see the files the project provides:
 
@@ -367,7 +367,7 @@
    #+END_SRC
 
    #+RESULTS: nix-build-path
-   : /nix/store/mn6zmw7f6swv5anz0nin8azxl20ql3x6-nix-project
+   : /nix/store/m6959ddx46qq9w6jr1jpmyi42zdh6v0v-nix-project
 
 ** Running commands
 

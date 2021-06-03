@@ -6,4 +6,4 @@
  (run-attr       . "nix-project-exe")
  (run-name       . "nix-project")
  (run-target     . "nix-project")
- (nixos-release  . "nixos-20.09"))
+ (nixos-release  . "nixos-21.05"))
