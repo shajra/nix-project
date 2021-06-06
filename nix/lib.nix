@@ -81,6 +81,11 @@ rec {
         die()
         {
             print_usage >&2
+            die_helpless "$1"
+        }
+
+        die_helpless()
+        {
             echo
             echo "ERROR: $1" >&2
             exit 1
