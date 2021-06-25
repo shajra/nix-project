@@ -142,7 +142,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/zqz9vbf3i0m8arc991k9ic354g21r4jw-nix-project
+    /nix/store/hx598j8akikqsl9hpxhq970c95jh7l49-nix-project
 
 Following these symlinks, we can see the files the project provides:
 
@@ -164,7 +164,7 @@ It's common to configure these "result" symlinks as ignored in source control to
 nix path-info --file . nix-project-exe
 ```
 
-    /nix/store/zqz9vbf3i0m8arc991k9ic354g21r4jw-nix-project
+    /nix/store/hx598j8akikqsl9hpxhq970c95jh7l49-nix-project
 
 ## Running commands<a id="sec-4-3"></a>
 
@@ -221,7 +221,6 @@ nix-env --install --file . --attr nix-project-exe 2>&1
 ```
 
     installing 'nix-project'
-    trace: Warning: `stdenv.lib` is deprecated and will be removed in the next release. Please use `lib` instead. For more information see https://github.com/NixOS/nixpkgs/issues/108938
 
 We can see this installation by querying what's been installed:
 
