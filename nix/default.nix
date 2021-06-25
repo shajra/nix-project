@@ -10,10 +10,7 @@ let
 
     pkgs = import sources.nixpkgs-stable {
         config = {};
-        overlays = [
-          (import ./overlay.nix)
-          buildOverlay
-        ];
+        overlays = [ buildOverlay ];
     };
 
     nix-project-lib = pkgs.recurseIntoAttrs
