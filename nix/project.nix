@@ -8,19 +8,30 @@
 , nix-project-lib
 }:
 
-let meta.description =
+let
+    progName = "nix-project";
+    meta.description =
         "Script to scaffold and maintain dependencies for a Nix project";
 in
 
-nix-project-lib.writeShellCheckedExe "nix-project"
+nix-project-lib.writeShellCheckedExe progName
 {
     inherit meta;
+    pathPure = false;
+    path = [
+        coreutils
+        gnused
+        gnutar
+        gzip
+        niv
+    ];
 }
 ''
 set -eu
+set -o pipefail
 
 
-PROG="$("${coreutils}/bin/basename" "$0")"
+PROG="$(basename "$0")"
 NIX_EXE="$(command -v nix || true)"
 TARGET_DIR="$(pwd)"
 NIV_DIR="nix"
@@ -32,7 +43,7 @@ COMMAND=
 
 print_usage()
 {
-    "${coreutils}/bin/cat" - <<EOF
+    cat - <<EOF
 USAGE:
 
     $PROG [OPTION]... --scaffold
@@ -141,12 +152,9 @@ main()
 setup_env()
 {
     add_nix_to_path "$1"
-    export PATH="${bash}/bin:$PATH"
-    export PATH="${gnutar}/bin:$PATH"
-    export PATH="${gzip}/bin:$PATH"
     if [ -r "$TOKEN" ]
     then
-        GITHUB_TOKEN="$("${coreutils}/bin/cat" "$TOKEN")"
+        GITHUB_TOKEN="$(cat "$TOKEN")"
         export GITHUB_TOKEN
     fi
 }
@@ -175,13 +183,13 @@ install_scripts()
 {
     local support_dir; support_dir="$(target_dir)/support"
     if ! [ -e "$support_dir" ]
-    then "${coreutils}/bin/mkdir" "$support_dir"
+    then mkdir "$support_dir"
     fi
     install_files ${./scaffold/support/docs-generate} \
         "$support_dir/docs-generate"
     install_files ${./scaffold/support/dependencies-upgrade} \
         "$support_dir/dependencies-upgrade"
-    "${gnused}/bin/sed" -i -e "s|@NIV_DIR@|$NIV_DIR|" "$support_dir"/*
+    sed -i -e "s|@NIV_DIR@|$NIV_DIR|" "$support_dir"/*
     install_files --mode 644 ${./scaffold}/nix/* "$(niv_dir)"
     install_files --mode 644 ${./scaffold}/*.org "$(target_dir)"
 }
@@ -195,33 +203,33 @@ add_nix_project()
 
 install_files()
 {
-    "${coreutils}/bin/install" --compare --backup "$@"
+    install --compare --backup "$@"
 }
 
 niv_init()
 {
     local dest; dest="$(niv_dir)"
-    local tmp; tmp="$("${coreutils}/bin/mktemp" -d)"
-    trap '${coreutils}/bin/rm -rf "'"$tmp"'"' EXIT
+    local tmp; tmp="$(mktemp -d)"
+    trap 'rm -rf "'"$tmp"'"' EXIT
     (
         cd "$tmp"
-        "${niv}/bin/niv" init
+        niv init
     ) > /dev/null
-    "${coreutils}/bin/mkdir" -p "$dest"
-    "${coreutils}/bin/cp" "$tmp/nix/sources.nix" "$dest"
+    mkdir -p "$dest"
+    cp "$tmp/nix/sources.nix" "$dest"
     if ! [ -e "$dest/sources.json" ]
-    then "${coreutils}/bin/cp" "$tmp/nix/sources.json" "$dest"
+    then cp "$tmp/nix/sources.json" "$dest"
     fi
 }
 
 run_niv()
 {
-    "${niv}/bin/niv" --sources-file "$(niv_dir)/sources.json" "$@"
+    niv --sources-file "$(niv_dir)/sources.json" "$@"
 }
 
 target_dir()
 {
-    "${coreutils}/bin/readlink" --canonicalize "$TARGET_DIR"
+    readlink --canonicalize "$TARGET_DIR"
 }
 
 niv_dir()

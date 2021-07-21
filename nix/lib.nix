@@ -7,6 +7,9 @@
 , writeTextFile
 }:
 
+let runtimeShell' = runtimeShell;
+in
+
 rec {
 
     isDarwin = builtins.elem builtins.currentSystem lib.systems.doubles.darwin;
@@ -32,8 +35,18 @@ rec {
     writeShellCheckedExe = name:
         { meta ? {}
         , exeName ? name
+        , runtimeShell ? runtimeShell'
+        , path ? null
+        , pathPure ? true
         }:
         body:
+        let
+            pathSuffix = if pathPure then "" else ":$PATH";
+            pathDecl =
+                if isNull path
+                then ""
+                else "PATH=\"" + lib.makeBinPath path + pathSuffix + "\"";
+        in
         writeShellChecked name {
             inherit meta;
             executable = true;
@@ -41,6 +54,9 @@ rec {
         }
         ''
             #!${runtimeShell}
+
+            ${pathDecl}
+
             ${body}
         '';
 

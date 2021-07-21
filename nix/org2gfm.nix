@@ -37,22 +37,33 @@ let
           (princ (concat "\n" action ": " buffer-file-name "\n")
                  'external-debugging-output))
     '';
+
+    progName = "org2gfm";
     meta.description =
         "Script to export Org-mode files to GitHub Flavored Markdown (GFM)";
 
 in
 
-nix-project-lib.writeShellCheckedExe "org2gfm"
+nix-project-lib.writeShellCheckedExe progName
 {
     inherit meta;
+    pathPure = false;
+    path = [
+        coreutils
+        emacs
+        findutils
+        gnugrep
+    ];
 }
 ''
 set -eu
+set -o pipefail
 
 
+PROG="$(basename "$0")"
+NIX_EXE="$(command -v nix || true)"
 EVALUATE=false
 IGNORE_REGEX=
-NIX_EXE=
 QUERY_ANSWER=
 
 
@@ -60,8 +71,8 @@ QUERY_ANSWER=
 
 print_usage()
 {
-    "${coreutils}/bin/cat" - <<EOF
-USAGE: $("${coreutils}/bin/basename" "$0") [OPTION]...  [FILE]...
+    cat - <<EOF
+USAGE: $PROG [OPTION]...  [FILE]...
 
 DESCRIPTION:
 
@@ -144,7 +155,7 @@ main()
     then add_nix_to_path "$NIX_EXE"
     fi
     if [ -n "$QUERY_ANSWER" ]
-    then "${coreutils}/bin/yes" "$QUERY_ANSWER" | generate_gfm "$@"
+    then yes "$QUERY_ANSWER" | generate_gfm "$@"
     else generate_gfm "$@"
     fi
 }
@@ -167,7 +178,7 @@ generate_gfm_args()
 generate_gfm_found()
 {
     {
-        "${findutils}/bin/find" .  -name '*.org' \
+        find .  -name '*.org' \
         | ignore_regex \
         | {
             while read -r f
@@ -182,7 +193,7 @@ generate_gfm_file()
     local filepath="$1"
     if [ "$EVALUATE" = true ]
     then
-        "${emacs}/bin/emacs" \
+        emacs \
             --batch \
             --kill \
             --load ${init} \
@@ -193,7 +204,7 @@ generate_gfm_file()
             --eval "(org2gfm-log \"EXPORTING\")" \
             --funcall org-gfm-export-to-markdown
     else
-        "${emacs}/bin/emacs" \
+        emacs \
             --batch \
             --kill \
             --load ${init} \
@@ -206,8 +217,8 @@ generate_gfm_file()
 ignore_regex()
 {
     if [ -n "$IGNORE_REGEX" ]
-    then "${gnugrep}/bin/grep" -v "$IGNORE_REGEX"
-    else "${coreutils}/bin/cat" -
+    then grep -v "$IGNORE_REGEX"
+    else cat -
     fi
 }
 
