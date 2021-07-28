@@ -60,7 +60,6 @@ set -eu
 set -o pipefail
 
 
-PROG="$(basename "$0")"
 NIX_EXE="$(command -v nix || true)"
 EVALUATE=false
 IGNORE_REGEX=
@@ -72,7 +71,7 @@ QUERY_ANSWER=
 print_usage()
 {
     cat - <<EOF
-USAGE: $PROG [OPTION]...  [FILE]...
+USAGE: ${progName} [OPTION]...  [FILE]...
 
 DESCRIPTION:
 

@@ -31,7 +31,6 @@ set -eu
 set -o pipefail
 
 
-PROG="$(basename "$0")"
 NIX_EXE="$(command -v nix || true)"
 TARGET_DIR="$(pwd)"
 NIV_DIR="nix"
@@ -46,16 +45,16 @@ print_usage()
     cat - <<EOF
 USAGE:
 
-    $PROG [OPTION]... --scaffold
-    $PROG [OPTION]... --upgrade
-    $PROG [OPTION]... --niv -- COMMAND...
+    ${progName} [OPTION]... --scaffold
+    ${progName} [OPTION]... --upgrade
+    ${progName} [OPTION]... --niv -- COMMAND...
 
 DESCRIPTION:
 
     A wrapper of Niv for managing Nix dependencies to assure
     dependencies Niv uses are pinned with Nix.  Also provides a
     '--scaffold' command to set up an directory as a project
-    using '$PROG'.
+    using '${progName}'.
 
     If multiple commands are specified, the last one is used.
     Similarly, if a switch is specified multiple times, the last
@@ -82,7 +81,7 @@ OPTIONS:
                           ~/.config/nix-project/github.token)
     -N --nix PATH        filepath of 'nix' executable to use
 
-    '$PROG' pins all dependencies except for Nix itself,
+    '${progName}' pins all dependencies except for Nix itself,
      which it finds on the path if possible.  Otherwise set
      '--nix'.
 
