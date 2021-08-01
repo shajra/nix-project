@@ -98,10 +98,10 @@
 
    This project actually uses both the =nix-project= and =org2gfm= scripts that
    it provides. You'll find usage of both of these scripts in the [[./support][./support]]
-   directory. The =support/dependencies-upgrade= script delegates to
+   directory. The =support/dependencies-update= script delegates to
    =nix-project=, and =support/docs-generate= delegates to =org2gfm=.
 
-   If you call =dependencies-upgrade= (no arguments needed) it will upgrade all
+   If you call =dependencies-update= (no arguments needed) it will update all
    of this project's dependencies, which are specified in the
    [[./nix/sources.json][./nix/sources.json]] file. And similarly, if you call =docs-generate= (again
    with no arguments) all the Org-mode files will be re-evaluated and
@@ -120,7 +120,7 @@
    #+END_SRC
 
    Note that we're using =nix run= again, similarly to how we configured
-   shajra.cachix.org before. Even =support/dependencies-upgrade= and
+   shajra.cachix.org before. Even =support/dependencies-update= and
    =support/docs-generate= are essentially calls to =nix run=. [[file:doc/nix.org][The provided
    documentation on Nix]] has a section explaining more of how =nix run= works.
 
@@ -133,12 +133,12 @@
      │   └── sources.nix
      ├── README.org
      └── support
-         ├── dependencies-upgrade
+         ├── dependencies-update
          └── docs-generate
    #+END_EXAMPLE
 
    =nix/sources.json= and =nix/sources.nix= are overwritten by calls to Niv
-   (via =nix-project= via =dependencies-upgrade=), but the rest of the files
+   (via =nix-project= via =dependencies-update=), but the rest of the files
    are yours to modify as you see fit.
 
 ** Managing dependencies
@@ -148,28 +148,28 @@
    dependencies specified in =nix/sources.json= rather than going to GitHub
    directly.
 
-   In your newly scaffolded project, you can call =dependencies-upgrade= with
-   no arguments to upgrade all your dependencies. But it will likely do
+   In your newly scaffolded project, you can call =dependencies-update= with
+   no arguments to update all your dependencies. But it will likely do
    nothing, because a freshly scaffolded project already has the latest
    dependencies.
 
    See the [[niv][Niv]] documentation on how to manage dependencies. You can run Niv
-   commands directly with =dependencies-upgrade=. For example, to run the
+   commands directly with =dependencies-update=. For example, to run the
    equivalent of ~niv show~ you can run
 
    #+BEGIN_SRC shell :eval no
-     support/dependencies-upgrade niv show
+     support/dependencies-update niv show
    #+END_SRC
 
-   You can also use =dependencies-upgrade= to see the help messages for both
+   You can also use =dependencies-update= to see the help messages for both
    =nix-project= and =niv=.
 
-   Using the ~--help~ switch directly with =dependencies-upgrade= shows the
+   Using the ~--help~ switch directly with =dependencies-update= shows the
    help for =nix-project=, which it delegates to.
 
    #+NAME: help-deps-plain
    #+BEGIN_SRC shell :results output :exports both
-     support/dependencies-upgrade --help
+     support/dependencies-update --help
    #+END_SRC
 
    #+RESULTS: help-deps-plain
@@ -196,12 +196,9 @@
    COMMANDS:
 
        scaffold     set up current directory with example scripts
-       init-update  upgrade sources.nix and update Niv sources
+       init-update  update both sources.nix (init) and sources.json
+		     (shortcut for "niv init; niv update")
        niv          pass arguments directly to Niv (default command)
-
-       Note 'init-update' runs the following in one step:
-
-	   niv init; niv update
 
    OPTIONS:
 
@@ -226,7 +223,7 @@
 
    #+NAME: help-deps-niv
    #+BEGIN_SRC shell :results output :exports both
-     support/dependencies-upgrade niv --help
+     support/dependencies-update niv --help
    #+END_SRC
 
    #+RESULTS: help-deps-niv

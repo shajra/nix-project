@@ -94,9 +94,9 @@ If you're running NixOS, you can configure Cachix globally by running the above 
 
 ## Scaffolding<a id="sec-2-3"></a>
 
-This project actually uses both the `nix-project` and `org2gfm` scripts that it provides. You'll find usage of both of these scripts in the [./support](./support) directory. The `support/dependencies-upgrade` script delegates to `nix-project`, and `support/docs-generate` delegates to `org2gfm`.
+This project actually uses both the `nix-project` and `org2gfm` scripts that it provides. You'll find usage of both of these scripts in the [./support](./support) directory. The `support/dependencies-update` script delegates to `nix-project`, and `support/docs-generate` delegates to `org2gfm`.
 
-If you call `dependencies-upgrade` (no arguments needed) it will upgrade all of this project's dependencies, which are specified in the [./nix/sources.json](./nix/sources.json) file. And similarly, if you call `docs-generate` (again with no arguments) all the Org-mode files will be re-evaluated and re-exported to GFM files.
+If you call `dependencies-update` (no arguments needed) it will update all of this project's dependencies, which are specified in the [./nix/sources.json](./nix/sources.json) file. And similarly, if you call `docs-generate` (again with no arguments) all the Org-mode files will be re-evaluated and re-exported to GFM files.
 
 If you want to scaffold a new project with these scripts set up similarly, you can create a new directory, go into it, and invoke the following `nix` call:
 
@@ -108,7 +108,7 @@ nix run \
     --command nix-project --scaffold --nix `command -v nix`
 ```
 
-Note that we're using `nix run` again, similarly to how we configured shajra.cachix.org before. Even `support/dependencies-upgrade` and `support/docs-generate` are essentially calls to `nix run`. [The provided documentation on Nix](doc/nix.md) has a section explaining more of how `nix run` works.
+Note that we're using `nix run` again, similarly to how we configured shajra.cachix.org before. Even `support/dependencies-update` and `support/docs-generate` are essentially calls to `nix run`. [The provided documentation on Nix](doc/nix.md) has a section explaining more of how `nix run` works.
 
 In the freshly scaffolded project, you'll see the following files:
 
@@ -118,29 +118,29 @@ In the freshly scaffolded project, you'll see the following files:
     │   └── sources.nix
     ├── README.org
     └── support
-        ├── dependencies-upgrade
+        ├── dependencies-update
         └── docs-generate
 
-`nix/sources.json` and `nix/sources.nix` are overwritten by calls to Niv (via `nix-project` via `dependencies-upgrade`), but the rest of the files are yours to modify as you see fit.
+`nix/sources.json` and `nix/sources.nix` are overwritten by calls to Niv (via `nix-project` via `dependencies-update`), but the rest of the files are yours to modify as you see fit.
 
 ## Managing dependencies<a id="sec-2-4"></a>
 
 The scripts in the `support` directory are mostly calls to `nix run`, similarly to what we called for scaffolding, except they reference dependencies specified in `nix/sources.json` rather than going to GitHub directly.
 
-In your newly scaffolded project, you can call `dependencies-upgrade` with no arguments to upgrade all your dependencies. But it will likely do nothing, because a freshly scaffolded project already has the latest dependencies.
+In your newly scaffolded project, you can call `dependencies-update` with no arguments to update all your dependencies. But it will likely do nothing, because a freshly scaffolded project already has the latest dependencies.
 
-See the [Niv](https://github.com/nmattia/niv) documentation on how to manage dependencies. You can run Niv commands directly with `dependencies-upgrade`. For example, to run the equivalent of `niv show` you can run
+See the [Niv](https://github.com/nmattia/niv) documentation on how to manage dependencies. You can run Niv commands directly with `dependencies-update`. For example, to run the equivalent of `niv show` you can run
 
 ```shell
-support/dependencies-upgrade niv show
+support/dependencies-update niv show
 ```
 
-You can also use `dependencies-upgrade` to see the help messages for both `nix-project` and `niv`.
+You can also use `dependencies-update` to see the help messages for both `nix-project` and `niv`.
 
-Using the `--help` switch directly with `dependencies-upgrade` shows the help for `nix-project`, which it delegates to.
+Using the `--help` switch directly with `dependencies-update` shows the help for `nix-project`, which it delegates to.
 
 ```shell
-support/dependencies-upgrade --help
+support/dependencies-update --help
 ```
 
     USAGE:
@@ -165,12 +165,9 @@ support/dependencies-upgrade --help
     COMMANDS:
     
         scaffold     set up current directory with example scripts
-        init-update  upgrade sources.nix and update Niv sources
+        init-update  update both sources.nix (init) and sources.json
+    		  (shortcut for "niv init; niv update")
         niv          pass arguments directly to Niv (default command)
-    
-        Note 'init-update' runs the following in one step:
-    
-    	niv init; niv update
     
     OPTIONS:
     
@@ -191,7 +188,7 @@ support/dependencies-upgrade --help
 Since `nix-project` can pass through commands to `niv` we can see the help for Niv with the following command:
 
 ```shell
-support/dependencies-upgrade niv --help
+support/dependencies-update niv --help
 ```
 
     niv - dependency manager for Nix projects

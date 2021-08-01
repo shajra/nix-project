@@ -65,12 +65,9 @@ DESCRIPTION:
 COMMANDS:
 
     scaffold     set up current directory with example scripts
-    init-update  upgrade sources.nix and update Niv sources
+    init-update  update both sources.nix (init) and sources.json
+                  (shortcut for "niv init; niv update")
     niv          pass arguments directly to Niv (default command)
-
-    Note 'init-update' runs the following in one step:
-
-        niv init; niv update
 
 OPTIONS:
 
@@ -191,8 +188,8 @@ install_scripts()
     fi
     install_files ${./scaffold/support/docs-generate} \
         "$support_dir/docs-generate"
-    install_files ${./scaffold/support/dependencies-upgrade} \
-        "$support_dir/dependencies-upgrade"
+    install_files ${./scaffold/support/dependencies-update} \
+        "$support_dir/dependencies-update"
     sed -i -e "s|@NIV_DIR@|$NIV_DIR|" "$support_dir"/*
     install_files --mode 644 ${./scaffold}/nix/* "$(niv_dir)"
     install_files --mode 644 ${./scaffold}/*.org "$(target_dir)"
