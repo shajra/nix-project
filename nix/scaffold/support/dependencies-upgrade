@@ -8,7 +8,7 @@ nix run \
     nix-project-exe \
     --command \
     nix-project \
-    --upgrade \
     --source-dir '@NIV_DIR@' \
     --nix "$(command -v nix)" \
+    init-update \
     "$@"
