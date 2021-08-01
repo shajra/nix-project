@@ -338,7 +338,7 @@
    #+END_SRC
 
    #+RESULTS: nix-build-link
-   : /nix/store/9h91r96sq72y14yichrwaairyvzjm2bn-nix-project
+   : /nix/store/3rq5nkcfy93364hqaxyh13d3wsxcynsk-nix-project
 
    Following these symlinks, we can see the files the project provides:
 
@@ -367,7 +367,7 @@
    #+END_SRC
 
    #+RESULTS: nix-build-path
-   : /nix/store/9h91r96sq72y14yichrwaairyvzjm2bn-nix-project
+   : /nix/store/3rq5nkcfy93364hqaxyh13d3wsxcynsk-nix-project
 
 ** Running commands
 
@@ -394,9 +394,9 @@
    #+RESULTS: nix-run
    : USAGE:
    : 
-   :     nix-project [OPTION]... --scaffold
-   :     nix-project [OPTION]... --upgrade
-   :     nix-project [OPTION]... --niv -- COMMAND...
+   :     nix-project [OPTION]... scaffold
+   :     nix-project [OPTION]... init-update [--] [NIV_UPDATE_ARGS]...
+   :     nix-project [OPTION]... niv NIV_COMMAND...
    : …
 
    Thus far, the argument of the =--file= switch has always referenced a Nix

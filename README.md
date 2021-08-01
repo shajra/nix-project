@@ -132,7 +132,7 @@ In your newly scaffolded project, you can call `dependencies-upgrade` with no ar
 See the [Niv](https://github.com/nmattia/niv) documentation on how to manage dependencies. You can run Niv commands directly with `dependencies-upgrade`. For example, to run the equivalent of `niv show` you can run
 
 ```shell
-support/dependencies-upgrade --niv -- show
+support/dependencies-upgrade niv show
 ```
 
 You can also use `dependencies-upgrade` to see the help messages for both `nix-project` and `niv`.
@@ -145,28 +145,30 @@ support/dependencies-upgrade --help
 
     USAGE:
     
-        nix-project [OPTION]... --scaffold
-        nix-project [OPTION]... --upgrade
-        nix-project [OPTION]... --niv -- COMMAND...
+        nix-project [OPTION]... scaffold
+        nix-project [OPTION]... init-update [--] [NIV_UPDATE_ARGS]...
+        nix-project [OPTION]... niv NIV_COMMAND...
+        nix-project [OPTION]... [--] NIV_COMMAND...
     
     DESCRIPTION:
     
         A wrapper of Niv for managing Nix dependencies to assure
-        dependencies Niv uses are pinned with Nix.  Also provides a
-        '--scaffold' command to set up an directory as a project
-        using 'nix-project'.
+        dependencies Niv uses are pinned with Nix.  Niv is extended
+        with two commands.
     
-        If multiple commands are specified, the last one is used.
+        If multiple commands are specified explicitly, 'niv' always
+        has precedence, otherwise the last one is used.
+    
         Similarly, if a switch is specified multiple times, the last
         one is used.
     
     COMMANDS:
     
-        -s --scaffold  set up current directory with example scripts
-        -u --upgrade   upgrade dependencies with Niv
-        -n --niv       pass arguments directly to Niv
+        scaffold     set up current directory with example scripts
+        init-update  upgrade sources.nix and update Niv sources
+        niv          pass arguments directly to Niv (default command)
     
-        Note '--upgrade' runs the following in one step:
+        Note 'init-update' runs the following in one step:
     
     	niv init; niv update
     
@@ -180,6 +182,7 @@ support/dependencies-upgrade --help
         -g --github-token    file with GitHub API token (default:
     			  ~/.config/nix-project/github.token)
         -N --nix PATH        filepath of 'nix' executable to use
+        --                   send remaining arguments to Niv
     
         'nix-project' pins all dependencies except for Nix itself,
          which it finds on the path if possible.  Otherwise set
@@ -188,7 +191,7 @@ support/dependencies-upgrade --help
 Since `nix-project` can pass through commands to `niv` we can see the help for Niv with the following command:
 
 ```shell
-support/dependencies-upgrade --niv -- --help
+support/dependencies-upgrade niv --help
 ```
 
     niv - dependency manager for Nix projects

@@ -35,7 +35,7 @@ NIX_EXE="$(command -v nix || true)"
 TARGET_DIR="$(pwd)"
 NIV_DIR="nix"
 TOKEN=~/.config/nix-project/github.token
-COMMAND=
+COMMAND=niv
 
 
 . "${nix-project-lib.lib-sh}/share/nix-project/lib.sh"
@@ -45,28 +45,30 @@ print_usage()
     cat - <<EOF
 USAGE:
 
-    ${progName} [OPTION]... --scaffold
-    ${progName} [OPTION]... --upgrade
-    ${progName} [OPTION]... --niv -- COMMAND...
+    ${progName} [OPTION]... scaffold
+    ${progName} [OPTION]... init-update [--] [NIV_UPDATE_ARGS]...
+    ${progName} [OPTION]... niv NIV_COMMAND...
+    ${progName} [OPTION]... [--] NIV_COMMAND...
 
 DESCRIPTION:
 
     A wrapper of Niv for managing Nix dependencies to assure
-    dependencies Niv uses are pinned with Nix.  Also provides a
-    '--scaffold' command to set up an directory as a project
-    using '${progName}'.
+    dependencies Niv uses are pinned with Nix.  Niv is extended
+    with two commands.
 
-    If multiple commands are specified, the last one is used.
+    If multiple commands are specified explicitly, 'niv' always
+    has precedence, otherwise the last one is used.
+
     Similarly, if a switch is specified multiple times, the last
     one is used.
 
 COMMANDS:
 
-    -s --scaffold  set up current directory with example scripts
-    -u --upgrade   upgrade dependencies with Niv
-    -n --niv       pass arguments directly to Niv
+    scaffold     set up current directory with example scripts
+    init-update  upgrade sources.nix and update Niv sources
+    niv          pass arguments directly to Niv (default command)
 
-    Note '--upgrade' runs the following in one step:
+    Note 'init-update' runs the following in one step:
 
         niv init; niv update
 
@@ -80,6 +82,7 @@ OPTIONS:
     -g --github-token    file with GitHub API token (default:
                           ~/.config/nix-project/github.token)
     -N --nix PATH        filepath of 'nix' executable to use
+    --                   send remaining arguments to Niv
 
     '${progName}' pins all dependencies except for Nix itself,
      which it finds on the path if possible.  Otherwise set
@@ -97,14 +100,16 @@ main()
             print_usage
             exit 0
             ;;
-        -u|--upgrade)
-            COMMAND=upgrade
+        init-update)
+            COMMAND=init-update
             ;;
-        -s|--scaffold)
+        scaffold)
             COMMAND=scaffold
             ;;
-        -n|--niv)
+        niv)
             COMMAND=niv
+            shift
+            break
             ;;
         -t|--target-dir)
             TARGET_DIR="''${2:-}"
@@ -163,10 +168,10 @@ run()
     if [ "$COMMAND" = niv ]
     then
         run_niv "$@"
-    elif [ "$COMMAND" = upgrade ]
+    elif [ "$COMMAND" = init-update ]
     then
         niv_init
-        run_niv update
+        run_niv update "$@"
     elif [ "$COMMAND" = scaffold ]
     then
         niv_init
