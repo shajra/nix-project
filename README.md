@@ -1,7 +1,6 @@
 - [About this project](#sec-1)
-  - [Using Nix](#sec-1-1)
-  - [Managing dependencies with Nix and Niv](#sec-1-2)
-  - [Documenting with Emacs Org-mode](#sec-1-3)
+  - [Managing dependencies with Nix and Niv](#sec-1-1)
+  - [Documenting with Emacs Org-mode](#sec-1-2)
 - [Usage](#sec-2)
   - [Nix package manager setup](#sec-2-1)
   - [Cache setup](#sec-2-2)
@@ -23,37 +22,35 @@ This project assists the setup of other projects with the [Nix package manager](
 -   `nix-project` to help scaffold a Nix-based project and update dependencies with [Niv](https://github.com/nmattia/niv).
 -   `org2gfm` to generate [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/) from [Emacs Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html) files.
 
-You can use this project directly (the author does). But it's also not a lot of code. So you could just borrow ideas from it for your own projects.
+By tailoring projects to use these two scripts, we can make our projects extremely portable. If a computer has Nix installed, our projects should be able to download and build all the dependencies needed. For the most part this makes the installation of Nix the only required dependency for our projects. Beyond Nix, we can spare bothering asking users to install and configure complicated tool chains. Nix's infrastructure supports a huge variety of language ecosystems.
 
-## Using Nix<a id="sec-1-1"></a>
-
-The main problem we use Nix to address is dependency management. A software project can depend on a lot of complicated dependencies from a variety of language ecosystems. These dependencies are needed not only for the project itself, but also to support things like generated documentation.
-
-Nix has a compelling approach that gives us an extremely precise and repeatable dependency management system that covers a broad set of programming language ecosystems.
+Also, Nix has a compelling approach that gives us an extremely precise and repeatable dependency management system that covers a broad set of programming language ecosystems.
 
 See [the provided documentation on Nix](doc/nix.md) for more on what Nix is, why we're motivated to use it, and how to get set up with it for this project.
 
-Once you scaffold a new project with `nix-project`, you'll have scripts to help you manage dependencies and generate documentation.
+Once you scaffold a new project with `nix-project`, it will have scripts wrapping `nix-project` and `org2gfm` to manage dependencies and generate documentation.
 
-## Managing dependencies with Nix and Niv<a id="sec-1-2"></a>
+You can use this project directly (the author does). But it's also not a lot of code. So you could just borrow ideas from it for your own projects.
+
+## Managing dependencies with Nix and Niv<a id="sec-1-1"></a>
 
 One of the benefits of Nix is that it pins our dependencies to specific versions. When they are downloaded, they are parity checked with an explicitly provided hash. Because each new version of each dependency requires a new hash, maintaining these hashes can be a chore, especially when upgrading many dependencies to their latest versions.
 
-Fortunately, a tool called [Niv](https://github.com/nmattia/niv) provides a command-line tool `niv` to make upgrading Nix dependencies a single command. Niv tracks downloaded versions of source from locations like GitHub, maintaining metadata of the latest versions and calculated hashes in a `sources.json` file. Since this project uses itself, you can have a look at [its `sources.json` file](nix/sources.json) as an example.
+Fortunately, a tool called [Niv](https://github.com/nmattia/niv) provides a command-line tool `niv` to make upgrading Nix dependencies a single command. Niv tracks downloaded versions of source from locations like GitHub, maintaining metadata of the latest versions and calculated hashes in a `sources.json` file. Since this project uses itself, you can have a look at [its `sources.json` file](nix/external/sources.json) as an example.
 
 You could use `niv` independently, but it has some dependencies it expects to be already installed. Although not often a problem, Niv's reliance on preexisting installations isn't in the spirit of Nix. We want Nix to download all dependencies for us. That's why we're using Nix in the first place. If we have Nix installed and nothing else, then a project should just work.
 
 The `nix-project` script provided by this project wraps `niv` such that all the dependencies it needs are provided by Nix. It can also help scaffold a new project to use all the scripts provided by this project.
 
-## Documenting with Emacs Org-mode<a id="sec-1-3"></a>
+## Documenting with Emacs Org-mode<a id="sec-1-2"></a>
 
 In addition to building and distributing a project, we often want to document it as well. Good documentation often has example snippets of code followed by the output of an evaluation/invocation. Ideally, these snippets of output are generated with automation, so that they are congruent with the code in the project. This leads to some form of [literate programming](https://en.wikipedia.org/wiki/Literate_programming).
 
 The state of literate programming is not that advanced. However, [Emacs' Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html) has some compelling features in the spirit of literate programming. With Org-mode, we can evaluate code blocks and inject the results inline right below the code. And this all can then be exported to the format of our choice.
 
-Manually managing an Emacs installation, including requisite plugins, is historically hard to do consistently and portably. Fortunately, Nix can install a precisely configured Emacs instance as a dependency without conflicting with any installations of Emacs already on a system.
+Manually managing an Emacs installation, including requisite plugins, is historically hard to do consistently and portably. Fortunately, Nix can build out a precisely configured Emacs instance as a dependency without conflicting with any installations of Emacs already on a system.
 
-The `org2gfm` script orchestrates with Nix the configuration, installation, and execution of Emacs to generate our documentation. Emacs is run in a headless mode by `org2gfm`, so the fact we're using Emacs at all is hidden.
+The `org2gfm` script orchestrates the configuration and build of this Emacs instance, which then is used to generate our documentation. Emacs is run in a headless mode by `org2gfm`, so the fact we're using Emacs at all is hidden.
 
 Note that as its name implies `org2gfm` only generates [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/) from Org-mode files. This is currently all the author needs for projects already hosted on GitHub.
 
@@ -65,21 +62,30 @@ This project should work with either GNU/Linux or MacOS operating systems. Just 
 
 > **<span class="underline">NOTE:</span>** You don't need this step if you're running NixOS, which comes with Nix baked in.
 
-If you don't already have Nix, the official installation script should work on a variety of UNIX-like operating systems. The easiest way to run this installation script is to execute the following shell command as a user other than root:
+If you don't already have Nix, [the official installation script](https://nixos.org/learn.html) should work on a variety of UNIX-like operating systems:
 
 ```shell
-curl https://nixos.org/nix/install | sh
+sh <(curl -L https://nixos.org/nix/install) --daemon
 ```
 
-This script will download a distribution-independent binary tarball containing Nix and its dependencies, and unpack it in `/nix`.
+If you're on a recent release of MacOS, you will need an extra switch:
+
+```shell
+sh <(curl -L https://nixos.org/nix/install) --daemon \
+    --darwin-use-unencrypted-nix-store-volume
+```
+
+After installation, you may have to exit your terminal session and log back in to have environment variables configured to put Nix executables on your `PATH`.
+
+The `--daemon` switch installs Nix in the recommended multi-user mode. This requires the script to run commands with `sudo`. The script fairly verbosely reports everything it does and touches. If you later want to uninstall Nix, you can run the installation script again, and it will tell you what to do to get back to a clean state.
 
 The Nix manual describes [other methods of installing Nix](https://nixos.org/nix/manual/#chap-installation) that may suit you more.
 
 ## Cache setup<a id="sec-2-2"></a>
 
-It's recommended to configure Nix to use shajra.cachix.org as a Nix *substituter*. This project pushes built Nix packages to [Cachix](https://cachix.org) as part of its continuous integration. Once configured, Nix will pull down these pre-built packages instead of building them locally.
+It's recommended to configure Nix to use shajra.cachix.org as a Nix *substitutor*. This project pushes built Nix packages to [Cachix](https://cachix.org) as part of its continuous integration. Once configured, Nix will pull down these pre-built packages instead of building them locally (potentially saving a lot of time). This augments the default substitutor that pulls from cache.nixos.org.
 
-You can configure shajra.cachix.org as a substituter with the following command:
+You can configure shajra.cachix.org as a substitutor with the following command:
 
 ```shell
 nix run \
@@ -88,15 +94,19 @@ nix run \
     --command cachix use shajra
 ```
 
-This will perform user-local configuration of Nix at `~/.config/nix/nix.conf`. This configuration will be available immediately, and any subsequent invocation of Nix commands will take advantage of the Cachix cache.
+Cachix is a service that anyone can use. You can call this command later to add substitutors for someone else using Cachix, replacing "shajra" with their cache's name.
 
-If you're running NixOS, you can configure Cachix globally by running the above command as a root user. The command will then configure `/etc/nixos/cachix/shajra.nix`, and will output instructions on how to tie this configuration into your NixOS configuration.
+If you've just run a multi-user Nix installation and are not yet a trusted user in `/etc/nix/nix.conf`, this command may not work. But it will report back some options to proceed.
+
+One option sets you up as a trusted user, and installs Cachix configuration for Nix locally at `~/.config/nix/nix.conf`. This configuration will be available immediately, and any subsequent invocation of Nix commands will take advantage of the Cachix cache.
+
+You can alternatively configure Cachix as a substitutor globally by running the above command as a root user (say with `sudo`), which sets up Cachix directly in `/etc/nix/nix.conf`. The invocation may give further instructions upon completion.
 
 ## Scaffolding<a id="sec-2-3"></a>
 
 This project actually uses both the `nix-project` and `org2gfm` scripts that it provides. You'll find usage of both of these scripts in the [./support](./support) directory. The `support/dependencies-update` script delegates to `nix-project`, and `support/docs-generate` delegates to `org2gfm`.
 
-If you call `dependencies-update` (no arguments needed) it will update all of this project's dependencies, which are specified in the [./nix/sources.json](./nix/sources.json) file. And similarly, if you call `docs-generate` (again with no arguments) all the Org-mode files will be re-evaluated and re-exported to GFM files.
+If you call `dependencies-update` (no arguments needed) it will update all of this project's dependencies, which are specified in the [./nix/external/sources.json](./nix/external/sources.json) file. And similarly, if you call `docs-generate` (again with no arguments) all the Org-mode files will be re-evaluated and re-exported to GFM files.
 
 If you want to scaffold a new project with these scripts set up similarly, you can create a new directory, go into it, and invoke the following `nix` call:
 
@@ -166,18 +176,18 @@ support/dependencies-update --help
     
         scaffold     set up current directory with example scripts
         init-update  update both sources.nix (init) and sources.json
-    		  (shortcut for "niv init; niv update")
+                      (shortcut for "niv init; niv update")
         niv          pass arguments directly to Niv (default command)
     
     OPTIONS:
     
         -h --help            print this help message
         -t --target-dir DIR  directory of project to manage
-    			  (default: current directory)
+                              (default: current directory)
         -S --source-dir DIR  directory relative to target for
-    			  Nix files (default: nix)
+                              Nix files (default: nix)
         -g --github-token    file with GitHub API token (default:
-    			  ~/.config/nix-project/github.token)
+                              ~/.config/nix-project/github.token)
         -N --nix PATH        filepath of 'nix' executable to use
         --                   send remaining arguments to Niv
     
@@ -205,12 +215,12 @@ support/dependencies-update niv --help
     
     Available commands:
       init                     Initialize a Nix project. Existing files won't be
-    			   modified.
+                               modified.
       add                      Add a GitHub dependency
       show                     
       update                   Update dependencies
       modify                   Modify dependency attributes without performing an
-    			   update
+                               update
       drop                     Drop dependency
 
 ## Evaluating/exporting documentation<a id="sec-2-5"></a>

@@ -1,7 +1,7 @@
-- [Org2gfm Design](#sec-1)
-  - [GitHub Flavored Markdown exporting only](#sec-1-1)
+- [Org2gfm design](#sec-1)
+  - [GitHub Flavored Markdown (GFM) exporting only](#sec-1-1)
   - [No evaluation when exporting](#sec-1-2)
-- [Org2gfm Recommended Usage For Source Blocks](#sec-2)
+- [Org2gfm recommended usage for source blocks](#sec-2)
   - [Evaluation of source blocks](#sec-2-1)
   - [Results of source blocks](#sec-2-2)
   - [Exporting source blocks](#sec-2-3)
@@ -10,9 +10,9 @@ The `org2gfm` script provided by this project constrains the full flexibility of
 
 You should have some familiarity with Org-mode and its terminology first before reading further.
 
-# Org2gfm Design<a id="sec-1"></a>
+# Org2gfm design<a id="sec-1"></a>
 
-## GitHub Flavored Markdown exporting only<a id="sec-1-1"></a>
+## GitHub Flavored Markdown (GFM) exporting only<a id="sec-1-1"></a>
 
 One obvious constraint of Org2gfm is that it only exports [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/). This assumes that all projects are hosted on GitHub, but if they are then GitHub's online rendering of markdown files is the first documentation a user encounters when finding the code. It's nice to make sure users find great documentation next to the code itself.
 
@@ -24,7 +24,7 @@ Instead, `org2gfm` adds `(:eval . "no-export")` to `org-babel-default-header-arg
 
 The `org-babel-default-header-args` setting is just a default. If you like, you can always override this default with explicit header arguments.
 
-# Org2gfm Recommended Usage For Source Blocks<a id="sec-2"></a>
+# Org2gfm recommended usage for source blocks<a id="sec-2"></a>
 
 It can be confusing figuring out [how Org-mode processes source blocks](https://orgmode.org/manual/Working-with-Source-Code.html#Working-with-Source-Code). Hopefully, the defaults of `org2gfm` simplifies our usage.
 

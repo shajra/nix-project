@@ -1,14 +1,17 @@
+{ externalOverrides ? {}
+}:
+
 let
 
-    sources = import ./sources;
+    external = import ./external // externalOverrides;
 
     buildOverlay = self: super: {
-        niv = (import sources.niv {}).niv;
-        ox-gfm = sources.ox-gfm;
+        niv = (import external.niv {}).niv;
+        ox-gfm = external.ox-gfm;
         inherit nix-project-lib;
     };
 
-    pkgs = import sources.nixpkgs-stable {
+    pkgs = import external.nixpkgs-stable {
         config = {};
         overlays = [ buildOverlay ];
     };
