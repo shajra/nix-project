@@ -62,6 +62,7 @@ set -o pipefail
 
 NIX_EXE="$(command -v nix || true)"
 EVALUATE=false
+KEEP_GOING=false
 IGNORE_REGEX=
 QUERY_ANSWER=
 
@@ -82,13 +83,15 @@ DESCRIPTION:
 
 OPTIONS:
 
-    -h --help          print this help message
-    -e --evaluate      evaluate all SRC blocks before exporting
-    -E --no-evaluate   don't evaluate before exporting (default)
-    -N --nix PATH      filepath to 'nix' binary to put on PATH
-    -i --ignore REGEX  ignore matched paths when searching
-    -y --yes           answer "yes" to all queries for evaluation
-    -n --no            answer "no" to all queries for evaluation
+    -h --help           print this help message
+    -e --evaluate       evaluate all SRC blocks before exporting
+    -E --no-evaluate    don't evaluate before exporting (default)
+    -N --nix PATH       filepath to 'nix' binary to put on PATH
+    -i --ignore REGEX   ignore matched paths when searching
+    -k --keep-going     don't stop if Babel executes non-zero
+    -K --no-keep-going  stop if Babel executes non-zero (default)
+    -y --yes            answer "yes" to all queries for evaluation
+    -n --no             answer "no" to all queries for evaluation
 
     This script is recommended for use in a clean environment
     with a PATH controlled by Nix.  This helps make executed
@@ -122,6 +125,12 @@ main()
             ;;
         -E|--no-evaluate)
             EVALUATE="false"
+            ;;
+        -k|--keep-going)
+            KEEP_GOING="true"
+            ;;
+        -K|--no-keep-going)
+            KEEP_GOING="false"
             ;;
         -N|--nix)
             NIX_EXE="''${2:-}"
@@ -190,27 +199,30 @@ generate_gfm_found()
 generate_gfm_file()
 {
     local filepath="$1"
+    local eval_switches=()
     if [ "$EVALUATE" = true ]
     then
-        emacs \
-            --batch \
-            --kill \
-            --load ${init} \
-            --file "$filepath" \
-            --eval "(org2gfm-log \"EVALUATING\")" \
-            --funcall org-babel-execute-buffer \
-            --funcall save-buffer \
-            --eval "(org2gfm-log \"EXPORTING\")" \
-            --funcall org-gfm-export-to-markdown
-    else
-        emacs \
-            --batch \
-            --kill \
-            --load ${init} \
-            --file "$filepath" \
-            --eval "(org2gfm-log \"EXPORTING\")" \
-            --funcall org-gfm-export-to-markdown
+        eval_switches+=(
+            --eval "(org2gfm-log \"EVALUATING\")"
+            --funcall org-babel-execute-buffer
+            --funcall save-buffer
+        )
     fi
+    while read -r line
+    do
+        echo "$line"
+        "$KEEP_GOING" \
+            || grep --invert-match --quiet \
+                "^Babel evaluation exited" <(echo "$line")
+    done < <(emacs \
+        --batch \
+        --kill \
+        --load ${init} \
+        --file "$filepath" \
+        "''${eval_switches[@]}" \
+        --eval "(org2gfm-log \"EXPORTING\")" \
+        --funcall org-gfm-export-to-markdown 2>&1
+    )
 }
 
 ignore_regex()
