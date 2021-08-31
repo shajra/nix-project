@@ -1,6 +1,6 @@
 { coreutils
 , emacsWithPackages
-, findutils
+, fd
 , gnugrep
 , ox-gfm
 , writeText
@@ -47,13 +47,6 @@ in
 nix-project-lib.writeShellCheckedExe progName
 {
     inherit meta;
-    pathPure = false;
-    path = [
-        coreutils
-        emacs
-        findutils
-        gnugrep
-    ];
 }
 ''
 set -eu
@@ -63,7 +56,7 @@ set -o pipefail
 NIX_EXE="$(command -v nix || true)"
 EVALUATE=false
 KEEP_GOING=false
-IGNORE_REGEX=
+EXCLUDE_ARGS=()
 QUERY_ANSWER=
 
 
@@ -71,7 +64,7 @@ QUERY_ANSWER=
 
 print_usage()
 {
-    cat - <<EOF
+    "${coreutils}/bin/cat" - <<EOF
 USAGE: ${progName} [OPTION]...  [FILE]...
 
 DESCRIPTION:
@@ -83,16 +76,16 @@ DESCRIPTION:
 
 OPTIONS:
 
-    -h --help           print this help message
-    -b --path-bin       include /bin on path (for /bin/sh)
-    -e --evaluate       evaluate all SRC blocks before exporting
-    -E --no-evaluate    don't evaluate before exporting (default)
-    -N --nix PATH       filepath to 'nix' binary to put on PATH
-    -i --ignore REGEX   ignore matched paths when searching
-    -k --keep-going     don't stop if Babel executes non-zero
-    -K --no-keep-going  stop if Babel executes non-zero (default)
-    -y --yes            answer "yes" to all queries for evaluation
-    -n --no             answer "no" to all queries for evaluation
+    -h --help            print this help message
+    -b --path-bin        include /bin on path (for /bin/sh)
+    -e --evaluate        evaluate all SRC blocks before exporting
+    -E --no-evaluate     don't evaluate before exporting (default)
+    -N --nix PATH        filepath to 'nix' binary to put on PATH
+    -x --exclude PATTERN exclude matched when searching
+    -k --keep-going      don't stop if Babel executes non-zero
+    -K --no-keep-going   stop if Babel executes non-zero (default)
+    -y --yes             answer "yes" to all queries for evaluation
+    -n --no              answer "no" to all queries for evaluation
 
     This script is recommended for use in a clean environment
     with a PATH controlled by Nix.  This helps make executed
@@ -137,10 +130,10 @@ main()
             KEEP_GOING="false"
             ;;
         -N|--nix)
-            NIX_EXE="''${2:-}"
-            if [ -z "$NIX_EXE" ]
+            if [ -z "''${2:-}" ]
             then die "$1 requires argument"
             fi
+            NIX_EXE="''${2:-}"
             shift
             ;;
         -y|--yes)
@@ -149,12 +142,18 @@ main()
         -n|--no)
             QUERY_ANSWER=no
             ;;
-        -i|--ignore)
-            IGNORE_REGEX="''${2:-}"
-            if [ -z "$IGNORE_REGEX" ]
+        -x|--exclude)
+            if [ -z "''${2:-}" ]
             then die "$1 requires argument"
             fi
+            EXCLUDE_ARGS+=(--exclude "''${2:-}")
             shift
+            ;;
+        --)
+            break
+            ;;
+        -*)
+            die "$1 not a valid argument"
             ;;
         *)
             break
@@ -167,7 +166,7 @@ main()
     then add_nix_to_path "$NIX_EXE"
     fi
     if [ -n "$QUERY_ANSWER" ]
-    then yes "$QUERY_ANSWER" | generate_gfm "$@"
+    then "${coreutils}/bin/yes" "$QUERY_ANSWER" | generate_gfm "$@"
     else generate_gfm "$@"
     fi
 }
@@ -190,8 +189,7 @@ generate_gfm_args()
 generate_gfm_found()
 {
     {
-        find .  -name '*.org' \
-        | ignore_regex \
+        "${fd}/bin/fd" '[.]org$' "''${EXCLUDE_ARGS[@]}" \
         | {
             while read -r f
             do generate_gfm_file "$f" <&3
@@ -216,9 +214,9 @@ generate_gfm_file()
     do
         echo "$line"
         "$KEEP_GOING" \
-            || grep --invert-match --quiet \
+            || "${gnugrep}/bin/grep" --invert-match --quiet \
                 "^Babel evaluation exited" <(echo "$line")
-    done < <(emacs \
+    done < <("${emacs}/bin/emacs" \
         --batch \
         --kill \
         --load ${init} \
@@ -227,14 +225,6 @@ generate_gfm_file()
         --eval "(org2gfm-log \"EXPORTING\")" \
         --funcall org-gfm-export-to-markdown 2>&1
     )
-}
-
-ignore_regex()
-{
-    if [ -n "$IGNORE_REGEX" ]
-    then grep -v "$IGNORE_REGEX"
-    else cat -
-    fi
 }
 
 

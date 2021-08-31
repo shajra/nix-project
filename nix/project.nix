@@ -109,31 +109,31 @@ main()
             break
             ;;
         -t|--target-dir)
-            TARGET_DIR="''${2:-}"
-            if [ -z "$TARGET_DIR" ]
+            if [ -z "''${2:-}" ]
             then die "$1 requires argument"
             fi
+            TARGET_DIR="''${2:-}"
             shift
             ;;
         -S|--source-dir)
-            NIV_DIR="''${2:-}"
-            if [ -z "$NIV_DIR" ]
+            if [ -z "''${2:-}" ]
             then die "$1 requires argument"
             fi
+            NIV_DIR="''${2:-}"
             shift
             ;;
         -N|--nix)
-            NIX_EXE="''${2:-}"
-            if [ -z "$NIX_EXE" ]
+            if [ -z "''${2:-}" ]
             then die "$1 requires argument"
             fi
+            NIX_EXE="''${2:-}"
             shift
             ;;
         -g|--github-token)
-            TOKEN="''${2:-}"
-            if [ -z "$TOKEN" ]
+            if [ -z "''${2:-}" ]
             then die "$1 requires argument"
             fi
+            TOKEN="''${2:-}"
             shift
             ;;
         --)

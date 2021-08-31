@@ -250,16 +250,16 @@ support/docs-generate --help
     
     OPTIONS:
     
-        -h --help           print this help message
-        -b --path-bin       include /bin on path (for /bin/sh)
-        -e --evaluate       evaluate all SRC blocks before exporting
-        -E --no-evaluate    don't evaluate before exporting (default)
-        -N --nix PATH       filepath to 'nix' binary to put on PATH
-        -i --ignore REGEX   ignore matched paths when searching
-        -k --keep-going     don't stop if Babel executes non-zero
-        -K --no-keep-going  stop if Babel executes non-zero (default)
-        -y --yes            answer "yes" to all queries for evaluation
-        -n --no             answer "no" to all queries for evaluation
+        -h --help            print this help message
+        -b --path-bin        include /bin on path (for /bin/sh)
+        -e --evaluate        evaluate all SRC blocks before exporting
+        -E --no-evaluate     don't evaluate before exporting (default)
+        -N --nix PATH        filepath to 'nix' binary to put on PATH
+        -x --exclude PATTERN exclude matched when searching
+        -k --keep-going      don't stop if Babel executes non-zero
+        -K --no-keep-going   stop if Babel executes non-zero (default)
+        -y --yes             answer "yes" to all queries for evaluation
+        -n --no              answer "no" to all queries for evaluation
     
         This script is recommended for use in a clean environment
         with a PATH controlled by Nix.  This helps make executed
