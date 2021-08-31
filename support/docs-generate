@@ -16,7 +16,8 @@ nix run \
     pkgs.tree \
     --command \
     org2gfm \
-    --ignore 'links.org\|scaffold\|snippet' \
+    --path-bin \
+    --ignore 'links.org\|nix.mac.org\|scaffold\|snippet' \
     --nix "$(command -v nix)" \
     --evaluate \
     "$@"

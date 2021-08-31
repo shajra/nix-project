@@ -64,13 +64,13 @@ This project should work with either GNU/Linux or MacOS operating systems. Just 
 
 If you don't already have Nix, [the official installation script](https://nixos.org/learn.html) should work on a variety of UNIX-like operating systems:
 
-```shell
+```bash
 sh <(curl -L https://nixos.org/nix/install) --daemon
 ```
 
 If you're on a recent release of MacOS, you will need an extra switch:
 
-```shell
+```bash
 sh <(curl -L https://nixos.org/nix/install) --daemon \
     --darwin-use-unencrypted-nix-store-volume
 ```
@@ -87,7 +87,7 @@ It's recommended to configure Nix to use shajra.cachix.org as a Nix *substitutor
 
 You can configure shajra.cachix.org as a substitutor with the following command:
 
-```shell
+```sh
 nix run \
     --file https://cachix.org/api/v1/install \
     cachix \
@@ -110,9 +110,9 @@ If you call `dependencies-update` (no arguments needed) it will update all of th
 
 If you want to scaffold a new project with these scripts set up similarly, you can create a new directory, go into it, and invoke the following `nix` call:
 
-```shell
+```sh
 nix run \
-    --file http://github.com/shajra/nix-project/tarball/master \
+    --file http://github.com/shajra/nix-project/tarball/main \
     nix-project-exe \
     --ignore-environment \
     --command nix-project --scaffold --nix `command -v nix`
@@ -141,7 +141,7 @@ In your newly scaffolded project, you can call `dependencies-update` with no arg
 
 See the [Niv](https://github.com/nmattia/niv) documentation on how to manage dependencies. You can run Niv commands directly with `dependencies-update`. For example, to run the equivalent of `niv show` you can run
 
-```shell
+```sh
 support/dependencies-update niv show
 ```
 
@@ -149,7 +149,7 @@ You can also use `dependencies-update` to see the help messages for both `nix-pr
 
 Using the `--help` switch directly with `dependencies-update` shows the help for `nix-project`, which it delegates to.
 
-```shell
+```sh
 support/dependencies-update --help
 ```
 
@@ -197,7 +197,7 @@ support/dependencies-update --help
 
 Since `nix-project` can pass through commands to `niv` we can see the help for Niv with the following command:
 
-```shell
+```sh
 support/dependencies-update niv --help
 ```
 
@@ -235,7 +235,7 @@ The `org2gfm` script that `docs-generate` delegates to does not support all Emac
 
 For reference, here's the documentation from the `--help` switch for `docs-generate` / `org2gfm`:
 
-```shell
+```sh
 support/docs-generate --help
 ```
 
@@ -251,6 +251,7 @@ support/docs-generate --help
     OPTIONS:
     
         -h --help           print this help message
+        -b --path-bin       include /bin on path (for /bin/sh)
         -e --evaluate       evaluate all SRC blocks before exporting
         -E --no-evaluate    don't evaluate before exporting (default)
         -N --nix PATH       filepath to 'nix' binary to put on PATH
@@ -293,9 +294,9 @@ Finally, the [official Nix documentation](https://nixos.org/learn.html) is compr
 
 # Release<a id="sec-3"></a>
 
-The "master" branch of the repository on GitHub has the latest released version of this code. There is currently no commitment to either forward or backward compatibility.
+The "main" branch of the repository on GitHub has the latest released version of this code. There is currently no commitment to either forward or backward compatibility.
 
-"user/shajra" branches are personal branches that may be force-pushed to. The "master" branch should not experience force-pushes and is recommended for general use.
+"user/shajra" branches are personal branches that may be force-pushed to. The "main" branch should not experience force-pushes and is recommended for general use.
 
 # License<a id="sec-4"></a>
 

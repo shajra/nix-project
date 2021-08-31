@@ -12,4 +12,8 @@ nix run \
     --file '@NIV_DIR@' \
     nix-project-org2gfm \
     pkgs.coreutils \
-    --command org2gfm --evaluate "$@"
+    --command \
+    org2gfm \
+    --path-bin \
+    --evaluate \
+    "$@"

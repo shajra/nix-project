@@ -14,12 +14,12 @@ Specifically, it provides two scripts:
   files.
 
 By tailoring projects to use these two scripts, we can make our projects
-extremely portable.  If a computer has Nix installed, our projects should be
-able to download and build all the dependencies needed.  For the most part this
-makes the installation of Nix the only required dependency for our projects.
-Beyond Nix, we can spare bothering asking users to install and configure
-complicated tool chains.  Nix's infrastructure supports a huge variety of
-language ecosystems.
+extremely portable. If a computer has Nix installed, our projects should be able
+to download and build all the dependencies needed. For the most part this makes
+the installation of Nix the only required dependency for our projects. Beyond
+Nix, we can spare bothering asking users to install and configure complicated
+tool chains. Nix's infrastructure supports a huge variety of language
+ecosystems.
 
 Also, Nix has a compelling approach that gives us an extremely precise and
 repeatable dependency management system that covers a broad set of programming
@@ -56,7 +56,7 @@ dependencies for us. That's why we're using Nix in the first place. If we have
 Nix installed and nothing else, then a project should just work.
 
 The =nix-project= script provided by this project wraps =niv= such that all the
-dependencies it needs are provided by Nix.  It can also help scaffold a new
+dependencies it needs are provided by Nix. It can also help scaffold a new
 project to use all the scripts provided by this project.
 
 ** Documenting with Emacs Org-mode
@@ -103,19 +103,19 @@ The =support/dependencies-update= script delegates to =nix-project=, and
 
 If you call =dependencies-update= (no arguments needed) it will update all of
 this project's dependencies, which are specified in the
-[[./nix/external/sources.json][./nix/external/sources.json]] file.  And similarly, if you call =docs-generate=
+[[./nix/external/sources.json][./nix/external/sources.json]] file. And similarly, if you call =docs-generate=
 (again with no arguments) all the Org-mode files will be re-evaluated and
 re-exported to GFM files.
 
 If you want to scaffold a new project with these scripts set up similarly, you
 can create a new directory, go into it, and invoke the following =nix= call:
 
-#+BEGIN_SRC shell :eval no
-  nix run \
-      --file http://github.com/shajra/nix-project/tarball/master \
-      nix-project-exe \
-      --ignore-environment \
-      --command nix-project --scaffold --nix `command -v nix`
+#+BEGIN_SRC sh :eval no
+nix run \
+    --file http://github.com/shajra/nix-project/tarball/main \
+    nix-project-exe \
+    --ignore-environment \
+    --command nix-project --scaffold --nix `command -v nix`
 #+END_SRC
 
 Note that we're using =nix run= again, similarly to how we configured
@@ -154,8 +154,8 @@ See the [[niv][Niv]] documentation on how to manage dependencies. You can run Ni
 commands directly with =dependencies-update=. For example, to run the equivalent
 of ~niv show~ you can run
 
-#+BEGIN_SRC shell :eval no
-  support/dependencies-update niv show
+#+BEGIN_SRC sh :eval no
+support/dependencies-update niv show
 #+END_SRC
 
 You can also use =dependencies-update= to see the help messages for both
@@ -165,8 +165,8 @@ Using the ~--help~ switch directly with =dependencies-update= shows the help for
 =nix-project=, which it delegates to.
 
 #+NAME: help-deps-plain
-#+BEGIN_SRC shell :results output :exports both
-  support/dependencies-update --help
+#+BEGIN_SRC sh :results output :exports both
+support/dependencies-update --help
 #+END_SRC
 
 #+RESULTS: help-deps-plain
@@ -219,8 +219,8 @@ Since =nix-project= can pass through commands to =niv= we can see the help for
 Niv with the following command:
 
 #+NAME: help-deps-niv
-#+BEGIN_SRC shell :results output :exports both
-  support/dependencies-update niv --help
+#+BEGIN_SRC sh :results output :exports both
+support/dependencies-update niv --help
 #+END_SRC
 
 #+RESULTS: help-deps-niv
@@ -275,8 +275,8 @@ For reference, here's the documentation from the ~--help~ switch for
 =docs-generate= / =org2gfm=:
 
 #+NAME: help-docs
-#+BEGIN_SRC shell :results output :exports both
-  support/docs-generate --help
+#+BEGIN_SRC sh :results output :exports both
+support/docs-generate --help
 #+END_SRC
 
 #+RESULTS: help-docs
@@ -293,6 +293,7 @@ DESCRIPTION:
 OPTIONS:
 
     -h --help           print this help message
+    -b --path-bin       include /bin on path (for /bin/sh)
     -e --evaluate       evaluate all SRC blocks before exporting
     -E --no-evaluate    don't evaluate before exporting (default)
     -N --nix PATH       filepath to 'nix' binary to put on PATH
@@ -348,12 +349,12 @@ Particularly useful are the [[nix-manual][Nix manual]] and [[nixpkgs-manual][Nix
 
 * Release
 
-The "master" branch of the repository on GitHub has the latest released version
+The "main" branch of the repository on GitHub has the latest released version
 of this code. There is currently no commitment to either forward or backward
 compatibility.
 
 "user/shajra" branches are personal branches that may be force-pushed to. The
-"master" branch should not experience force-pushes and is recommended for
+"main" branch should not experience force-pushes and is recommended for
 general use.
 
 * License
