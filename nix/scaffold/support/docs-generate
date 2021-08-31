@@ -2,16 +2,16 @@
 
 cd "$(dirname "$0")/.."
 
-# DESIGN: the `pkgs.coreutils` argument makes utilities like `whoami` available
-# for evaluated code blocks. This is just an example, you can include any
-# package you like.
+# DESIGN: the `coreutils` argument makes utilities like `whoami` available for
+# evaluated code blocks. This is just an example, you can include any package
+# you like.
 nix run \
     --ignore-environment \
     --keep LANG \
     --keep LOCALE_ARCHIVE \
     --file '@NIV_DIR@' \
     nix-project-org2gfm \
-    pkgs.coreutils \
+    coreutils \
     --command \
     org2gfm \
     --path-bin \

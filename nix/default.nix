@@ -8,7 +8,10 @@ let
     buildOverlay = self: super: {
         niv = (import external.niv {}).niv;
         ox-gfm = external.ox-gfm;
-        inherit nix-project-lib;
+        inherit
+            nix-project-exe
+            nix-project-lib
+            nix-project-org2gfm;
     };
 
     pkgs = import external.nixpkgs-stable {
@@ -23,11 +26,4 @@ let
 
     nix-project-org2gfm = pkgs.callPackage (import ./org2gfm.nix) {};
 
-in {
-    inherit
-    nix-project-exe
-    nix-project-lib
-    nix-project-org2gfm
-    pkgs
-    ;
-}
+in pkgs

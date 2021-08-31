@@ -372,7 +372,7 @@ readlink result*
 #+END_SRC
 
 #+RESULTS: nix-build-link
-: /nix/store/bmvrp921160plcl3gdcmqqbxq5l8ljxf-nix-project
+: /nix/store/08qn1pmw9viw8zpnmpzabhr8qjyimglb-nix-project
 
 Following these symlinks, we can see the files the project provides:
 
@@ -401,7 +401,7 @@ nix path-info --file . <<get("package-attr")>>
 #+END_SRC
 
 #+RESULTS: nix-build-path
-: /nix/store/bmvrp921160plcl3gdcmqqbxq5l8ljxf-nix-project
+: /nix/store/08qn1pmw9viw8zpnmpzabhr8qjyimglb-nix-project
 
 ** Running commands
 
