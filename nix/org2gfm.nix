@@ -60,7 +60,7 @@ EXCLUDE_ARGS=()
 QUERY_ANSWER=
 
 
-. "${nix-project-lib.lib-sh}/share/nix-project/lib.sh"
+. "${nix-project-lib.common}/share/nix-project/common.bash"
 
 print_usage()
 {

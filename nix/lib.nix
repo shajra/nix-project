@@ -12,7 +12,7 @@ in
 
 rec {
 
-    isDarwin = builtins.elem builtins.currentSystem lib.systems.doubles.darwin;
+    isDarwin = stdenv.isDarwin;
 
     writeShellChecked = name:
         { meta ? {}
@@ -63,20 +63,26 @@ rec {
     writeShellCheckedShareLib = name: packagePath:
         { meta ? {}
         , baseName ? name
+        , dialect ? "bash"
         }:
+        body:
         writeShellChecked name {
             inherit meta;
             executable = false;
-            destination = "/share/${packagePath}/${baseName}.sh";
-        };
-
-    lib-sh = writeShellCheckedShareLib
-        "nix-project-lib" "nix-project" {
-            meta.description = "Common shell functions";
-            baseName = "lib";
+            destination = "/share/${packagePath}/${baseName}.${dialect}";
         }
         ''
-        # shellcheck shell=bash
+        # shellcheck shell=${dialect}
+
+        ${body}
+        '';
+
+    common = writeShellCheckedShareLib
+        "nix-project-lib-common" "nix-project" {
+            meta.description = "Common Bash functions";
+            baseName = "common";
+        }
+        ''
         add_nix_to_path()
         {
             local nix_exe="$1"

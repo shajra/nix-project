@@ -1,9 +1,1 @@
-with (import ./nix {});
-
-{
-    inherit
-    nix-project-exe
-    nix-project-lib
-    nix-project-org2gfm
-    ;
-}
+(import ./nix {}).nix-project-dist

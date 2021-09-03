@@ -279,8 +279,8 @@ nix search --file default.nix --no-cache | ansifilter
 : * nix-project-exe (nix-project)
 :   Script to scaffold and maintain dependencies for a Nix project
 : 
-: * nix-project-lib.lib-sh (nix-project-lib)
-:   Common shell functions
+: * nix-project-lib.common (nix-project-lib-common)
+:   Common Bash functions
 : 
 : * nix-project-org2gfm (org2gfm)
 :   Script to export Org-mode files to GitHub Flavored Markdown (GFM)
@@ -372,7 +372,7 @@ readlink result*
 #+END_SRC
 
 #+RESULTS: nix-build-link
-: /nix/store/08qn1pmw9viw8zpnmpzabhr8qjyimglb-nix-project
+: /nix/store/7j5v2h1wdwy2lz6hidrv9qjln813h17p-nix-project
 
 Following these symlinks, we can see the files the project provides:
 
@@ -401,7 +401,7 @@ nix path-info --file . <<get("package-attr")>>
 #+END_SRC
 
 #+RESULTS: nix-build-path
-: /nix/store/08qn1pmw9viw8zpnmpzabhr8qjyimglb-nix-project
+: /nix/store/7j5v2h1wdwy2lz6hidrv9qjln813h17p-nix-project
 
 ** Running commands
 

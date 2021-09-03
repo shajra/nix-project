@@ -38,7 +38,7 @@ TOKEN=~/.config/nix-project/github.token
 COMMAND=niv
 
 
-. "${nix-project-lib.lib-sh}/share/nix-project/lib.sh"
+. "${nix-project-lib.common}/share/nix-project/common.bash"
 
 print_usage()
 {
