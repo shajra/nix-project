@@ -251,7 +251,7 @@ support/docs-generate --help
     OPTIONS:
     
         -h --help            print this help message
-        -b --path-bin        include /bin on path (for /bin/sh)
+        -b --path-bin        include /bin on path (perhaps for /bin/sh)
         -e --evaluate        evaluate all SRC blocks before exporting
         -E --no-evaluate     don't evaluate before exporting (default)
         -N --nix PATH        filepath to 'nix' binary to put on PATH
