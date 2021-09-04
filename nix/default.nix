@@ -12,17 +12,22 @@ let
                 (self.callPackage (import ./lib.nix) {});
         nix-project-exe = self.callPackage (import ./project.nix) {};
         nix-project-org2gfm = self.callPackage (import ./org2gfm.nix) {};
-        nix-project-dist = {
-            inherit
-            nix-project-lib
-            nix-project-exe
-            nix-project-org2gfm;
-        };
     };
 
-    pkgs = import external.nixpkgs-stable {
+    nixpkgs = import external.nixpkgs-stable {
         config = {};
         overlays = [ buildOverlay ];
     };
 
-in pkgs
+    distribution = {
+        inherit (nixpkgs)
+        nix-project-lib
+        nix-project-exe
+        nix-project-org2gfm;
+    };
+
+in {
+    inherit
+    distribution
+    nixpkgs;
+}

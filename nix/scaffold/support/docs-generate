@@ -10,8 +10,8 @@ nix run \
     --keep LANG \
     --keep LOCALE_ARCHIVE \
     --file '@NIV_DIR@' \
-    nix-project-org2gfm \
-    coreutils \
+    nix-project.nix-project-org2gfm \
+    nixpkgs.coreutils \
     --command \
     org2gfm \
     --path-bin \

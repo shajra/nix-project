@@ -1,1 +1,1 @@
-(import ./nix {}).nix-project-dist
+(import ./nix {}).distribution

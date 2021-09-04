@@ -1,5 +1,9 @@
 let
     sources     = import ./sources.nix;
-    pkgs        = import sources.nixpkgs { config = {}; overlays = []; };
-in
-    pkgs // (import sources.nix-project)
+    nixpkgs     = import sources.nixpkgs { config = {}; overlays = []; };
+    nix-project = import sources.nix-project;
+in {
+    inherit
+    nixpkgs
+    nix-project;
+}
