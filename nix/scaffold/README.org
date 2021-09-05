@@ -1,4 +1,4 @@
-#+TITLE: Example Nix-based Project
+#+title: Example Nix-based Project
 
 This is a skeleton project illustrating how to use [[https://github.com/shajra/nix-project][shajra/nix-project]] to
 build/maintain software projects with Nix.
@@ -18,7 +18,7 @@ Markdown.
 
 Here's an example source block to illustrate evaluation of =whoami=:
 
-#+NAME: whoami
-#+BEGIN_SRC sh :results output :exports both
+#+name: whoami
+#+begin_src sh :results output :exports both
 whoami
-#+END_SRC
+#+end_src

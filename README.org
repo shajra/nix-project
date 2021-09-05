@@ -1,5 +1,5 @@
-#+TITLE: Nix-based Project Tools
-#+SETUPFILE: doc/links.org
+#+title: Nix-based Project Tools
+#+setupfile: doc/links.org
 
 [[https://github.com/shajra/nix-project/actions][https://github.com/shajra/nix-project/workflows/CI/badge.svg]]
 
@@ -90,9 +90,9 @@ already hosted on GitHub.
 This project should work with either GNU/Linux or MacOS operating systems. Just
 follow the following steps.
 
-#+INCLUDE: "doc/nix.org::*Nix package manager setup"
+#+include: "doc/nix.org::*Nix package manager setup"
 
-#+INCLUDE: "doc/nix.org::*Cache setup"
+#+include: "doc/nix.org::*Cache setup"
 
 ** Scaffolding
 
@@ -110,13 +110,13 @@ re-exported to GFM files.
 If you want to scaffold a new project with these scripts set up similarly, you
 can create a new directory, go into it, and invoke the following =nix= call:
 
-#+BEGIN_SRC sh :eval no
+#+begin_src sh :eval no
 nix run \
     --file http://github.com/shajra/nix-project/tarball/main \
     nix-project-exe \
     --ignore-environment \
     --command nix-project --scaffold --nix `command -v nix`
-#+END_SRC
+#+end_src
 
 Note that we're using =nix run= again, similarly to how we configured
 shajra.cachix.org before. Even =support/dependencies-update= and
@@ -125,7 +125,7 @@ documentation on Nix]] has a section explaining more of how =nix run= works.
 
 In the freshly scaffolded project, you'll see the following files:
 
-#+BEGIN_EXAMPLE
+#+begin_example
   ├── nix
   │   ├── default.nix
   │   ├── sources.json
@@ -134,7 +134,7 @@ In the freshly scaffolded project, you'll see the following files:
   └── support
       ├── dependencies-update
       └── docs-generate
-#+END_EXAMPLE
+#+end_example
 
 =nix/sources.json= and =nix/sources.nix= are overwritten by calls to Niv (via
 =nix-project= via =dependencies-update=), but the rest of the files are yours to
@@ -154,9 +154,9 @@ See the [[niv][Niv]] documentation on how to manage dependencies. You can run Ni
 commands directly with =dependencies-update=. For example, to run the equivalent
 of ~niv show~ you can run
 
-#+BEGIN_SRC sh :eval no
+#+begin_src sh :eval no
 support/dependencies-update niv show
-#+END_SRC
+#+end_src
 
 You can also use =dependencies-update= to see the help messages for both
 =nix-project= and =niv=.
@@ -164,12 +164,12 @@ You can also use =dependencies-update= to see the help messages for both
 Using the ~--help~ switch directly with =dependencies-update= shows the help for
 =nix-project=, which it delegates to.
 
-#+NAME: help-deps-plain
-#+BEGIN_SRC sh :results output :exports both
+#+name: help-deps-plain
+#+begin_src sh :results output :exports both
 support/dependencies-update --help
-#+END_SRC
+#+end_src
 
-#+RESULTS: help-deps-plain
+#+results: help-deps-plain
 #+begin_example
 USAGE:
 
@@ -218,12 +218,12 @@ OPTIONS:
 Since =nix-project= can pass through commands to =niv= we can see the help for
 Niv with the following command:
 
-#+NAME: help-deps-niv
-#+BEGIN_SRC sh :results output :exports both
+#+name: help-deps-niv
+#+begin_src sh :results output :exports both
 support/dependencies-update niv --help
-#+END_SRC
+#+end_src
 
-#+RESULTS: help-deps-niv
+#+results: help-deps-niv
 #+begin_example
 niv - dependency manager for Nix projects
 
@@ -262,10 +262,10 @@ explicitly control what executables are in scope for evaluating your code
 snippets. ~pkgs~ provides all the packages that come with the [[nixpkgs][Nixpkgs
 repository]], but you can always define your own packages with a Nix expression.
 
-#+BEGIN_QUOTE
+#+begin_quote
 *_NOTE_*: Since =docs-generate= writes over files in-place, source control is
 highly recommended to protect against the loss of documentation.
-#+END_QUOTE
+#+end_quote
 
 The =org2gfm= script that =docs-generate= delegates to does not support all
 Emacs Org-mode evaluation/export features. See [[file:doc/org2gfm-design.org][doc/org2gfm-design]] for a
@@ -274,12 +274,12 @@ discussion of =org2gfm='s design and recommended usage.
 For reference, here's the documentation from the ~--help~ switch for
 =docs-generate= / =org2gfm=:
 
-#+NAME: help-docs
-#+BEGIN_SRC sh :results output :exports both
+#+name: help-docs
+#+begin_src sh :results output :exports both
 support/docs-generate --help
-#+END_SRC
+#+end_src
 
-#+RESULTS: help-docs
+#+results: help-docs
 #+begin_example
 USAGE: org2gfm [OPTION]...  [FILE]...
 
