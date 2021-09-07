@@ -202,6 +202,7 @@ generate_gfm_file()
 {
     local filepath="$1"
     local eval_switches=()
+    remove_markdown "$filepath"
     if [ "$EVALUATE" = true ]
     then
         eval_switches+=(
@@ -225,6 +226,20 @@ generate_gfm_file()
         --eval "(org2gfm-log \"EXPORTING\")" \
         --funcall org-gfm-export-to-markdown 2>&1
     )
+}
+
+remove_markdown()
+{
+    local filepath="$1"
+    if [[ "$filepath" =~ \.org$ ]]
+    then
+        local md_path="''${filepath/%.org/.md}"
+        if [ -e "$md_path" ]
+        then
+            printf "\n%s\n" "REMOVING: $md_path" >&2
+            rm "$md_path"
+        fi
+    fi
 }
 
 
