@@ -61,6 +61,7 @@ QUERY_ANSWER=
 
 ERR_REGEX="^Babel evaluation exited"
 ERR_REGEX="$ERR_REGEX\|^No org-babel-execute function"
+ERR_REGEX="$ERR_REGEX\|^Unable to resolve link"
 
 
 . "${nix-project-lib.common}/share/nix-project/common.bash"
