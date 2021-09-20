@@ -59,6 +59,9 @@ KEEP_GOING=false
 EXCLUDE_ARGS=()
 QUERY_ANSWER=
 
+ERR_REGEX="^Babel evaluation exited"
+ERR_REGEX="$ERR_REGEX\|^No org-babel-execute function"
+
 
 . "${nix-project-lib.common}/share/nix-project/common.bash"
 
@@ -216,7 +219,7 @@ generate_gfm_file()
         echo "$line"
         "$KEEP_GOING" \
             || "${gnugrep}/bin/grep" --invert-match --quiet \
-                "^Babel evaluation exited" <(echo "$line")
+                "$ERR_REGEX" <(echo "$line")
     done < <("${emacs}/bin/emacs" \
         --batch \
         --kill \
