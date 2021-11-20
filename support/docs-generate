@@ -11,6 +11,8 @@ nix run \
     nixpkgs.ansifilter \
     nixpkgs.coreutils \
     nixpkgs.gnugrep \
+    nixpkgs.gnutar \
+    nixpkgs.gzip \
     nixpkgs.tree \
     --command \
     org2gfm \
