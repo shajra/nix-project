@@ -1,4 +1,6 @@
 #+link: cachix https://cachix.org
+#+link: docstring https://en.wikipedia.org/wiki/Docstring
+#+link: fhs https://www.pathname.com/fhs/
 #+link: gfm https://github.github.com/gfm/
 #+link: github-actions https://github.com/shajra/nix-project/actions
 #+link: github-token https://github.com/settings/tokens
@@ -6,12 +8,15 @@
 #+link: niv https://github.com/nmattia/niv
 #+link: nix https://nixos.org/nix
 #+link: nix-darwin https://daiderd.com/nix-darwin
-#+link: nix-env https://nixos.org/nix/manual/#sec-nix-env
 #+link: nix-expr https://nixos.org/nix/manual/#ch-expression-language
-#+link: nix-install https://nixos.org/nix/manual/#chap-installation
+#+link: nix-flake https://nixos.wiki/wiki/Flakes
+#+link: nix-flake-compat https://github.com/edolstra/flake-compat
+#+link: nix-install-quick https://nixos.org/download.html#download-nix
+#+link: nix-install-manual https://nixos.org/manual/nix/stable/installation/installation.html
 #+link: nix-learn https://nixos.org/learn.html
 #+link: nix-manual https://nixos.org/nix/manual
 #+link: nixos https://nixos.org
+#+link: nixos-search https://search.nixos.org/packages
 #+link: nixpkgs https://github.com/NixOS/nixpkgs
 #+link: nixpkgs-manual https://nixos.org/nixpkgs/manual
 #+link: nix-tutorial https://github.com/shajra/example-nix/tree/master/tutorials/0-nix-intro
@@ -23,3 +28,4 @@
 #+link: org-blocks-src-results https://orgmode.org/manual/Results-of-Evaluation.html
 #+link: org-export-settings https://orgmode.org/manual/Export-Settings.html#Export-Settings
 #+link: org-tags https://orgmode.org/manual/Tags.html#Tags
+#+link: repl https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop

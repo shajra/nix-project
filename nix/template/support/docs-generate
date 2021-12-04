@@ -1,0 +1,15 @@
+#!/bin/sh -eu
+
+cd "$(dirname "$0")/.."
+
+nix shell \
+    --ignore-environment \
+    --keep LANG \
+    --keep LOCALE_ARCHIVE \
+    .#nixpkgs.nix-project-org2gfm \
+    .#nixpkgs.coreutils \
+    --command \
+    org2gfm \
+    --path-bin \
+    --evaluate \
+    "$@"

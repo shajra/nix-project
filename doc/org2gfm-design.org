@@ -1,5 +1,5 @@
 #+title: Org2gfm Design and Usage Recommendations
-#+setupfile: links.org
+#+setupfile: internal/links.org
 
 The =org2gfm= script provided by this project constrains the full flexibility of
 [[org][Emac's Org-mode]], particularly with respect to evaluation and exporting. This

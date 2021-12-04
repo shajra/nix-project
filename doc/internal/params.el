@@ -1,0 +1,8 @@
+((package-attr   . "nix-scaffold")
+ (package-name   . "nix-scaffold")
+ (package-type   . "executable")
+ (package-target . "nix-scaffold")
+ (run-attr       . "nix-scaffold")
+ (run-target     . "nix-scaffold")
+ (nix-release    . "2.8.0")
+ (nixos-release  . "21.11"))

@@ -1,0 +1,854 @@
+#+title: Nix Setup and Usage with Flakes
+#+setupfile: internal/links.org
+
+* Org-mode setup :noexport:
+
+This document is written in a project-agnostic way so it can be copied to other
+projects that use Nix.
+
+** Variables
+
+We set variables in =internal/params.el= and access those settings with the
+following macros and source code blocks (using Noweb).
+
+#+name: get
+#+begin_src emacs-lisp :var arg="" :eval yes :results silent
+(alist-get (intern arg) (car (read-from-string (f-read "internal/params.el"))))
+#+end_src
+
+#+macro: get (eval (concat $2 (alist-get (intern $1) (car (read-from-string (f-read "internal/params.el")))) $3))
+#+macro: package-attr-short {{{get(package-attr,=,=)}}}
+#+macro: package-attr-long {{{get(package-attr,=packages.x86_64-linux.,=)}}}
+#+macro: package-type {{{get(package-type)}}}
+#+macro: package-target {{{get(package-target,=,=)}}}
+#+macro: run-attr {{{get(run-attr,=,=)}}}
+#+macro: run-target {{{get(run-target,=,=)}}}
+#+macro: nix-release {{{get(nix-release)}}}
+#+macro: nixos-release {{{get(nixos-release)}}}
+#+macro: nixos-branch {{{get(nixos-release,=nixos-,=)}}}
+
+** Formatting help
+
+This snippet can be used as a post-processing step to crop down the results from
+an evaluation of a source code block.
+
+#+name: crop
+#+begin_src emacs-lisp :var text="" :var first-n=5 :var last-n=5 :results silent
+(let* ((ls         (split-string text "\n"))
+       (first-ls   (-take first-n ls))
+       (rest-first (-drop first-n ls))
+       (rest-last  (-drop-last (+ 1 last-n) rest-first))
+       (last-ls    (-take-last (+ 1 last-n) rest-first)))
+  (string-join
+   (if rest-last
+       (append first-ls '("…") last-ls)
+     (append first-ls last-ls))
+   "\n"))
+#+end_src
+
+** Setup action
+
+The following helps (using Noweb) set up Nix environment variables for source
+block evaluation.
+
+#+name: nix-init
+#+begin_src sh :eval no
+export NIX_PROFILE=$(pwd)/nix-profile
+export NIX_PAGER=cat
+export PATH="$NIX_PROFILE/bin:$PATH"
+#+end_src
+
+Next we perform some side-effects to set up the evaluation of the whole
+document.
+
+#+name: cleanup
+#+begin_src sh :dir .. :results output silent :noweb yes
+<<nix-init>>
+rm --force result*
+rm --force "$NIX_PROFILE"*
+#+end_src
+
+This is just a hack to deal with the fact that we never know what directory a
+session will start in, so we need a way to calculate the PWD to jump to it.
+
+#+name: pwd-parent
+#+begin_src sh :results output silent
+echo cd "$(pwd)/.."
+#+end_src
+
+This begins a session with environment variables initialized.
+
+#+name: session-init
+#+begin_src sh :session env :results output silent :noweb yes
+<<pwd-parent()>>
+<<nix-init>>
+#+end_src
+
+* About this document
+
+For people new to [[nix][the Nix package manager]], this document gives a walk-through of
+using Nix in the context of this project. A supplemental document covers [[file:nix-motivation.org][what
+Nix is and the motivation to use it]].
+
+#+begin_quote
+*_WARNING:_* This project not only uses Nix, but furthermore a
+still-experimental feature of Nix called /flakes/. The decision to use an
+experimental feature such as flakes comes with trade-offs. Please read the
+[[file:nix-motivation.org][provided supplemental documentation on Nix]] if you're unfamiliar with flakes or
+these trade-offs.
+#+end_quote
+
+Note, some users may be using [[nixos][NixOS]], a Linux operating system built on top of
+Nix. Those users already have Nix and don't need to install it separately. To
+use this project, you don't need to use NixOS as well. Nix can be installed on a
+variety of Linux and Mac systems. Nix can also be installed in Windows via the
+Windows Subsystem for Linux (WSL). Installation on WSL may involve steps not
+covered in this documentation, though.
+
+* How this project uses Nix
+
+This project uses Nix to download all necessary dependencies and build
+everything from source. In this regard, Nix is helpful as not just a package
+manager, but also a build tool. Nix helps us get from raw source files to not
+only built executables, but all the way to a Nix package, which we can install
+with Nix if we like.
+
+[[github-actions][This project's continuous integration (using GitHub Actions)]] caches built
+packages at [[cachix][Cachix]], a service for caching pre-built Nix packages. If you don't
+want to wait for a full local build when first using this project, setting up
+Nix to pull from Cachix is recommended.
+
+Within this project, the various files with a ".nix" extension are Nix files,
+each of which contains an expression written in the [[nix-expr][Nix expression language]] used
+by the Nix package manager to specify packages. If you get proficient with this
+language, you can use these expressions as a starting point to compose your own
+packages beyond what's provided in this project.
+
+* Level of commitment/risk
+
+Unless you're on NixOS, you're likely already using another package manager for
+your operating system already (APT, DNF, etc.). You don't have to worry about
+Nix or packages installed by Nix conflicting with anything already on your
+system. Running Nix along side other package managers is safe.
+
+All the files of a Nix package are located under =/nix= a directory, well
+isolated from any other package manager. Nix won't touch any directories like
+=/usr= or =/var=. Nix then symlinks files under =/nix= to your home directory
+under dot-files like =~/.nix-profile=. There is also some light configuration
+under =/etc/nix=.
+
+Hopefully this alleviates any worry about installing a complex program on your
+machine. Uninstallation is nearly as easy as deleting everything under =/nix=.
+
+* Installation and setup
+
+** Nix package manager installation
+
+#+begin_quote
+*_NOTE:_* You don't need this step if you're running NixOS, which comes with Nix
+baked in.
+#+end_quote
+
+If you don't already have Nix, [[nix-install-quick][the official installation script]] should work on a
+variety of UNIX-like operating systems. If you're okay with the script calling
+=sudo= you can install Nix on a non-WSL machine with the following recommended
+command:
+
+#+begin_src bash :eval no
+sh <(curl -L https://nixos.org/nix/install) --daemon
+#+end_src
+
+The =--daemon= switch installs Nix in the multi-user mode, which is generally
+recommended (single-user installation with =--no-daemon= instead is recommended
+for WSL). The script reports everything it does and touches. If you later want
+to uninstall Nix, you can run the installation script again, and it will tell
+you what to do to get back to a clean state.
+
+After installation, you may have to exit your terminal session and log back in
+to have environment variables configured to put Nix executables on your =PATH=.
+
+The Nix manual describes [[nix-install-manual][other methods of installing Nix]] that may suit you more.
+
+** Cache setup
+
+For this project, it's recommended to configure Nix to use shajra.cachix.org as
+a Nix /substitutor/. This project pushes built Nix packages to [[cachix][Cachix]] as part of
+its continuous integration. Once configured, Nix will pull down these pre-built
+packages instead of building them locally (potentially saving a lot of time).
+This augments Nix's default substitutor that pulls from cache.nixos.org.
+
+You can configure shajra.cachix.org as a supplemental substitutor with the
+following command:
+
+#+begin_src sh :eval no
+nix run \
+    --file https://cachix.org/api/v1/install \
+    cachix \
+    --command cachix use shajra
+#+end_src
+
+Cachix is a service that anyone can use. You can call this command later to add
+substitutors for someone else using Cachix, replacing “shajra” with their
+cache's name.
+
+If you've just run a multi-user Nix installation and are not yet a trusted user
+in =/etc/nix/nix.conf=, this command may not work. But it will report back some
+options to proceed.
+
+One option sets you up as a trusted user, and installs Cachix configuration for
+Nix locally at =~/.config/nix/nix.conf=. This configuration will be available
+immediately, and any subsequent invocation of Nix commands will take advantage
+of the Cachix cache.
+
+You can alternatively configure Cachix as a substitutor globally by running the
+above command as a root user (say with =sudo=), which sets up Cachix directly in
+=/etc/nix/nix.conf=. The invocation may give further instructions upon
+completion.
+
+** Setting up flakes
+
+This project uses a still-experimental feature in Nix called /flakes/.
+
+#+begin_quote
+*_WARNING:_* The decision to use an experimental feature such as flakes comes
+with trade-offs. Please read the [[file:nix.motivation.org][provided supplemental documentation on Nix]] if
+you're unfamiliar with flakes or these trade-offs.
+#+end_quote
+
+The root of this project includes a =default.nix= file that enables users to use
+this project without flakes installed, but the specifics of how to do so are
+beyond the scope of this document. The legacy (non-flakes) way of using Nix
+lacks ergonomics, reliability, and performance. Hopefully we won't have to wait
+long for flakes to be released as non-experimental.
+
+To use flakes there are two things we need to do:
+1. make sure the version we're at least on Nix 2.4
+2. enable both the =nix-command= and =flakes= experimental features.
+
+Since Nix {{{nix-release}}} has already been released, if you installed Nix
+recently as per the instructions above, you should be on a recent-enough
+version:
+
+#+name: nix-version
+#+begin_src sh :results output :exports both
+nix --version
+#+end_src
+
+#+RESULTS: nix-version
+: nix (Nix) 2.4
+
+The easiest way to turn on experimental features is to create a file
+=~/.config/nix/nix.conf= if it doesn't already exist, and in it put the
+following line:
+
+#+begin_src text :eval no
+experimental-features = nix-command flakes
+#+end_src
+
+Then you should see that the appropriate feature is enabled:
+
+#+name: nix-show-config
+#+begin_src sh :results output :export both
+nix show-config | grep experimental-features
+#+end_src
+
+#+RESULTS: nix-show-config
+: experimental-features = nix-command flakes
+
+Note, if you're using the latest NixOS release of {{{nixos-release}}}, you are
+probably still on Nix 2.3, which doesn't provide flakes. Upgrading to 2.4 or
+later can be done by editing your system's =configuration.nix= as follows:
+
+#+begin_src nix :eval no
+{ pkgs, ... }: {
+
+    # ... the rest of your configuration
+
+    # Upgrade Nix to get flakes
+    nix.package = pkgs.nixFlakes;
+
+    # Enable flakes in the newer version of Nix
+    nix.extraOptions = ''
+        experimental-features = nix-command flakes
+    '';
+}
+#+end_src
+
+* Working with Nix
+
+Though covering Nix comprehensively is beyond the scope of this document, we'll
+go over a few commands illustrating some usage of Nix with this project.
+
+** Referencing flake projects
+
+Most of this document illustrates use of the =nix= command, which provides a
+number of subcommands and centralizes Nix usage.
+
+Many of the =nix= subcommands accept references to flake-enabled projects. A
+flake is written as just a Nix expression saved in a file named =flake.nix=.
+This file should be at the root of a project. We can reference both local and
+remote flake projects.
+
+Here's some common forms we can use to reference flake projects:
+
+| Syntax                           | Location                                                       |
+|----------------------------------+----------------------------------------------------------------|
+| ~.~                              | flake in the current directory                                 |
+| ~<path>~                         | flake in some other filepath (must have a slash)               |
+| ~<registry>~                     | reference to flake from the registry (see =nix registry list=) |
+| ~git+<url>~                      | latest flake in the default branch of a Git repository         |
+| ~git+<url>?ref=<branch>~         | latest flake in a branch of a Git repository                   |
+| ~git+<url>?rev=<commit>~         | flake in a specific commit of a Git repository                 |
+| ~github:<owner>/<repo>~          | latest flake in the default branch of a GitHub repository      |
+| ~github:<owner>/<repo>/<branch>~ | latest flake in a branch of a GitHub repository                |
+| ~github:<owner>/<repo>/<commit>~ | flake in a specific commit of a GitHub repository              |
+
+This table introduces an angle-bracket notation for syntactic forms with
+components that change with context. This notation is used throughout this
+document.
+
+Referencing local flake projects is easy enough with filepaths. But the URL-like
+notation for remote flake projects can get a touch verbose to type out.
+Furthermore, some of these references are not fixed. For example, Git branches
+move to different commits with time.
+
+To manage flake references, Nix provides a flakes registry. Upon installation
+this registry is prepopulated with some global entries:
+
+#+name: nix-registry-list
+#+begin_src sh :results output :exports both :post crop(text=*this*, first-n=0, last-n=10)
+nix registry list
+#+end_src
+
+#+RESULTS: nix-registry-list
+#+begin_example
+…
+global flake:nixos-homepage github:NixOS/nixos-homepage/flake
+global flake:nixos-search github:NixOS/nixos-search
+global flake:nur github:nix-community/NUR
+global flake:nixpkgs github:NixOS/nixpkgs/nixpkgs-unstable
+global flake:templates github:NixOS/templates
+global flake:patchelf github:NixOS/patchelf
+global flake:poetry2nix github:nix-community/poetry2nix
+global flake:nix-serve github:edolstra/nix-serve
+global flake:nickel github:tweag/nickel
+global flake:bundlers github:NixOS/bundlers
+#+end_example
+
+For example, rather than referencing the flake on the =nixpkgs-unstable= branch
+of the Nixpkgs GitHub repository with ~github:NixOS/nixpkgs/nixpkgs-unstable~,
+we can just use the simple identifier ~nixpkgs~.
+
+If we want to point to a different branch, but still use an identifier from the
+registry, we can by extending it with the branch. For example, the flakes
+identifier ~nixpkgs~ is the same as ~nixpkgs/nixpkgs-ustable~, but we can also
+use {{{get(nixos-release,~nixpkgs/nixos-,~)}}} to override the branch and point
+to the NixOS {{{nixos-release}}} release branch.
+
+** Inspecting a flake
+
+A flake can provide a variety of outputs that can be used in different contexts.
+One of these outputs includes the packages we can build and install.
+
+We can use =nix flake show= to see the outputs provided by any flake, local or
+remote, by providing a flake reference discussed in the previous section. Here's
+an example of inspecting the flake of this project locally:
+
+#+begin_src sh :eval no
+nix flake show .
+#+end_src
+
+#+name: nix-flake-show
+#+begin_src sh :dir .. :results output :exports results :post crop(text=*this*, first-n=20, last-n=0)
+nix flake show . | ansifilter
+#+end_src
+
+#+RESULTS: nix-flake-show
+#+begin_example
+git+file:///home/tnks/src/shajra/nix-project
+├───defaultPackage
+│   ├───aarch64-darwin: package 'org2gfm'
+│   ├───x86_64-darwin: package 'org2gfm'
+│   └───x86_64-linux: package 'org2gfm'
+├───defaultTemplate: template: A starter project using shajra/nix-project.
+├───legacyPackages
+├───lib: unknown
+├───overlay: Nixpkgs overlay
+├───overlays
+└───packages
+    ├───aarch64-darwin
+    │   ├───nix-scaffold: package 'nix-scaffold'
+    │   └───org2gfm: package 'org2gfm'
+    ├───x86_64-darwin
+    │   ├───nix-scaffold: package 'nix-scaffold'
+    │   └───org2gfm: package 'org2gfm'
+    └───x86_64-linux
+        ├───nix-scaffold: package 'nix-scaffold'
+        └───org2gfm: package 'org2gfm'
+#+end_example
+
+Flake outputs are a organized in a tree of /attributes/. References to paths of
+attributes are dot-delimited. There is a standard schema for the output
+attribute tree of flake. It's permitted to have output outside this schema.
+
+This document will mostly focus on packages provided by the =packages= output
+attribute. Notice that a flake provides packages for different (but often not
+all) system architectures.
+
+For commands like =nix flake show= that expect a flake reference as an argument,
+=.= will be assumed as a default if an argument isn't provided. So ~nix flake
+show~ is equivalent to ~nix flake show .~.
+
+** Referencing flake outputs
+
+Many of the =nix= subcommands work with references to flakes outputs. These
+references are called /installables/. There are many types of installables
+(hence the general name). In this document, we'll hone in on the following
+forms:
+
+- ~<flake>~ to select a default output from
+- ~<flake>#<output reference>~ for a reference to packages(s) within a flake.
+
+In this notation, ~<flake>~ is the same reference to a local or remote flake
+project discussed earlier.
+
+When the installable is just a flake reference, the called =nix= subcommand will
+generally look for the ~defaultPackage.<system>~ attribute within the flake. So
+~<flake>~ will generally be the same as ~<flake>#defaultPackage.<system>~. One
+exception to this rule, =nix run= will first look for
+~<flake>#defaultApp.<system>~, and then for ~<flake>#defaultPackage.<system>~.
+
+Installables can also reference an output of a flake (~<output reference>~
+above) directly in a couple of ways:
+
+| Output reference                      | Example installable                                 |
+|---------------------------------------+-----------------------------------------------------|
+| ~<prefix attributes>.<system>.<name>~ | {{{get(package-attr,~.#packages.x86_64-linux.,~)}}} |
+| ~<name>~                              | {{{get(package-attr,~.#,~)}}}                       |
+
+The first way is the most explicit, by providing the full attribute path we can
+see with =nix flake show=. But this requires specifying the package's system
+architecture.
+
+With the second form, with the shorter ~<name>~ package reference, Nix will
+detect the system we're on and also search some attributes in a precedence order
+for the provided name. Which attributes are searched depends on the =nix=
+subcommand called:
+
+1. ~apps.<system>.<name>~ (=nix run= only)
+2. ~packages.<system>.<name>~ (all subcommands accepting installables)
+3. ~legacyPackages.<system>.<name>~ (all subcommands accepting installables)
+
+For commands accepting installables as an argument, if none is provided, then
+=.= is assumed. Nix will attempt to read a =flake.nix= file in the current
+directory. If not found, newer versions of Nix will continue searching parent
+directories recursively to find a =flake.nix= file.
+
+** Searching flakes for packages
+
+We can use the =nix search= command to see what package derivations a flake
+contains. For example from the root directory of this project, we can execute:
+
+#+begin_src sh :eval no
+nix search .
+#+end_src
+
+#+name: nix-search-local
+#+begin_src sh :dir .. :results output :exports results :post crop(text=*this*, first-n=9, last-n=0)
+nix search . | ansifilter
+#+end_src
+
+#+results: nix-search-local
+: * packages.x86_64-linux.nix-scaffold
+:   Script to scaffold a Nix project
+:
+: * packages.x86_64-linux.org2gfm
+:   Script to export Org-mode files to GitHub Flavored Markdown (GFM)
+
+If a flake has a lot of packages, you can pass regexes to prune down the search.
+Returned values will match all the regexes provided.
+
+If we like, we can search a remote repository as well for packages to install.
+For example, Nixpkgs is a central repository for Nix providing several thousand
+packages. We can search the “nixpkgs-unstable” branch of [[nixpkgs][Nixpkgs' GitHub
+repository]] for packages that match both “gpu|opengl|accel” and “terminal” as
+follows:
+
+#+name: nix-search-remote-verbose
+#+begin_src sh :results output :exports code
+nix search github:NixOS/nixpkgs/nixpkgs-unstable 'gpu|opengl|accel' terminal
+#+end_src
+
+As discussed in a previous section, we can use the flakes registry identifier of
+=nixpkgs= instead of the longer =github:NixOS/nixpkgs/nixpkgs-unstable= to save
+some typing:
+
+#+begin_src sh :eval no
+nix search nixpkgs 'gpu|opengl|accel' terminal
+#+end_src
+
+#+name: nix-search-remote-concise
+#+begin_src sh :dir .. :results output :exports results
+nix search nixpkgs 'gpu|opengl|accel' terminal | ansifilter
+#+end_src
+
+#+RESULTS: nix-search-remote-concise
+#+begin_example
+,* legacyPackages.x86_64-linux.alacritty (0.10.1)
+  A cross-platform, GPU-accelerated terminal emulator
+
+,* legacyPackages.x86_64-linux.darktile (0.0.10)
+  A GPU rendered terminal emulator designed for tiling window managers
+
+,* legacyPackages.x86_64-linux.kitty (0.24.4)
+  A modern, hackable, featureful, OpenGL based terminal emulator
+
+,* legacyPackages.x86_64-linux.wezterm (20220408-101518-b908e2dd)
+  A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust
+#+end_example
+
+If we're curious what version of WezTerm is available in NixOS's latest release,
+we can specialize the installable we're searching as follows:
+
+#+begin_src sh :eval no :noweb yes
+nix search nixpkgs/nixos-<<get("nixos-release")>>#wezterm
+#+end_src
+
+#+name: nix-search-remote-wezterm
+#+begin_src sh :dir .. :results output :exports results :noweb yes
+nix search nixpkgs/nixos-<<get("nixos-release")>>#wezterm | ansifilter
+#+end_src
+
+#+RESULTS: nix-search-remote-wezterm
+: * legacyPackages.x86_64-linux.wezterm (20210814-124438-54e29167)
+:   A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust
+
+Here ~/{{{nixos-branch}}}~ overrides the default =nixpkgs-unstable= branch of
+the registry entry, and the ~#wezterm~ suffix searches not just the flake, but a
+specific package named ~wezterm~, which will either be found or not (there's no
+need for regexes to filter further).
+
+You may also notice that the Nixpkgs flake outputs packages under the
+=legacyPackages= attribute instead of the =packages=. The primary difference is
+that packages are flatly organized under =packages=, while =legacyPackages= can
+be an arbitrary tree. =legacyPackages= exists specifically for the Nixpkgs
+project, a central project to the Nix ecosystem that's existed long before
+flakes. Beyond Nixpkgs, don't worry about =legacyPackages=. Packages from all
+other flakes should generally be found under =packages=.
+
+** Building installables
+
+The following result is one returned by our prior execution of ~nix search .~:
+
+#+name: nix-search-specific
+#+begin_src sh :dir .. :results output :exports results :noweb yes
+nix search . '<<get("package-attr")>>' | ansifilter
+#+end_src
+
+#+RESULTS: nix-search-specific
+: * packages.x86_64-linux.nix-scaffold
+:   Script to scaffold a Nix project
+
+We can see that a package can be accessed with the {{{package-attr-long}}}
+output attribute path of the project's flake. Not shown in the search results
+above, this package happens to provide the {{{package-type}}}
+{{{package-target}}}.
+
+We can build this package with =nix build= from the project root:
+
+#+name: nix-build
+#+begin_src sh :dir .. :results output silent :noweb yes
+nix build .#<<get("package-attr")>>
+#+end_src
+
+The positional arguments to =nix build= are /installables/ as discussed in prior
+sections. Here, the =.= indicates that our flake should be in the current
+directory. Within this flake we look for a package with an attribute of
+{{{package-attr-short}}}. We didn't have to use the full attribute
+{{{package-attr-long}}} because =nix build= will automatically look in the
+=packages= attribute for the system it detects we're on.
+
+If we omit the attribute path of our installable, Nix try to build a default
+package which it expects to find under the flake's =defaultPackage= output
+attribute. For example, if we ran just ~nix build .~, Nix would expect to find a
+=flake.nix= in the current directory with an output providing a
+~defaultPackage.<system>~ attribute with a package to build.
+
+Furthermore, if we didn't specify an installable at all, Nix would assume we're
+trying to build the default package of the flake found in the current directory.
+So, the following invocations are all equivalent:
+- =nix build=
+- =nix build .=
+- =nix build .#defaultPackage.<system>=
+
+All packages built by Nix are stored in =/nix/store=. Nix won't rebuild packages
+found there. Once a package is built, its content in =/nix/store= is read-only
+(until the package is garbage collected, discussed later).
+
+After a successful call of =nix build=, you'll see one or more symlinks for each
+package requested in the current working directory. These symlinks by default
+have a name prefixed with "result" and point back to the respective build in
+=/nix/store=:
+
+#+name: nix-build-link
+#+begin_src sh :dir .. :results output :exports both
+readlink result*
+#+end_src
+
+#+RESULTS: nix-build-link
+: /nix/store/yzkbxisa1clj22210bbasbv3ji3h83p0-nix-scaffold
+
+Following these symlinks, we can see the files the project provides:
+
+#+name: nix-build-tree
+#+begin_src sh :dir .. :results output :exports both :post crop(text=*this*, first-n=10, last-n=0)
+tree -l result*
+#+end_src
+
+#+RESULTS: nix-build-tree
+: result
+: └── bin
+:     └── nix-scaffold
+:
+: 1 directory, 1 file
+
+It's common to configure these "result" symlinks as ignored in source control
+tools (for instance, for Git within a =.gitignore= file).
+
+=nix build= has a =--no-link= switch in case you want to build packages without
+creating "result" symlinks. To get the paths where your packages are located,
+you can use =nix path-info= after a successful build:
+
+#+name: nix-build-path
+#+begin_src sh :dir .. :results output :exports both :noweb yes
+nix path-info .#<<get("package-attr")>>
+#+end_src
+
+#+results: nix-build-path
+: /nix/store/yzkbxisa1clj22210bbasbv3ji3h83p0-nix-scaffold
+
+** Running commands in a shell
+
+We can run commands in Nix-curated environments with =nix shell=. Nix will take
+executables found in packages, put them in an environment's =PATH=, and then
+execute a user-specified command.
+
+With =nix shell=, you don't even have to build the package first with =nix
+build= or mess around with "result" symlinks. =nix shell= will build any
+necessary packages required.
+
+For example, to get the help message for the {{{run-target}}} executable
+provided by the package selected by the {{{run-attr}}} attribute path output by
+this project's flake, we can call the following:
+
+#+name: nix-shell
+#+begin_src sh :dir .. :results output :exports both :noweb yes :post crop(text=*this*, first-n=5, last-n=0)
+nix shell \
+    .#<<get("run-attr")>> \
+    --command <<get("run-target")>> --help
+#+end_src
+
+#+RESULTS: nix-shell
+: USAGE: nix-scaffold [OPTION]...
+:
+: DESCRIPTION:
+:
+:     Scaffolds a new project based on Nix flakes.
+: …
+
+Similarly to =nix build=, =nix shell= accepts installables as positional
+arguments to select packages to put on the =PATH=.
+
+The command to run is specified after the =--command= switch. =nix shell= runs
+the command in a shell set up with a =PATH= environment variable including all
+the =bin= directories provided by the selected packages.
+
+If you just want to drop into a shell with the set up =PATH=, you can drop the
+=--command== switch and following arguments.
+
+=nix shell= also supports an =--ignore-environment= flag that restricts =PATH=
+to only packages selected, rather than extending the =PATH= of the caller's
+environment. With =--ignore-environment=, the invocation is more sandboxed.
+
+As with =nix build=, =nix shell= will select default packages for any
+installable that is only a flake reference. If no installable is provided to
+=nix shell=, the invocation will look for the default package in under the
+=defaultPackage= attribute output by a flake assumed to be in the current
+directory. So, the following invocations are all equivalent:
+- ~nix shell~
+- ~nix shell .~
+- ~nix shell .#defaultPackage.<system>~
+
+** Running installables
+
+Some packages only have one command that's the obvious one to run. Some flakes
+have only one package that has this command in it. The =nix run= command uses
+some heuristics to find executables for a more concise syntax than =nix shell=
+with a =--command= switch.
+
+As with other =nix= subcommands, =nix run= accepts an installable as an argument
+(but only one). If none if provided, then =.= is assumed.
+
+If the provided installable is only a flake reference with no package selected,
+then =nix run= searched the following flake output attributes in order for
+something to run:
+
+- =defaultApp.<system>=
+- =defaultPackage.<system>=
+
+If only a name is provided, then =nix run= searches in order through the
+following output attribute paths:
+
+- =apps.<system>.<name>=
+- =packages.<system>.<name>=
+- =legacyPackages.<system>.<name>=
+
+And as always, we can specify a full output attribute path explicitly if =nix
+run='s search doesn't find what we want to run.
+
+Here's the =nix run= equivalent of the =nix shell= invocation from the previous
+section:
+
+#+name: nix-run
+#+begin_src sh :dir .. :results output :exports both :noweb yes :post crop(text=*this*, first-n=5, last-n=0)
+nix run .#<<get("run-attr")>>  -- --help
+#+end_src
+
+#+RESULTS: nix-run
+: USAGE: nix-scaffold [OPTION]...
+:
+: DESCRIPTION:
+:
+:     Scaffolds a new project based on Nix flakes.
+: …
+
+** Installing and uninstalling programs
+
+We've seen that we can build programs with =nix build= and then execute them
+using the "result" symlink (=result/bin/*=). Additionally, we've seen that you
+can run programs with =nix shell= and =nix run=. But these additional steps and
+switches/arguments can feel extraneous. It would be nice if we could just have
+the programs on our =PATH=. This is what =nix profile= is for.
+
+=nix profile= maintains a symlink tree, called a /profile/, of installed
+programs. The active profile is pointed to by a symlink at =~/.nix-profile=. By
+default, this profile points to =/nix/var/nix/profiles/per-user/$USER/profile=.
+But you can point your =~/.nix-profile= to any writable location.
+
+This way, you can just put =~/.nix-profile/bin= on your =PATH=, and any programs
+installed in your currently active profile will be available for interactive use
+or scripts.
+
+To install the {{{package-target}}} {{{package-type}}}, which is provided by the
+{{{package-attr-short}}} output of our flake, we'd run the following:
+
+#+begin_src sh :eval no :noweb yes
+nix profile install .#<<get("package-attr")>>
+#+end_src
+
+#+name: nix-profile-install
+#+begin_src sh :session env :results output silent :exports none :noweb yes
+nix profile install --profile "$NIX_PROFILE" '.#<<get("package-attr")>>' 2>&1
+#+end_src
+
+We can see this installation by querying what's been installed:
+
+#+begin_src sh :eval no
+nix profile list
+#+end_src
+
+#+name: nix-profile-list
+#+begin_src sh :session env :results output :exports results
+nix profile list --profile "$NIX_PROFILE" | sed -e "s/^/$/"
+#+end_src
+
+#+RESULTS: nix-profile-list
+
+The output of =nix profile list= is a bit verbose, but each line has three parts:
+- an index to use with other =nix profile= subcommands (like =nix profile remove=)
+- the original installable reference (might be mutable)
+- the immutable reference actually installed
+- the store path in =/nix/store=
+
+And if we want to uninstall a program from our active profile, we do so by the
+index
+
+#+name: nix-profile-remove
+#+begin_src sh :eval no :noweb yes
+nix profile remove 0
+#+end_src
+
+we can also provide a regex matching the full attribute path of the flake:
+#+name: nix-profile-remove
+#+begin_src sh :eval no :noweb yes
+nix profile remove '.*<<get("package-attr")>>'
+#+end_src
+
+#+name: nix-profile-remove
+#+begin_src sh :session env :results silent :exports none :noweb yes
+nix profile remove --profile "$NIX_PROFILE" '.*<<get("package-attr")>>'
+#+end_src
+
+** Garbage collection
+
+Every time you build a new version of your code, it's stored in =/nix/store=.
+You can call =nix store gc= to purge unneeded packages. Programs that should not
+be removed by =nix store gc= that can be found by starting with symlinks stored
+as /garbage collection (GC) roots/ under three locations:
+
+  - =/nix/var/nix/gcroots=
+  - =/nix/var/nix/profiles=
+  - =/nix/var/nix/manifests=.
+
+For each package, Nix is aware of all references back to other packages in
+=/nix/store=, whether in text files or binaries. This helps Nix assure that
+dependencies of packages linked as GC roots won't be deleted.
+
+Each "result" symlink created by a =nix build= invocation has a symlink in
+=/nix/var/nix/gcroots/auto= pointing back it. So we've got symlinks in
+=/nix/var/nix/gcroots/auto= pointing to "result" symlinks in our projects, which
+then reference the actual built project in =/nix/store=. These chains of
+symlinks prevent packages built by =nix build= from being garbage collected.
+
+If you want a package you've built with =nix build= to be garbage collected,
+delete the "result" symlink created before calling =nix store gc=. Breaking
+symlink chains under =/nix/var/nix/gcroots= removes protection from garbage
+collection. =nix store gc= will clean up broken symlinks when it runs.
+
+Note that everything under =/nix/var/nix/profiles= is considered a GC root as
+well. This is why users by convention use this location to store their Nix
+profiles.
+
+Also, note if you delete a “result*” link and call =nix store gc=, though some
+garbage may be reclaimed, you may find that an old profile is keeping the
+program alive. Use the =nix profile wipe-history= command to delete old profiles
+before calling =nix store gc=.
+
+It's also good to know that =nix store gc= won't delete packages referenced by
+any running processes. In the case of =nix run= no garbage collection root
+symlink is created under =/nix/var/nix/gcroots=, but while =nix run= is running
+=nix store gc= won't delete packages needed by the running command. However,
+once the =nix run= call exits, any packages pulled from a substitutor or built
+locally are candidates for deletion by =nix store gc=. If you called =nix run=
+again after garbage collecting, those packages may be pulled or built again.
+
+* Next steps
+
+This document has covered a fraction of Nix usage, hopefully enough to introduce
+Nix in the context of [[file:../README.org][this project]].
+
+An obvious place to start learning more about Nix is [[nix-learn][the official documentation]].
+The author of this project also maintains another project with [[nix-tutorial][a small tutorial
+on Nix]]. This tutorial covers the Nix expression language in more detail.
+
+All the commands we've covered have more switches and options. See the
+respective man pages for more. Also, we didn't cover =nix-shell=, which can be
+used for setting up development environments. And we didn't cover much of
+[[nixpkgs][Nixpkgs]], the gigantic repository of community-curated Nix expressions.
+
+The Nix ecosystem is vast. This project and documentation illustrates just a
+small sample of what Nix can do.
+
+* Org-mode teardown :noexport:
+
+#+call: cleanup()

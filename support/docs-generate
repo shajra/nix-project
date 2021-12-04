@@ -2,18 +2,17 @@
 
 cd "$(dirname "$0")/.."
 
-nix run \
+nix shell \
     --ignore-environment \
     --keep LANG \
     --keep LOCALE_ARCHIVE \
-    --file nix \
-    distribution.nix-project-org2gfm \
-    nixpkgs.ansifilter \
-    nixpkgs.coreutils \
-    nixpkgs.gnugrep \
-    nixpkgs.gnutar \
-    nixpkgs.gzip \
-    nixpkgs.tree \
+    .#org2gfm \
+    .#nixpkgs.ansifilter \
+    .#nixpkgs.coreutils \
+    .#nixpkgs.gnugrep \
+    .#nixpkgs.gnutar \
+    .#nixpkgs.gzip \
+    .#nixpkgs.tree \
     --command \
     org2gfm \
     --path-bin \

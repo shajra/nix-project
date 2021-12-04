@@ -12,8 +12,6 @@ in
 
 rec {
 
-    isDarwin = stdenv.isDarwin;
-
     writeShellChecked = name:
         { meta ? {}
         , executable ? false
@@ -77,7 +75,7 @@ rec {
         ${body}
         '';
 
-    common = writeShellCheckedShareLib
+    scriptCommon = writeShellCheckedShareLib
         "nix-project-lib-common" "nix-project" {
             meta.description = "Common Bash functions";
             baseName = "common";

@@ -1,0 +1,36 @@
+#+title: Playing with Org-mode
+#+setupfile: internal/links.org
+
+* Org-mode setup :noexport:
+
+#+name: crop
+#+CALL: internal/library.org:crop()
+
+* About this document
+
+This is a document to play around in as an author and see what Org-mode is
+capable of.
+
+#+begin_src sh :results output :exports both :post crop(text=*this*)
+i=1
+while [ "$i" -le 100 ]
+do
+    echo "$i"
+    i=$((i + 1))
+done
+#+end_src
+
+#+RESULTS:
+#+begin_example
+1
+2
+3
+4
+5
+…
+96
+97
+98
+99
+100
+#+end_example

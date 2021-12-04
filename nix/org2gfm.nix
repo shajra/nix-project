@@ -44,7 +44,7 @@ let
 
 in
 
-nix-project-lib.writeShellCheckedExe progName
+nix-project-lib.scripts.writeShellCheckedExe progName
 {
     inherit meta;
 }
@@ -64,7 +64,7 @@ ERR_REGEX="$ERR_REGEX\|^No org-babel-execute function"
 ERR_REGEX="$ERR_REGEX\|^Unable to resolve link"
 
 
-. "${nix-project-lib.common}/share/nix-project/common.bash"
+. "${nix-project-lib.scripts.scriptCommon}/share/nix-project/common.bash"
 
 print_usage()
 {
