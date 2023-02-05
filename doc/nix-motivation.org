@@ -4,18 +4,13 @@
 * About this document
 
 This document introduces the [[nix][Nix package manager]] and highlights some motivations
-to use Nix. It also covers some problems to be aware of when deciding on whether
-or how to use Nix.
+to use Nix. It also covers important tradeoffs not only of using Nix, but
+experimental features in Nix such as one called /flakes/.
 
-This project not only uses Nix, but furthermore a still-experimental feature of
-Nix called /flakes/.
-
-#+begin_quote
-*_WARNING:_* The decision to use an experimental feature such as flakes with
-this project comes with trade-offs, discussed in the latter sections of this
-document. Please read this material to make an informed decision for your
-context and avoid later regrets.
-#+end_quote
+This document tries to capture enthusiasm while being honest about frustrations.
+Nix is amazing, and a clear pioneer of an architectural approach that users will
+come to demand in the future. However, users need clear information up front
+where they are likely to face challenges.
 
 * Problems addressed by Nix
 
@@ -65,7 +60,7 @@ world of machine learning programming often requires the mixing C/C++, Python,
 and even basic shell scripts. These hybrid applications have a tendency to be
 fragile.
 
-** Completely cached builds
+** Complete distributed cache of builds
 
 Various build systems provide repositories for pre-built packages, which helps
 users save time by downloading packages instead of building them. What we really
@@ -79,8 +74,8 @@ managers. Secondly, most of the package managers require adherence to a set of
 policies for everything to work well together. For example, many distributions
 respect the [[fhs][Filesystem Hierarchy Standard (FHS)]]. Confusion around policies have
 led many developers to steer away from package managers and towards
-container-based technologies like Docker, despite the overhead and drawback of
-these systems.
+container-based technologies like Docker, despite the overhead and drawbacks of
+containers.
 
 * Nix at a high level
 
@@ -101,8 +96,8 @@ result.
 Above and beyond the problems discussed above, Nix has a precisely deterministic
 build, broadly guaranteeing reproducibility. If the package builds on one
 system, it should build on all systems, irrespective of what's installed or not.
-Furthermore, multiple systems building the same package independently should
-generally produce bit-for-bit identical builds.
+Furthermore, multiple systems building the same package independently will often
+produce bit-for-bit identical builds.
 
 Nix also is able to conveniently copy the transitive closure of a package all
 its dependencies ergonomically from one system to another.
@@ -135,10 +130,10 @@ deal with finding executables to call installed in =/nix/store=.
 
 Nix conjoins the features of a package manager with those of a build tool. If a
 package or any of its dependencies (including low-level system dependencies)
-aren't found in a /Nix registry/, they are built locally. Otherwise, the
-pre-built package cached in the Nix registry is downloaded rather than built.
-All we need to build or download any package is the Nix package manager and a
-network connection.
+aren't found in a /Nix substituter/, they are built locally. Otherwise, the
+pre-built package and dependencies cached in the Nix substituter are downloaded
+rather than built. All we need to build or download any package is the Nix
+package manager and a network connection.
 
 Every Nix package is specified by a /Nix expression/, written in a small
 programming language also called Nix. This expression specifies everything
@@ -170,15 +165,18 @@ cascades to a different calculated hash for any package relying on this
 dependency. But if nothing changes, the same hashes will be calculated on all
 systems.
 
-The repeatability and precision of Nix enables caching services, which for Nix
-are called /substitutors/. Nix has standard one at https://cache.nixos.org, but
-there are third-party ones as well, like [[cachix][Cachix]]. Before building a package,
-the hash for the package is calculated. If any configured substitutor has a
-build for the hash, it's pulled down as a substitute. A certificate-based
-protocol is used to establish trust of substitutors. Between this protocol, and
-the algorithm for calculating hashes in Nix, you can have confidence that a
-package pulled from a substitutor will be identical to what you would have built
-locally.
+The repeatability and precision of Nix forms the basis of how substituters are
+trusted as caching services across the world. It also allows us to trust remote
+builds more easily, without worrying about deviations of environment
+configuration.
+
+Nix has central a substituter at https://cache.nixos.org, but there are
+third-party ones as well, like [[cachix][Cachix]]. Before building a package, the hash for
+the package is calculated. If any configured substituter has a build for the
+hash, it's pulled down as a substitute. A certificate-based protocol is used to
+establish trust of substituters. Between this protocol, and the algorithm for
+calculating hashes in Nix, you can have confidence that a package pulled from a
+substituter will be identical to what you would have built locally.
 
 Finally, all packages are stored in =/nix/store= by their hash. This simple
 scheme allows us to have multiple versions of the same package installed with no
@@ -205,7 +203,7 @@ tooling can be kept largely hidden away from general Nix authors. The Nix
 language lets us work with packages from any language ecosystem in a uniform
 way.
 
-* Problems in paradise
+* Frustrations acknowledged
 
 Having covered so many of Nix's strengths, it's important to be aware of some
 problems the Nix community is still working through.
@@ -221,7 +219,7 @@ out there, there are a /lot/ of supporting libraries in Nixpkgs to understand.
 There's over two million lines of Nix in Nixpkgs, some auto-generated,
 increasing the odds of getting lost in it.
 
-The [[nixpkgs-manual][official Nixpkgs manual]] only seems to cover the surface of what package
+The [[nixpkgs-manual][official Nixpkgs manual]] only seems to cover a fraction of what package
 authors really need to know. Invariably, people seem to master Nix by exploring
 the source code of Nixpkgs, supplemented by example projects for reference.
 
@@ -245,10 +243,12 @@ build stable systems with Nix.
 
 *** Nix 2.0 and the new =nix= command
 
-An early complaint of Nix was the non-intuitiveness of Nix's command-line tools.
-To address this, Nix 2.0 introduces a unifying tool called =nix=, but it only
-covered a subset of the functionality of the other tools. In practice, it ended
-up just being yet another tool to learn.
+An early complaint of Nix was the non-intuitiveness of Nix's original assortment
+of command-line tools. To address this, Nix 2.0 introduced a unifying tool
+called =nix=. Despite appreciable improvements in user experience, the newer
+=nix= command has taken some time for it to get enough functionality to actually
+replace the older tools. For a while, it ended up being yet another tool to
+learn.
 
 If you look at the manpage for =nix= there's a clear warning at the top:
 
@@ -256,101 +256,163 @@ If you look at the manpage for =nix= there's a clear warning at the top:
 Warning: This program is experimental and its interface is subject to change.
 #+END_QUOTE
 
-This warning has been there since 2018 when Nix 2.0 was released.
+This warning has been there since 2018 when Nix 2.0 released.
 
 However, =nix repl= is the only way to get to a [[repl][REPL session]] in Nix, which is an
-important tool for any programming language. The old tool providing a REPL
+important tool for any programming language. The previous tool providing a REPL
 (=nix-repl=) has been removed from Nixpkgs.
 
 This means that technically, the community is strongly encouraging, if not
-forcing, users to use an experimental tool and providing no guidance on how to
-use Nix with some assurance of stability.
+forcing, users to use an experimental tool and providing little guidance on how
+to use Nix with some assurance of stability. This is important for industrial
+users who script solutions against the =nix= command-line tools.
 
-Some may say that =nix repl= is actually stable, and that it's the other
-sub-commands that are really experimental. That's fine, but which ones?
+Eventually, with the release of Nix 2.4, experimental features were turned into
+flags that needed to be explicitly enabled by users. One of these flags was
+=nix-command=, which now gates users from any subcommand of =nix= beyond =nix
+repl=. However, because so many users were already using the new =nix= command,
+the experimental =nix-command= feature is enabled by default if no experimental
+features have been configured explicitly.
 
-When getting help on Nix forums the vast majority of people say that it's fine
-too use =nix=. However, Nix 2.4 did indeed change the API of these sub-commands,
-which has absolutely broken industrial scripts calling =nix=.
+In other words, Nix ships with an experimental feature enabled by default.
 
-There is no warning of this risk beyond what's atop the manpage, which most
+This almost indicates that the new =nix= command isn't too unstable. Except, Nix
+2.4 did indeed change the API of =nix= subcommands, which has absolutely broken
+industrial scripts calling =nix=.
+
+In practice, the =nix= subcommands are relatively reliable. They are
+well-written and functionally robust. But the core maintainers are reserving the
+right to change input parameterization and output formatting.
+
+They communicate this risk only with the warning atop the manpage, which most
 users have been training one another to ignore.
 
-*** Nix 2.4 and flakes
+*** Experimental flags and flakes
 
 Though Nix expressions have an incredible potential to be precise and
 reproducible, there has always been some backdoors to break the reliability of
 builds. For example, Nix expressions have the potential to evaluate differently
 depending on the setting of some environment variables like =NIX_PATH=.
 
-The motivation for these relaxations of determinism has largely been to have a
-quick way to let personal computing users have a convenient way to manage their
+The motivation for these relaxations of determinism has been to have a quick way
+to let personal computing users have a convenient way to manage their
 environments. Some people are careful to avoid accidentally having
 non-deterministic builds. Still, accidents have occurred frequently enough for
-the community to want better. It's frustrating to have a broken build because of
-an environment variable.
+the community to want better. It's frustrating to have a broken build because
+someone else set an environment variable incorrectly.
 
 Nix 2.4 corrected for this by introducing an experimental feature called
 /flakes/. Users still have a largely ergonomic way to manage their environments,
 but builds are strictly deterministic. Determinism is a large reason many turn
-to Nix in the first place.
-
-A nice benefit of strictly enforces determinism is the ability to cache
-evaluations of Nix expressions, which can be expensive to compute.
+to Nix in the first place. A nice benefit of strictly enforced determinism is
+the ability to cache evaluations of Nix expressions, which can be expensive to
+compute.
 
 All this is generally good news. Flakes address problems that industrial users
 of Nix have long had to deal with.
 
-However, not only is Nix 2.4 not yet the standard in NixOS. NixOS users have to
-opt in to using Nix 2.4, but even if they do, flakes are an experimental feature
-that users need to explicitly enable. As an experimental feature, there's low
-confidence the API for flakes might change in the future.
+However, flakes are an experimental feature that users need to explicitly
+enable. Similar to the =nix= command, the inputs and outputs of flake-related
+subcommands might change slightly. Such changes have already happened.
 
-This puts industrial Nix users in a hard place. Not using flakes and instead
-coaching coworkers and customers on how to use Nix safely
+On top of this, because flakes are experimental, documentation of flakes is
+extremely fractured in the official documentation. It almost seems like the Nix
+developers are delaying proper documentation until there's a declaration of
+stability. A preferred alternative would be developing documentation more
+concurrently with the implementation, using the comprehensibility of the
+documentation to inform the design of the software. Features that are too hard
+to explain expose good opportunities for redesign.
+
+All this puts industrial Nix users in an annoying place. Not using flakes and
+instead coaching coworkers and customers on how to use Nix safely
 
 - increases the likelihood of defects as people make honest mistakes
 - reduces the likelihood of adoption, because people get frustrated with the
   nuances of these corner cases.
 
-However, if industrial users move to flakes to address these problems, we get no
-confidence that automation relying on flakes won't break with future releases.
-The entire API is technically experimental.
+However, if industrial users move to flakes to address these problems we have
+the following problems:
 
-Worse yet, Nix has a history of leaving features experimental years after
-release. This lulls people into the false confidence of stability as more and
-more people ignore the warning that the API might change.
+- we have to be ready for the flakes API to change as it's technically
+  experimental
+- we have to accept some added training hurdles since documentation of flakes is
+  tucked behind documentation of non-flakes usage.
 
-* The choice to use flakes
+* Encouraging development with flakes
 
-This project uses flakes. The benefits seems to outweigh the risks of
-instability. This is not a choice made lightly, and this document is an exercise
-of due diligence to inform users of the compromise made.
+This project encourages the development of Nix projects using flakes. The
+benefits seem to outweigh the risks of instability. This is not a choice made
+lightly, and this document is an exercise of due diligence to inform users of
+the compromise made.
 
 To buffer this compromise, this project uses and encourages the use of the
 [[nix-flake-compat][flake-compat]] project, which enables an end user who has opted not to enable
-flakes to still use this project.
+flakes to still use this project, even if only in a limited capacity.
 
-With Flake-compat, end users will have a normal (non-flake) Nix expression they
+With flake-compat, end users will have a normal (non-flake) Nix expression they
 can evaluate. However, since dependencies are managed with flakes, the project
 maintainer must have flakes enabled to manage dependencies (for example,
 updating to the latest dependencies with =nix flake update=).
 
-We can already feel some stress points from the mass adoption of an experimental
-API. The latest release of NixOS 21.11 only has Nix 2.4 in it for flakes
-support. Meanwhile, Nix itself has moved on to Nix 2.8. The flakes API also saw
-a change from 2.7 to 2.8 (the attribute paths for default packages,
-applications, and templates). We luck out that the change was backwards
-compatible with 2.4, with a deprecation warning.
+* Documenting an end user experience
 
-What would be preferable is for this backwards compatibility to continue until
-Nix 2.8 has reached an official NixOS release. However, this guarantee is of
-backwards compatibility is a shift away from the warning currently in the =nix=
-manpage. Instead, this backwards compatibility is just an unofficial courtesy by
-the developers of new and experimental features.
+** Not forcing end users to flakes
 
-It seems clear that a huge number of users are enthusiastically jumping into
-flakes. Without some better assurances of API stability, the Nix community
-further risks the loss of adoption in industrial settings. This is a heavy price
-to pay for a technology with so much potential to help get so many chaotic
-systems under better control.
+Not everyone will be developing Nix projects. Some will just consume Nix
+packages as end users. For those users unfamiliar with Nix setup and usage, this
+project provides two guides:
+
+- [[file:nix-usage-flakes.org][Nix Usage with Flakes]]
+- [[file:nix-usage-noflakes.org][Nix Usage without Flakes]]
+
+The first guide caters to the user who values improved ergonomics and
+reproducible builds, and are willing to turn on the =nix-command= and =flakes=
+experimental features. This comes at the cost of API instability as these
+features evolve.
+
+The other guide is for users who value API stability. It doesn't force users to
+enable =flakes=, but it does invite them to use the experimental =nix-command=
+to help users avoid complexity the Nix community has been working to get rid of.
+
+There is a way to use flakes local to just a single command-line invocation by
+using ~nix --extra-experimental-features 'nix-command flakes' …~, so users
+avoiding using flakes can try out using flakes for a few commands with little
+commitment. In that case, reading both guides may be useful.
+
+** Opinionated guidance for non-flakes users
+
+As discussed above, one reason the new flakes feature exists is to ensure our
+builds are reproducible. When not using flakes, we instead have to be cautious
+of using certain commands, particularly those that are sensitive to =NIX_PATH=
+when evaluating Nix expressions. The documentation in this project leads users
+away from these commands, which include =nix-shell= as well as another called
+=nix-channel=.
+
+The without-flakes guide invites end users to use the experimental =nix-command=
+to get the following subcommands:
+- =nix search=
+- =nix shell=
+- =nix run=
+
+In general, this guide only explains usage of experimental =nix= subcommands
+when there exist no other alternatives, or when the alternatives are considered
+worse for new users.
+
+=nix search= simply has no good alternative within the set of non-experimental
+Nix tools, but it's too useful to not tell users about. Again, this is an
+example of the Nix community leading users to experimental features.
+
+=nix shell= and =nix run= are shown as improved alternatives to =nix-shell=.
+=nix-shell= is a complicated tool that has been historically used for a lot of
+different purposes:
+- debugging the build environments of packages
+- creating a developer environment for a package (=nix develop= does this
+  better, but for only for flakes)
+- entering a shell with Nix-build executables on the path (=nix shell= does this
+  better)
+- running arbitrary commands with Nix-build executables on the path (=nix run=
+  does this better)
+
+To cover all of these scenarios, =nix-shell= became so complex it is hard to
+explain to new users. =nix-shell= is really only best for debugging builds,
+which is beyond the scope of the documentation provided by this project.

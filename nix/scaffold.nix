@@ -22,7 +22,7 @@ let
         filter = path: type:
             let baseName = builtins.baseNameOf path;
             in (type == "directory")
-                || (builtins.match ".*/template/.*" path != null)
+                || (builtins.match ".*/example/.*" path != null)
                 || (type == "regular" && ! lib.hasSuffix ".org" baseName);
     };
 in

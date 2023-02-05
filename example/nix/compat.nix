@@ -1,3 +1,21 @@
+# A standard way to allow non-flake users to use this project with a standard
+# default.nix file using edolstra's flake-compat project.
+#
+# Flake-compat has been reliably stable for some time, so you shouldn't have to
+# edit this file.
+#
+# Note that we augment the upstream `defaultNix` attribute with a new
+# `currentSystem` attribute that selects out packages for the detected current
+# system.  So if we're on an x86-64 Linux box, we can use
+#
+#     currentSystem.packages.my-app
+#
+# instead of
+#
+#     packages.x86_64-linux.my-app
+#
+#  Otherwise, `defaultNix` includes includes all the flakes outputs.
+
 let
     lock = builtins.fromJSON (builtins.readFile ../flake.lock);
     compatUrlBase = "https://github.com/edolstra/flake-compat/archive";

@@ -3,340 +3,36 @@
 
 [[https://github.com/shajra/nix-project/actions][https://github.com/shajra/nix-project/workflows/CI/badge.svg]]
 
-* Org-mode setup :noexport:
-
-#+name: cleanup
-#+begin_src sh :results output silent
-rm --recursive --force my-proj
-#+end_src
-
 * About this project
 
 This project, Nix-project, assists the setup of other projects with the [[nix][Nix
-package manager]] leaning on the recently released [[nix-flake][Nix flakes]] feature.
-Specifically, it helps
+package manager]] leaning on [[nix-flake][flakes]], an experimental Nix feature.
+
+Specifically, this project helps
 
 - scaffold new projects
 - maintain dependencies, which may mix different language ecosystems
 - generate Github-oriented documentation with evaluated code blocks
 - build and distribute packages, binary or otherwise.
 
-If you're new to Nix, this project [[file:doc/nix.org][provides some documentation]] to help you
-better understand what it has to offer and how to get started with it. Here's a
-few key benefits:
-
-- Nix projects are extremely portable and reproducible.
-- Nix supports a variety of language ecosystems.
-- Nix supports multiple isolated versions of the same package.
-- Nix is great at controlling binaries available on PATH.
-
-All of this is not only great for reproducible builds, but also for reproducible
-execution. This comes in handy when making technical documentation. We often
-have code snippets that we'd like to run, presenting the results or output to
-users. Some may recognize this as similar to [[litprog][literate programming]]. Regenerating
-documentation to reflect changes in your project's code becomes as simple as
-running a single command. Because of Nix, we can have confidence that our
-documentation is correct, irrespective of which machine we generated it on or
-how it was configured.
-
-Because Nix is so flexible, it has been known to be a bit daunting for new
-users. Furthermore, Nix commands and libraries have some known ergonomic issues.
-To assist picking up Nix, this project brings together a few ideas into a
-recommended approach for structuring projects with Nix.
-
-This project provides
-
-- a library to ease the management of projects with flakes
-- a script called =nix-scaffold= to assist creating new projects using
-  Nix-project
-- a script called =org2gfm= to generate [[gfm][GitHub Flavored Markdown (GFM)]] from
-  [[org][Emacs Org-mode]] files
-- some miscellaneous library functions that have proven generally useful.
-
-Note that =org2gfm= uses a headless Emacs under the covers, but all this is
-hidden from the user, who can use =org2gfm= as any other executable. The user
-doesn't need to worry about configuring an Emacs instance or any conflicts with
-an already installed Emacs instance. =org2gfm= accomplishes this degree of
-isolation by using Nix.
-
-The Org-mode input files used by =org2gfm= are more-or-less a human-readable
-markdown files, though they support a lot of features for document processing.
-This project provides some [[file:doc/org2gfm-design.org][guidance for using Org-mode with =org2gfm=]].
-
-You can use this project directly (the author does). But it's also not a lot of
-code. So you could just borrow ideas from it for your own projects.
-
-* Usage
-
-This project should work with either GNU/Linux or MacOS operating systems. Just
-follow the following steps.
-
-#+include: "doc/nix.org::*Nix package manager setup"
-
-#+include: "doc/nix.org::*Cache setup"
-
-** Scaffolding
-
-Nix-project itself actually uses all the features it provides. The
-=support/docs-generate= script delegates to =org2gfm=.
-
-If you want to scaffold a new project set up similarly, you can create a new
-directory, go into it, and invoke the following =nix= call:
-
-#+begin_src sh :eval no
-nix --refresh run github:shajra/nix-project/main#nix-scaffold \
-    -- --target-dir my-proj
-#+end_src
-
-#+name: scaffold
-#+begin_src sh :results output :exports none
-nix --refresh run .#nix-scaffold -- --target-dir my-proj
-#+end_src
-
-#+RESULTS: scaffold
-: SUCCESS: Scaffolded Nix project at /home/tnks/src/shajra/nix-project/my-proj
-
-The =--refresh= just assures that you get the latest version of the scaffolding
-script from the internet in case you've made this =nix run= invocation before.
-
-Note that we're using =nix run= again, similarly to how we configured
-shajra.cachix.org before. Even =support/docs-generate= is essentially a call to
-=nix run=. [[file:doc/nix.org][The provided documentation on Nix]] has a section explaining more of
-how =nix run= works.
-
-In the freshly scaffolded project, you'll see the following files:
-
-#+name: scaffold-tree
-#+begin_src sh :results output :exports results
-tree --noreport my-proj
-#+end_src
-
-#+RESULTS: scaffold-tree
-#+begin_example
-my-proj
-├── default.nix
-├── flake.nix
-├── nix
-│   ├── build-forall.nix
-│   ├── build-foreach.nix
-│   ├── compat.nix
-│   ├── overlay-build.nix
-│   └── overlay-deps.nix
-├── README.org
-└── support
-    └── docs-generate
-#+end_example
-
-=nix/sources.json= and =nix/sources.nix= are overwritten by calls to Niv (via
-=nix-project= via =dependencies-update=), but the rest of the files are yours to
-modify as you see fit.
-
-** Managing dependencies
-
-The scripts in the =support= directory are mostly calls to ~nix run~, similarly
-to what we called for scaffolding, except they reference dependencies specified
-in =nix/sources.json= rather than going to GitHub directly.
-
-In your newly scaffolded project, you can call =dependencies-update= with no
-arguments to update all your dependencies. But it will likely do nothing,
-because a freshly scaffolded project already has the latest dependencies.
-
-See the [[niv][Niv]] documentation on how to manage dependencies. You can run Niv
-commands directly with =dependencies-update=. For example, to run the equivalent
-of ~niv show~ you can run
-
-#+begin_src sh :eval no
-support/dependencies-update niv show
-#+end_src
-
-You can also use =dependencies-update= to see the help messages for both
-=nix-project= and =niv=.
-
-Using the ~--help~ switch directly with =dependencies-update= shows the help for
-=nix-project=, which it delegates to.
-
-#+name: help-deps-plain
-#+begin_src sh :results output :exports both
-support/dependencies-update --help
-#+end_src
-
-#+results: help-deps-plain
-#+begin_example
-USAGE:
-
-    nix-project [OPTION]... scaffold
-    nix-project [OPTION]... init-update [--] [NIV_UPDATE_ARGS]...
-    nix-project [OPTION]... niv NIV_COMMAND...
-    nix-project [OPTION]... [--] NIV_COMMAND...
-
-DESCRIPTION:
-
-    A wrapper of Niv for managing Nix dependencies to assure
-    dependencies Niv uses are pinned with Nix.  Niv is extended
-    with two commands.
-
-    If multiple commands are specified explicitly, 'niv' always
-    has precedence, otherwise the last one is used.
-
-    Similarly, if a switch is specified multiple times, the last
-    one is used.
-
-COMMANDS:
-
-    scaffold     set up current directory with example scripts
-    init-update  update both sources.nix (init) and sources.json
-                  (shortcut for "niv init; niv update")
-    niv          pass arguments directly to Niv (default command)
-
-OPTIONS:
-
-    -h --help            print this help message
-    -t --target-dir DIR  directory of project to manage
-                          (default: current directory)
-    -S --source-dir DIR  directory relative to target for
-                          Nix files (default: nix)
-    -g --github-token    file with GitHub API token (default:
-                          ~/.config/nix-project/github.token)
-    -N --nix PATH        filepath of 'nix' executable to use
-    --                   send remaining arguments to Niv
-
-    'nix-project' pins all dependencies except for Nix itself,
-     which it finds on the path if possible.  Otherwise set
-     '--nix'.
-
-#+end_example
-
-Since =nix-project= can pass through commands to =niv= we can see the help for
-Niv with the following command:
-
-#+name: help-deps-niv
-#+begin_src sh :results output :exports both
-support/dependencies-update niv --help
-#+end_src
-
-#+results: help-deps-niv
-#+begin_example
-niv - dependency manager for Nix projects
-
-version: 0.2.19
-
-Usage: niv [-s|--sources-file FILE] [--no-colors] COMMAND
-
-Available options:
-  -s,--sources-file FILE   Use FILE instead of nix/sources.json
-  --no-colors              Don't use colors in output
-  -h,--help                Show this help text
-  --version                Print version
-
-Available commands:
-  init                     Initialize a Nix project. Existing files won't be
-                           modified.
-  add                      Add a GitHub dependency
-  show
-  update                   Update dependencies
-  modify                   Modify dependency attributes without performing an
-                           update
-  drop                     Drop dependency
-#+end_example
-
-** Evaluating/exporting documentation
-
-A freshly scaffolded project will have a =README.org= file in its root. This
-file has an example call to =whoami= in it. When you call
-=support/docs-generate=, you'll see that the =README.org= file is modified in
-place to include the result of the =whoami= call. Additionally, a =README.md=
-file is exported.
-
-Notice that the =support/docs-generate= script includes the ~pkgs.coreutils~
-package. This is the package that provides the =whoami= executable. You
-explicitly control what executables are in scope for evaluating your code
-snippets. ~pkgs~ provides all the packages that come with the [[nixpkgs][Nixpkgs
-repository]], but you can always define your own packages with a Nix expression.
-
-#+begin_quote
-*_NOTE_*: Since =docs-generate= writes over files in-place, source control is
-highly recommended to protect against the loss of documentation.
-#+end_quote
-
-The =org2gfm= script that =docs-generate= delegates to does not support all
-Emacs Org-mode evaluation/export features. See [[file:doc/org2gfm-design.org][doc/org2gfm-design]] for a
-discussion of =org2gfm='s design and recommended usage.
-
-For reference, here's the documentation from the ~--help~ switch for
-=docs-generate= / =org2gfm=:
-
-#+name: help-docs
-#+begin_src sh :results output :exports both
-support/docs-generate --help
-#+end_src
-
-#+results: help-docs
-#+begin_example
-USAGE: org2gfm [OPTION]...  [FILE]...
-
-DESCRIPTION:
-
-    Uses Emacs to export Org-mode files to GitHub Flavored
-    Markdown, which are written to sibling ".md" files.  If no
-    files are specified, then all '*.org' files found recursively
-    from the current working directory are used instead.
-
-OPTIONS:
-
-    -h --help            print this help message
-    -b --path-bin        include /bin on path (perhaps for /bin/sh)
-    -e --evaluate        evaluate all SRC blocks before exporting
-    -E --no-evaluate     don't evaluate before exporting (default)
-    -N --nix PATH        filepath to 'nix' binary to put on PATH
-    -x --exclude PATTERN exclude matched when searching
-    -k --keep-going      don't stop if Babel executes non-zero
-    -K --no-keep-going   stop if Babel executes non-zero (default)
-    -y --yes             answer "yes" to all queries for evaluation
-    -n --no              answer "no" to all queries for evaluation
-
-    This script is recommended for use in a clean environment
-    with a PATH controlled by Nix.  This helps make executed
-    source blocks more deterministic.  However, if the source
-    blocks need to execute Nix commands, it's best to use the Nix
-    version already installed on the system, rather than a pinned
-    version.  This is what the '-N' option is for.
-
-    If using both '-e' and '-E' options the last one is overriding
-    (useful for automation/defaults).
-
-    Note, the '-e' switch evaluates the Org-mode file in-place.
-    No evaluation occurs during the export to Markdown, which
-    will have the same blocks as the Org-mode file.
-
-
-#+end_example
-
-** GitHub rate limiting of Niv calls
-
-Many dependencies managed by Niv may come from GitHub. GitHub will rate limit
-anonymous API calls to 60/hour, which is not a lot. To increase this limit, you
-can make a [[github-token][personal access token]] with GitHub. Then write the generated token
-value in the file =~/.config/nix-project/github.token=. Make sure to restrict
-the permissions of this file appropriately.
-
-** Next steps
-
-At this point, you can create a skeleton project with dependencies and generate
-documentation for it. But you need to know more about Nix and the Nix expression
-language to build your own projects with Nix.
-
-the =nix/default.nix= in the skeleton project derives packages from
-=sources.json=. You can make more Nix expressions in this directory and
-reference them in =nix/default.nix=.
-
-If you haven't looked it yet, in the [[./doc][./doc]] directory, this project provides
-
-- [[file:doc/nix.org][some documentation on Nix]] to get you started
-- [[file:doc/org2gfm-design.org][design and recommended usage of =org2gfm=]].
-
-Finally, the [[nix-learn][official Nix documentation]] is comprehensive, and can help you make
-your own Nix expressions using the Nixpkgs repository as a foundation.
-Particularly useful are the [[nix-manual][Nix manual]] and [[nixpkgs-manual][Nixpkgs manual]].
+This source's [[file:doc][doc directory]] provides a variety of documents to not only help you
+use this project, but to also get an introduction to the Nix ecosystem.
+
+Among other benefits, Nix gives use an incredible amount of control and
+repeatability of our software projects. If you don't know much about Nix,
+consider reading the following:
+
+- [[file:doc/nix-motivation.org][Introduction to Nix and motivations to use it]]
+- [[file:doc/nix-installation.org][Nix installation and configuration guide]]
+- [[file:doc/nix-usage-flakes.org][Nix end user guide with flakes]]
+- [[file:doc/nix-usage-noflakes.org][Nix end user guide without flakes]]
+- [[file:doc/nix-language.org][Introduction to the Nix programming language]]
+
+If you know something about Nix, then these documents will help you get started
+using this project:
+
+- [[file:doc/project-developing.org][Developing a Nix project with Nix-Project]]
+- [[file:doc/project-documenting.org][Documenting a Nix project with Nix-project]]
 
 * Release
 
@@ -363,7 +59,3 @@ There is only one author to date, so the following copyright covers all files in
 this project:
 
 Copyright © 2019 Sukant Hajra
-
-* Org-mode teardown :noexport:
-
-#+call: cleanup()

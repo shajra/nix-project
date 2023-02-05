@@ -10,12 +10,12 @@ jobs:
     name: ${{ matrix.os }} build
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
-    - uses: cachix/install-nix-action@v15
-    - uses: cachix/cachix-action@v10
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v19
+    - uses: cachix/cachix-action@v12
       with:
         name: shajra
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
     - run: cat ~/.config/nix/nix.conf
-    - run: nix --print-build-logs build --file nix/ci.nix
-    - run: nix path-info --file nix/ci.nix
+    - run: nix --print-build-logs build .#ci
+    - run: nix path-info .#ci

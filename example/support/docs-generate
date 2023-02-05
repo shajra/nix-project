@@ -1,0 +1,19 @@
+#!/bin/sh -eu
+
+cd "$(dirname "$0")/.."
+
+# NOTE: because of --ignore-environment, you control _exactly_ what executables
+# are on PATH when generating documentation with Org2gfm.  Below, only coreutils
+# is on PATH.  You can change the line below to include other binaries from
+# Nixpkgs or any package from any flake you like.
+nix shell \
+    --ignore-environment \
+    --keep LANG \
+    --keep LOCALE_ARCHIVE \
+    .#nixpkgs.nix-project-org2gfm \
+    .#nixpkgs.coreutils \
+    --command \
+    org2gfm \
+    --path-bin \
+    --evaluate \
+    "$@"

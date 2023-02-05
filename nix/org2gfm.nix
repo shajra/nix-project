@@ -1,10 +1,12 @@
 { coreutils
 , emacsWithPackages
 , fd
+, git
 , gnugrep
 , ox-gfm
 , writeText
 , nix-project-lib
+, lib
 }:
 
 let
@@ -24,6 +26,7 @@ let
         (require 'ox-gfm)
         (require 'subr-x)
         (setq-default
+         vc-git-program "${git}/bin/git"
          org-confirm-babel-evaluate nil
          org-babel-default-header-args
           (cons '(:eval . "no-export")
@@ -62,6 +65,7 @@ QUERY_ANSWER=
 ERR_REGEX="^Babel evaluation exited"
 ERR_REGEX="$ERR_REGEX\|^No org-babel-execute function"
 ERR_REGEX="$ERR_REGEX\|^Unable to resolve link"
+ERR_REGEX="$ERR_REGEX\|^Debugger entered--Lisp error"
 
 
 . "${nix-project-lib.scripts.scriptCommon}/share/nix-project/common.bash"

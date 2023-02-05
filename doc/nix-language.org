@@ -10,11 +10,28 @@ rm --recursive --force nix_example
 
 * About this document
 
-To better discuss the [[nix][Nix]] command-line tools and also [[nixpkgs][Nixpkgs]], we'll introduce
-the Nix language first. This is no substitute for the [[nix-language][official Nix language
-documentation]], which is surprisingly not that long for a programming language.
-Nix does not have much syntax relative to other general-purpose programming
-languages.
+This document is a quick introduction to the Nix programming language.
+
+You can use the [[nix][Nix]] command-line tools without understanding the programming
+language (also called Nix). However, learning the Nix language, will allow you
+to develop your own Nix packages and read the source code of others. A lot of
+this code is in [[nixpkgs][Nixpkgs]], a centralized repository of Nix code for the entire Nix
+ecosystem.
+
+The Nix community has recently developed [[nix-language-tutorial][a tutorial for the language]], which may
+be a good alternative or supplement to this document.
+
+This document is no substitute for the [[nix-language-manual][official Nix language documentation]],
+which is not that long for a programming language. Nix does not have much syntax
+relative to other general-purpose programming languages.
+
+* Prerequisites
+
+You can read this document without following along on your own computer.
+
+If you do want to follow along, you need to [[file:nix-installation.org][install Nix]]. When installing Nix you
+will need to have the =nix-command= experimental feature enabled to follow along
+with this document. You won't need =flakes= enabled, though.
 
 * Primitive literals
 
@@ -22,7 +39,7 @@ We can play around with the Nix language with the =nix eval= command. As with
 many languages, we can use Nix as a simple calculator by passing Nix expressions
 to it:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr '1 + 1'
 #+end_src
 
@@ -36,7 +53,7 @@ command.
 Nix supports a variety of types you'd expect for a programming language, and we
 get some literal syntax for typical primitives:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr 'builtins.typeOf 1'
 nix eval --expr 'builtins.typeOf 1.0'
 nix eval --expr 'builtins.typeOf true'
@@ -50,14 +67,14 @@ nix eval --expr 'builtins.typeOf true'
 Though not covered here in great detail, primitives support the typical
 operations one would expect. For instance, we have =||=, =&&=, and =!= for
 boolean values. Numeric values have typical arithmetic operators of =+=, =-=,
-=/=, and =*=. And all values can be compared with ====.
+=/=, and =*=. And we can compare all values with ====.
 
 * Strings
 
 As you may expect from other languages, Nix supports string literals with the
 conventional double quote syntax:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr 'builtins.typeOf "hello"'
 #+end_src
 
@@ -66,7 +83,7 @@ nix eval --expr 'builtins.typeOf "hello"'
 
 Nix also supports multi-line strings with two consecutive single quotes:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr "''
       line 1
         line 2
@@ -77,12 +94,12 @@ nix eval --expr "''
 : "  line 1\n    line 2\nline 3 "
 
 The left-most token in any line establishes a left margin. In the example above,
-this is “line 3”. Beyond these strings, Nix does not have syntactically
+this is ~line 3~. Beyond these strings, Nix does not have syntactically
 significant whitespace.
 
 We concatenate strings with the =+= operator:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr '"a" + "b"'
 #+end_src
 
@@ -91,19 +108,35 @@ nix eval --expr '"a" + "b"'
 
 * Let-expressions
 
-For the most part, Nix is a lazily evaluated purely functional programming
-language. We don't imperatively run commands that change things, and in general,
-the language restricts us from doing so. There's not even syntax to do so. At
-the top-level, you can't bind values to variables as you may in other imperative
-languages. Instead, we are only ever working with a single Nix expression at a
-time, and we bind values to names locally with /let-expressions/:
+Because of Nix's foundation as a “functional” programming language, you can't
+repeatedly bind values to variables as you may in other “imperative” languages.
+When we bind a value to a name, it's permanently bound for the entire scope the
+name exists within. We manage these scopes of bound names with
+/let-expressions/:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr 'let a = 1; b = 2; in a + b'
 #+end_src
 
 #+RESULTS:
 : 3
+
+In this example, we've bound =a= to 1, and =b= to 2, but only for the scope of
+the expression that follows the =in= keyword, =a + b=.
+
+As illustrated below, we can't rebind a name:
+
+#+begin_src sh :results output :exports both
+nix eval --expr 'let a = 1; a = 2; in a' 2>&1 || true
+#+end_src
+
+#+RESULTS:
+: error: attribute 'a' already defined at (string):1:5
+: 
+:        at «string»:1:12:
+: 
+:             1| let a = 1; a = 2; in a
+:              |            ^
 
 Note that semicolons are mandatory in all Nix forms that have them, including
 let-expressions. Because of Nix's strict parsing you can neither elide
@@ -112,10 +145,10 @@ semicolons, nor put extra ones.
 * String interpolation
 
 Sometimes we build up small code snippets inline in a Nix expression, so it's
-useful to have string interpolation support. This is done with the following
-syntax:
+useful to have string interpolation support. Similar to shell scripting, the
+syntax for this follows:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr '
     let foo = "Foo";
         bar = "Bar";
@@ -130,7 +163,7 @@ String interpolation is supported by both normal and multi-line strings.
 You can only interpolate strings into strings. For instance, interpolating an
 integer won't work:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr '
     let a_number = 42;
     in "${a_number} is a terrible number"' 2>&1 || true
@@ -138,20 +171,58 @@ nix eval --expr '
 
 #+RESULTS:
 : error: cannot coerce an integer to a string
-:
+: 
 :        at «string»:3:9:
-:
+: 
 :             2|     let a_number = 42;
 :             3|     in "${a_number} is a terrible number"
 :              |         ^
 
+We can use a builtin =toString= function to coerce types to strings:
+
+#+begin_src sh :results output :exports both
+nix eval --expr '
+    let a_number = 42;
+    in "${builtins.toString a_number} is a terrible number"' 2>&1 || true
+#+end_src
+
+#+RESULTS:
+: "42 is a terrible number"
 
 Note that unlike shell scripts, the curly braces are not optional for string
 interpolation in Nix. This works out in our favor if we're writing shell scripts
 inline in a Nix expression, because we can use ~$name~ for shell string
 interpolation and ~${nix_expr}~ for Nix string interpolation. If this is not
-enough, though not covered in this tutorial, there is a syntax for suppressing
-interpolation in both normal and multi-line Nix string literals.
+enough, within multiline strings, we can suppress interpolation with by using
+=''${…}= instead of just =${…}=.
+
+This is a little tedious to illustrate in a shell example without dealing with
+quote delimiting. In the following example, the shell will interpolate, but not
+the final Nix expression because we have =''$= instead of just =$= in our final
+string:
+
+#+begin_src sh :results output :exports both
+FROM_SHELL='${NOT_EXPANDED_BY_NIX}'
+nix eval --expr "''In ''$FROM_SHELL expansion is prevented.''"
+#+end_src
+
+#+RESULTS:
+: "In \${NOT_EXPANDED_BY_NIX} expansion is prevented."
+
+Here's the same example without the suppression of the interpolation:
+
+#+begin_src sh :results output :exports both
+FROM_SHELL='${EXPANDED_BY_NIX}'
+nix eval --expr "''In $FROM_SHELL expansion still happens.''" 2>&1 || true
+#+end_src
+
+#+RESULTS:
+: error: undefined variable 'EXPANDED_BY_NIX'
+: 
+:        at «string»:1:8:
+: 
+:             1| ''In ${EXPANDED_BY_NIX} expansion still happens.''
+:              |        ^
 
 * Functions
 
@@ -159,7 +230,7 @@ Nix has first class functions. Nix's functions take in only one argument at a
 time, and use a colon to separate the parameter name from the body of the
 function. Furthermore, Nix uses whitespace for function application:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr 'builtins.typeOf (a: a + 1)'
 nix eval --expr '(a: a + 1) 2'
 #+end_src
@@ -171,13 +242,12 @@ nix eval --expr '(a: a + 1) 2'
 Since functions take only one argument at a time, we encode n-ary functions with
 functions returning functions:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr '(a: b: a + b) 1 2'
 #+end_src
 
 #+RESULTS:
 : 3
-
 
 In this case, when we apply ~1~ to ~a: b: a + b~, we get another function. When
 we apply ~2~ to this resultant function, we finally get our answer ~3~.
@@ -190,7 +260,7 @@ functions, you may recognize this technique.
 Nix also has list literals, which use square brackets and are
 whitespace-delimited:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr 'builtins.typeOf [1 2 3 4 5]'
 #+end_src
 
@@ -199,7 +269,7 @@ nix eval --expr 'builtins.typeOf [1 2 3 4 5]'
 
 We can append lists together with the =++= operator:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr '[1 2] ++ [3 4]'
 #+end_src
 
@@ -209,7 +279,7 @@ nix eval --expr '[1 2] ++ [3 4]'
 The elements of a list in Nix do not have to be the same type, and lists can be
 nested:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr '[1 "hello" [true]]'
 #+end_src
 
@@ -222,13 +292,15 @@ Very importantly, Nix has a kind of map called an /attribute set/ that is
 specialized to have textual indices called /attributes/ that index values of
 arbitrary types. It uses the following syntax:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr 'builtins.typeOf { a = 1; b = 2; }'
+nix eval --expr '{ a = 1; b = 2; }'
 nix eval --expr '{ a = 1; b = 2; }.b'
 #+end_src
 
 #+RESULTS:
 : "set"
+: { a = 1; b = 2; }
 : 2
 
 Note, =builtins= is just an attribute set that is in scope by default. And
@@ -238,18 +310,17 @@ indicating the type of the argument.
 Often used in Nix expressions, we can overlay sets on top of each other with the
 =//= operator:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr '{ a = 1; b = 2; } // { b = 3; c = 4; }'
 #+end_src
 
 #+RESULTS:
 : { a = 1; b = 3; c = 4; }
 
-
 Additionally, we can prefix set literals with the =rec= keyword to get recursive
 sets. Recursive sets allow values in a set to reference attributes by name:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr 'rec { a = b; b = 2; }.a'
 #+end_src
 
@@ -258,22 +329,22 @@ nix eval --expr 'rec { a = b; b = 2; }.a'
 
 Without the =rec= keyword, we'd get an error:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr '{ a = b; b = 2; }.a' 2>&1 || true
 #+end_src
 
 #+RESULTS:
 : error: undefined variable 'b'
-:
+: 
 :        at «string»:1:7:
-:
+: 
 :             1| { a = b; b = 2; }.a
 :              |       ^
 
 If a function accepts an attribute set as an argument, we can have Nix
 destructure the set as a convenience with the following pattern syntax:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr '({ a, b }: a + b ) { a = 1; b = 2; }'
 #+end_src
 
@@ -283,22 +354,23 @@ nix eval --expr '({ a, b }: a + b ) { a = 1; b = 2; }'
 This basic pattern syntax is rigid, and we can't pass in a attribute set with
 attributes that don't match the pattern:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr '({ a }: a + 2 ) { a = 3; b = 4; }' 2>&1 || true
 #+end_src
 
 #+RESULTS:
 : error: anonymous function at (string):1:2 called with unexpected argument 'b'
-:
+: 
 :        at «string»:1:1:
-:
+: 
 :             1| ({ a }: a + 2 ) { a = 3; b = 4; }
 :              | ^
+:        Did you mean a?
 
 If we want to relax the destructuring to accept sets with other attributes we
 can use a “...” form:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr '({ a, ...}: a + 2 ) { a = 3; b = 4; }'
 #+end_src
 
@@ -308,7 +380,7 @@ nix eval --expr '({ a, ...}: a + 2 ) { a = 3; b = 4; }'
 When destructuring, we can still bind the whole set to a name if we want to
 using a “@” form.
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr '(s@{ a, b }: a + s.b ) { a = 2; b = 3; }'
 #+end_src
 
@@ -319,7 +391,7 @@ Attribute sets also support an additional syntactic convenience when pulling in
 locally bound values as attributes, which comes up a lot in Nix. For example,
 consider the way we're using ~a = a~ here:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr 'let a = 3; in { a = a; }'
 #+end_src
 
@@ -329,7 +401,7 @@ nix eval --expr 'let a = 3; in { a = a; }'
 Rather than worrying about spelling the same name correctly both sides of
 the ‘=’ for an attribute setting, we can use the =inherit= keyword:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr 'let a = 3; in { inherit a; }'
 #+end_src
 
@@ -339,10 +411,10 @@ nix eval --expr 'let a = 3; in { inherit a; }'
 * Paths
 
 Because the Nix language was designed for building packages, file paths come up
-frequently in Nix expressions. Nix conveniently has a /path/ type, which is
-indicated by identifiers with at least one slash:
+frequently in Nix expressions. Nix conveniently has a /path/ type, indicated by
+identifiers with at least one slash:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 nix eval --expr 'builtins.typeOf /some/filepath'
 nix eval --expr '/some/filepath'
 #+end_src
@@ -387,7 +459,7 @@ In a Nix expression, we can use an angle bracket syntax to search =NIX_PATH= for
 an existent file path. Here's an example of using =NIX_PATH= to set the name
 “temporary” to =/tmp=, which we then access with ~<temporary>~:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 NIX_PATH=temporary=/tmp nix eval --impure --expr '<temporary>'
 #+end_src
 
@@ -396,27 +468,26 @@ NIX_PATH=temporary=/tmp nix eval --impure --expr '<temporary>'
 
 If we create some files or folders there:
 
-#+begin_src shell :results silent
+#+begin_src sh :results silent
 mkdir --parents /tmp/some.d/path
 #+end_src
 
 Then we can access them using our name as a path prefix in our angle
 brackets:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 NIX_PATH=temporary=/tmp nix eval --impure --expr '<temporary/some.d/path>'
 #+end_src
 
 #+RESULTS:
 : /tmp/some.d/path
 
-
 If we use the second form for =NIX_PATH=, can specify directories without a
 name. These directories are then used as candidate prefixes until an existent
 path if found. For example, we can consider =/tmp= as a path prefix when looking
 up =some.d/path= to find =/tmp/some.d/path=:
 
-#+begin_src shell :results output :exports both
+#+begin_src sh :results output :exports both
 NIX_PATH=/tmp nix eval --impure --expr '<some.d/path>'
 #+end_src
 
@@ -456,13 +527,13 @@ nix eval --impure --expr '
 #+RESULTS:
 #+begin_example
 {
-  lastModified = 1649312777;
-  lastModifiedDate = "20220407062617";
-  narHash = "sha256-JvpQyEyN2rQrmj9T7yUjWc3Y1TiLxaZfKOgUiho5uek=";
-  outPath = "/nix/store/7m0ymcca5dnhs8hq255fdmxlrj51mqm1-source";
-  rev = "31d052c1fd7fdf9d29a62a4b8e68bc69cfd69a05";
-  revCount = 640;
-  shortRev = "31d052c";
+  lastModified = 1676931605;
+  lastModifiedDate = "20230220222005";
+  narHash = "sha256-PKAs/qSE77tBxzjcRRnWDWnOU4CnvISKIWkK3EB9r4s=";
+  outPath = "/nix/store/mp6sxlv2vhajkbd19vc0y219c3gr8gpv-source";
+  rev = "8d3188daa7fbefb93e8d967d2967ca45934c30aa";
+  revCount = 761;
+  shortRev = "8d3188d";
   submodules = false;
 }
 #+end_example
