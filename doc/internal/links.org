@@ -5,10 +5,7 @@
 #+link: github-actions https://github.com/shajra/nix-project/actions
 #+link: github-token https://github.com/settings/tokens
 #+link: litprog https://en.wikipedia.org/wiki/Literate_programming
-#+link: niv https://github.com/nmattia/niv
 #+link: nix https://nixos.org/nix
-#+link: nix-darwin https://daiderd.com/nix-darwin
-#+link: nix-expr https://nixos.org/nix/manual/#ch-expression-language
 #+link: nix-flake https://nixos.wiki/wiki/Flakes
 #+link: nix-flake-parts https://github.com/hercules-ci/flake-parts
 #+link: nix-flake-parts-doc https://flake.parts
@@ -28,7 +25,6 @@
 #+link: nixos-search https://search.nixos.org/packages
 #+link: nixpkgs https://github.com/NixOS/nixpkgs
 #+link: nixpkgs-manual https://nixos.org/nixpkgs/manual
-#+link: nix-tutorial https://github.com/shajra/example-nix/tree/master/tutorials/0-nix-intro
 #+link: org https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html
 #+link: org-blocks-src https://orgmode.org/manual/Working-with-Source-Code.html#Working-with-Source-Code
 #+link: org-blocks-src-eval https://orgmode.org/manual/Evaluating-Code-Blocks.html#Evaluating-Code-Blocks

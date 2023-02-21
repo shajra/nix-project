@@ -87,7 +87,7 @@ only built executables, but all the way to a Nix package, which we can install
 with Nix if we like.
 
 Within this project, the various files with a ~.nix~ extension are Nix files,
-each of which contains an expression written in the [[nix-expr][Nix expression language]] used
+each of which contains an expression written in the [[nix-language-manual][Nix expression language]] used
 by the Nix package manager to specify packages. If you get proficient with this
 language, you can use these expressions as a starting point to compose your own
 packages beyond what's provided in this project.

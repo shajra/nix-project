@@ -30,7 +30,7 @@ In general, this document only explains usage of experimental `nix` subcommands 
 
 This project uses Nix to download all necessary dependencies and build everything from source. In this regard, Nix is helpful as not just a package manager, but also a build tool. Nix helps us get from raw source files to not only built executables, but all the way to a Nix package, which we can install with Nix if we like.
 
-Within this project, the various files with a `.nix` extension are Nix files, each of which contains an expression written in the [Nix expression language](https://nixos.org/nix/manual/#ch-expression-language) used by the Nix package manager to specify packages. If you get proficient with this language, you can use these expressions as a starting point to compose your own packages beyond what's provided in this project.
+Within this project, the various files with a `.nix` extension are Nix files, each of which contains an expression written in the [Nix expression language](https://nixos.org/manual/nix/stable/language/index.html) used by the Nix package manager to specify packages. If you get proficient with this language, you can use these expressions as a starting point to compose your own packages beyond what's provided in this project.
 
 # Prerequisites<a id="sec-2"></a>
 
