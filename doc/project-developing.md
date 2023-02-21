@@ -8,6 +8,7 @@
   - [Overlays](#sec-4-4)
   - [Making applications with `callPackage`](#sec-4-5)
 - [Updating dependencies](#sec-5)
+- [Next Steps](#sec-6)
 
 
 # About this document<a id="sec-1"></a>
@@ -395,3 +396,13 @@ When we want to update all the dependencies in our lock file, we can run:
 ```sh
 nix flake update
 ```
+
+# Next Steps<a id="sec-6"></a>
+
+This guide and the scaffolded project used as an example, shows how to make packages providing a simple shell script. You will likely want to start making packages for other languages.
+
+Nix has an [official learning starting point](https://nixos.org/learn.html), that is a good next step. In particular, you will find yourself reading the [Nixpkgs manual](https://nixos.org/nixpkgs/manual).
+
+The guides included with this project cover more of the language-general aspects of Nix and Nixpkgs. Each programming language ecosystems has its set of unique requirements and idiosyncrasies. Nixpkgs provide functions to assist with each language, which can lead to some divergent experiences packaging and developing with Nix. The Nixpkgs manual has [dedicated sections for each language](https://nixos.org/manual/nixpkgs/stable/#chap-language-support). Eventually, you will find yourself diving into [Nixpkgs source code](https://github.com/NixOS/nixpkgs).
+
+The Nix ecosystem is vast. This project and documentation illustrates just a small sample of what Nix can do.

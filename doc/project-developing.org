@@ -506,6 +506,25 @@ nix flake update
 
 #+RESULTS:
 
+* Next Steps
+
+This guide and the scaffolded project used as an example, shows how to make
+packages providing a simple shell script. You will likely want to start making
+packages for other languages.
+
+Nix has an [[nix-learn][official learning starting point]], that is a good next step. In
+particular, you will find yourself reading the [[nixpkgs-manual][Nixpkgs manual]].
+
+The guides included with this project cover more of the language-general aspects
+of Nix and Nixpkgs. Each programming language ecosystems has its set of unique
+requirements and idiosyncrasies. Nixpkgs provide functions to assist with each
+language, which can lead to some divergent experiences packaging and developing
+with Nix. The Nixpkgs manual has [[nixpkgs-manual-langs][dedicated sections for each language]].
+Eventually, you will find yourself diving into [[nixpkgs][Nixpkgs source code]].
+
+The Nix ecosystem is vast. This project and documentation illustrates just a
+small sample of what Nix can do.
+
 * Org-mode Cleanup :noexport:
 
 Cleans directory for run:

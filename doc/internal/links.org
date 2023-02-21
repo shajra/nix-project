@@ -25,6 +25,7 @@
 #+link: nixos-search https://search.nixos.org/packages
 #+link: nixpkgs https://github.com/NixOS/nixpkgs
 #+link: nixpkgs-manual https://nixos.org/nixpkgs/manual
+#+link: nixpkgs-manual-langs https://nixos.org/manual/nixpkgs/stable/#chap-language-support
 #+link: org https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html
 #+link: org-blocks-src https://orgmode.org/manual/Working-with-Source-Code.html#Working-with-Source-Code
 #+link: org-blocks-src-eval https://orgmode.org/manual/Evaluating-Code-Blocks.html#Evaluating-Code-Blocks
