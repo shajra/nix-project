@@ -57,7 +57,6 @@ In the freshly scaffolded project, you'll see the following files:
     ├── default.nix
     ├── flake.nix
     ├── nix
-    │   ├── build.nix
     │   ├── compat.nix
     │   ├── my-app.nix
     │   └── overlay.nix
