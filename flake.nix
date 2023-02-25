@@ -32,6 +32,7 @@
                     };
                     legacyPackages.nixpkgs = build;
                     legacyPackages.ci      = build.nix-project-ci;
+                    legacyPackages.lib     = build.nix-project-lib;
                     apps = rec {
                         default = nix-scaffold;
                         nix-scaffold = {
