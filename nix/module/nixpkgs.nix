@@ -15,6 +15,7 @@ in {
             let args' = { inherit inputs' system; };
             in {
             config._module.args.nixpkgs = lib.mkDefault {
+                master        = lookupOpt args' "master";
                 unstable      = lookupOpt args' "unstable";
                 stable-darwin = lookupOpt args' "stable-darwin";
                 stable-linux  = lookupOpt args' "stable-linux";
