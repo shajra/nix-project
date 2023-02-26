@@ -4,11 +4,9 @@ final: prev: {
     nix-project-lib.scripts = final.callPackage (import ./scripts.nix)  {};
     nix-project-org2gfm     = final.callPackage (import ./org2gfm.nix)  {};
     nix-project-scaffold    = final.callPackage (import ./scaffold.nix) {};
-    nix-project-ci = prev.symlinkJoin {
-        name = "nix-project-ci";
-        paths = [
-            final.nix-project-org2gfm
-            final.nix-project-scaffold
-        ];
+    nix-project-ci = prev.linkFarm "nix-project-ci" {
+        inherit (final)
+            nix-project-org2gfm
+            nix-project-scaffold;
     };
 }
