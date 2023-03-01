@@ -20,7 +20,7 @@ This document explains how to take advantage of software provided by Nix for peo
 
 This project supports a still-experimental feature of Nix called *flakes*, which this document shows users how to use <span class="underline">without</span>. [Another document](nix-usage-flakes.md) explains how to do everything illustrated in this document, but with flakes.
 
-> **<span class="underline">NOTE:</span>** The decision to use an experimental feature such as flakes comes with trade-offs. Please read the provided [supplemental documentation on Nix](nix-motivation.md) if you're unfamiliar with flakes or trade-offs of using Nix's experimental features.
+> **<span class="underline">NOTE:</span>** The decision to use an experimental feature such as flakes comes with trade-offs. Please read the provided [supplemental documentation on Nix](nix-introduction.md) if you're unfamiliar with flakes or trade-offs of using Nix's experimental features.
 
 Although this document avoids requiring enabling the experimental flakes feature, it does encourage some usage of the “nix-command” experimental feature. This feature exposes a variety of subcommands on the `nix` command-line tool. These subcommands have been in broad usage and are safe to use. However, as still marked as experimental, their input parameters or output formats are subject to change. Be aware when scripting against them.
 
@@ -34,7 +34,7 @@ Within this project, the various files with a `.nix` extension are Nix files, ea
 
 # Prerequisites<a id="sec-2"></a>
 
-If you're new to Nix consider reading the provided [introduction](nix-motivation.md).
+If you're new to Nix consider reading the provided [introduction](nix-introduction.md).
 
 This project supports
 

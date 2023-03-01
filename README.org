@@ -22,7 +22,7 @@ Among other benefits, Nix gives use an incredible amount of control and
 repeatability of our software projects. If you don't know much about Nix,
 consider reading the following:
 
-- [[file:doc/nix-motivation.org][Introduction to Nix and motivations to use it]]
+- [[file:doc/nix-introduction.org][Introduction to Nix and motivations to use it]]
 - [[file:doc/nix-installation.org][Nix installation and configuration guide]]
 - [[file:doc/nix-usage-flakes.org][Nix end user guide with flakes]]
 - [[file:doc/nix-usage-noflakes.org][Nix end user guide without flakes]]

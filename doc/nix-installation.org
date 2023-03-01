@@ -30,7 +30,7 @@ This document explains how to
 - set up the Nix's experimental flakes feature (optionally)
 
 If you're unsure if you want to enable flakes or not, read the provided
-[[file:nix-motivation.org][introduction to Nix]].
+[[file:nix-introduction.org][introduction to Nix]].
 
 * Prerequisites
 
@@ -131,7 +131,7 @@ This project can take advantage of two experimental Nix features:
 - =nix-command=
 - =flakes=
 
-The provided [[file:nix-motivation.org][introduction to Nix]] covers in detail what these features are and
+The provided [[file:nix-introduction.org][introduction to Nix]] covers in detail what these features are and
 can help you decide whether you want to enable them.
 
 As you can guess, the =flakes= feature enables flakes functionality in Nix. The
@@ -160,7 +160,7 @@ nix --version
 #+end_src
 
 #+RESULTS: nix-version
-: nix (Nix) 2.11.0
+: nix (Nix) 2.11.1
 
 The easiest way to turn on experimental features is to create a file
 =~/.config/nix/nix.conf= if it doesn't already exist, and in it put the

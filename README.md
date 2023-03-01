@@ -20,7 +20,7 @@ This source's [doc directory](doc) provides a variety of documents to not only h
 
 Among other benefits, Nix gives use an incredible amount of control and repeatability of our software projects. If you don't know much about Nix, consider reading the following:
 
--   [Introduction to Nix and motivations to use it](doc/nix-motivation.md)
+-   [Introduction to Nix and motivations to use it](doc/nix-introduction.md)
 -   [Nix installation and configuration guide](doc/nix-installation.md)
 -   [Nix end user guide with flakes](doc/nix-usage-flakes.md)
 -   [Nix end user guide without flakes](doc/nix-usage-noflakes.md)

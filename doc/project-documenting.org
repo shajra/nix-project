@@ -57,7 +57,7 @@ continuing.
 
 You need Nix installed to use =org2gfm=.
 
-If you're new to Nix consider reading the provided [[file:nix-motivation.org][introduction]].
+If you're new to Nix consider reading the provided [[file:nix-introduction.org][introduction]].
 
 If you don't have Nix set up yet, see the provided [[file:nix-installation.org][installation and
 configuration guide]]. This guide will show you how to use =org2gfm= both with

@@ -43,7 +43,7 @@ You should have some familiarity with [Org-mode](https://www.gnu.org/software/em
 
 You need Nix installed to use `org2gfm`.
 
-If you're new to Nix consider reading the provided [introduction](nix-motivation.md).
+If you're new to Nix consider reading the provided [introduction](nix-introduction.md).
 
 If you don't have Nix set up yet, see the provided [installation and configuration guide](nix-installation.md). This guide will show you how to use `org2gfm` both with and without Nix's experimental flakes feature enabled. More options are available with flakes.
 

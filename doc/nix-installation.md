@@ -14,7 +14,7 @@ This document explains how to
 -   set up Nix to download pre-built packages from a cache (optionally)
 -   set up the Nix's experimental flakes feature (optionally)
 
-If you're unsure if you want to enable flakes or not, read the provided [introduction to Nix](nix-motivation.md).
+If you're unsure if you want to enable flakes or not, read the provided [introduction to Nix](nix-introduction.md).
 
 # Prerequisites<a id="sec-2"></a>
 
@@ -80,7 +80,7 @@ This project can take advantage of two experimental Nix features:
 -   `nix-command`
 -   `flakes`
 
-The provided [introduction to Nix](nix-motivation.md) covers in detail what these features are and can help you decide whether you want to enable them.
+The provided [introduction to Nix](nix-introduction.md) covers in detail what these features are and can help you decide whether you want to enable them.
 
 As you can guess, the `flakes` feature enables flakes functionality in Nix. The `nix-command` feature enables a variety of subcommands of Nix's newer `nix` command-line tool, some of which allow us to work with flakes.
 
@@ -99,7 +99,7 @@ Since the latest release of Nix is already at 2.13, if you installed Nix recentl
 nix --version
 ```
 
-    nix (Nix) 2.11.0
+    nix (Nix) 2.11.1
 
 The easiest way to turn on experimental features is to create a file `~/.config/nix/nix.conf` if it doesn't already exist, and in it put the following line:
 

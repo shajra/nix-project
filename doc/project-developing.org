@@ -30,7 +30,7 @@ following in conjunction:
 
 #+begin_quote
 *_WARNING:_* The decision to author projects with an experimental feature such
-as flakes comes with trade-offs. Please read the provided [[file:nix-motivation.org][supplemental
+as flakes comes with trade-offs. Please read the provided [[file:nix-introduction.org][supplemental
 documentation on Nix]] if you're unfamiliar with flakes or these trade-offs.
 #+end_quote
 
@@ -44,7 +44,7 @@ document.
 
 * Prerequisites
 
-If you're new to Nix consider reading the provided [[file:nix-motivation.org][introduction]].
+If you're new to Nix consider reading the provided [[file:nix-introduction.org][introduction]].
 
 If you don't have Nix set up yet, see the provided [[file:nix-installation.org][installation and
 configuration guide]]. To continue following this development guide, you will
@@ -120,7 +120,7 @@ to your needs.
 
 * Authoring flakes
 
-As documented in the provided [[file:nix-motivation.org][introduction to Nix]], we're using the experimental
+As documented in the provided [[file:nix-introduction.org][introduction to Nix]], we're using the experimental
 flakes feature of Nix for a few reasons:
 - more assurances of a deterministic and reproducible build
 - faster evaluation from improved caching

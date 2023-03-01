@@ -19,7 +19,7 @@ This document shows how to get started managing a software project using the fol
 -   an experimental feature of Nix called [flakes](https://nixos.wiki/wiki/Flakes)
 -   this project, Nix-project.
 
-> **<span class="underline">WARNING:</span>** The decision to author projects with an experimental feature such as flakes comes with trade-offs. Please read the provided [supplemental documentation on Nix](nix-motivation.md) if you're unfamiliar with flakes or these trade-offs.
+> **<span class="underline">WARNING:</span>** The decision to author projects with an experimental feature such as flakes comes with trade-offs. Please read the provided [supplemental documentation on Nix](nix-introduction.md) if you're unfamiliar with flakes or these trade-offs.
 
 Nix-project provides library support that helps ease the ergonomics of using Nix with flakes. This guide attempts to explain Nix-project without obscuring how to use flakes directly.
 
@@ -27,7 +27,7 @@ Nix-project uses all the features it provides itself, so you can look through th
 
 # Prerequisites<a id="sec-2"></a>
 
-If you're new to Nix consider reading the provided [introduction](nix-motivation.md).
+If you're new to Nix consider reading the provided [introduction](nix-introduction.md).
 
 If you don't have Nix set up yet, see the provided [installation and configuration guide](nix-installation.md). To continue following this development guide, you will need Nix's experimental flakes feature enabled.
 
@@ -74,7 +74,7 @@ You'll modify the top-level `flake.nix` file and the Nix files under the `nix` d
 
 # Authoring flakes<a id="sec-4"></a>
 
-As documented in the provided [introduction to Nix](nix-motivation.md), we're using the experimental flakes feature of Nix for a few reasons:
+As documented in the provided [introduction to Nix](nix-introduction.md), we're using the experimental flakes feature of Nix for a few reasons:
 
 -   more assurances of a deterministic and reproducible build
 -   faster evaluation from improved caching

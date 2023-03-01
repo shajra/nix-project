@@ -21,7 +21,7 @@ This document explains how to take advantage of software provided by Nix for peo
 
 This project supports a still-experimental feature of Nix called *flakes*, which this document covers. [Another document](nix-usage-noflakes.md) explains how to do everything illustrated in this document, but without flakes.
 
-> **<span class="underline">WARNING:</span>** The decision to use an experimental feature such as flakes comes with trade-offs. Please read the provided [supplemental documentation on Nix](nix-motivation.md) if you're unfamiliar with flakes or these trade-offs.
+> **<span class="underline">WARNING:</span>** The decision to use an experimental feature such as flakes comes with trade-offs. Please read the provided [supplemental documentation on Nix](nix-introduction.md) if you're unfamiliar with flakes or these trade-offs.
 
 # How this project uses Nix<a id="sec-2"></a>
 
@@ -31,7 +31,7 @@ Within this project, the various files with a `.nix` extension are Nix files, ea
 
 # Prerequisites<a id="sec-3"></a>
 
-If you're new to Nix consider reading the provided [introduction](nix-motivation.md).
+If you're new to Nix consider reading the provided [introduction](nix-introduction.md).
 
 This project supports
 

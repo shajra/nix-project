@@ -74,7 +74,7 @@ in this document, but without flakes.
 
 #+begin_quote
 *_WARNING:_* The decision to use an experimental feature such as flakes comes
-with trade-offs. Please read the provided [[file:nix-motivation.org][supplemental documentation on Nix]] if
+with trade-offs. Please read the provided [[file:nix-introduction.org][supplemental documentation on Nix]] if
 you're unfamiliar with flakes or these trade-offs.
 #+end_quote
 
@@ -94,7 +94,7 @@ packages beyond what's provided in this project.
 
 * Prerequisites
 
-If you're new to Nix consider reading the provided [[file:nix-motivation.org][introduction]].
+If you're new to Nix consider reading the provided [[file:nix-introduction.org][introduction]].
 
 This project supports {{{platforms}}}.
 

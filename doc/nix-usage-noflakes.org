@@ -79,7 +79,7 @@ do everything illustrated in this document, but with flakes.
 
 #+begin_quote
 *_NOTE:_* The decision to use an experimental feature such as flakes comes with
-trade-offs. Please read the provided [[file:nix-motivation.org][supplemental documentation on Nix]] if you're
+trade-offs. Please read the provided [[file:nix-introduction.org][supplemental documentation on Nix]] if you're
 unfamiliar with flakes or trade-offs of using Nix's experimental features.
 #+end_quote
 
@@ -98,7 +98,7 @@ worse for new users.
 
 * Prerequisites
 
-If you're new to Nix consider reading the provided [[file:nix-motivation.org][introduction]].
+If you're new to Nix consider reading the provided [[file:nix-introduction.org][introduction]].
 
 This project supports {{{platforms}}}.
 
