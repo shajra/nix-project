@@ -139,9 +139,14 @@ As you can guess, the =flakes= feature enables flakes functionality in Nix. The
 command-line tool, some of which allow us to work with flakes.
 
 There is a way to use flakes local to just a single command-line invocation by
-using ~nix --extra-experimental-features 'nix-command flakes' …~, so users
-avoiding using flakes can try out using flakes with little commitment. For those
-users, this can be useful to set to a shell alias.
+using ~nix --extra-experimental-features 'nix-command flakes' …~, so users can
+try out using flakes without enabling it globally. For those users, this can be
+useful to set to a shell alias. Here's an example that works in most
+POSIX-compliant shells:
+
+#+begin_src sh :eval no
+alias nix-flakes = nix --extra-experimental-features 'nix-command flakes'
+#+end_src
 
 As discussed in the introduction, =nix-command= is actually enabled by default.
 You don't need to enable it explicitly (though you could disable it).

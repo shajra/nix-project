@@ -14,16 +14,15 @@
   - [Nixpkgs takes time to learn](#sec-4-1)
   - [Confusion of stability](#sec-4-2)
     - [Nix 2.0 and the new `nix` command](#sec-4-2-1)
-    - [Experimental flags and flakes](#sec-4-2-2)
+    - [Flakes as an experiment](#sec-4-2-2)
 - [Encouraging development with flakes](#sec-5)
-- [Documenting an end user experience](#sec-6)
-  - [Not forcing end users to flakes](#sec-6-1)
-  - [Opinionated guidance for non-flakes users](#sec-6-2)
+- [Helping non-flakes users](#sec-6)
+- [Documenting an end user experience](#sec-7)
 
 
 # About this document<a id="sec-1"></a>
 
-This document introduces the [Nix package manager](https://nixos.org/nix) and highlights some motivations to use Nix. It also covers important tradeoffs not only of using Nix, but experimental features in Nix such as one called *flakes*.
+This document introduces the [Nix package manager](https://nixos.org/nix) and highlights some motivations to use Nix. It also covers tradeoffs not only of using Nix, but experimental features in Nix such as one called *flakes*.
 
 This document tries to capture enthusiasm while being honest about frustrations. Nix is amazing, and a clear pioneer of an architectural approach that users will come to demand in the future. However, users need clear information up front where they are likely to face challenges.
 
@@ -130,7 +129,7 @@ There are parts of Nix that are extremely simple. For example, there's an elegan
 
 However, because of the complexity of all the programming language ecosystems out there, there are a *lot* of supporting libraries in Nixpkgs to understand. There's over two million lines of Nix in Nixpkgs, some auto-generated, increasing the odds of getting lost in it.
 
-The [official Nixpkgs manual](https://nixos.org/nixpkgs/manual) only seems to cover a fraction of what package authors really need to know. Invariably, people seem to master Nix by exploring the source code of Nixpkgs, supplemented by example projects for reference.
+The [official Nixpkgs manual](https://nixos.org/nixpkgs/manual) only seems to cover a fraction of what package authors really need to know. Invariably, people seem to master Nix by exploring the source code of Nixpkgs, supplemented by example projects for reference. You can get surprisingly far mimicking code you find in Nixpkgs that packages something similar to what you have in front of you. But understanding what's actually going on so you avoid simple mistakes can take some time.
 
 Various people have attempted to fill the gap with documentation and tutorials. Even this document you're reading now is one such attempt. However, we're missing searchable index of all the critical functions in Nixpkgs for people to explore. Something as simple as parsed [docstrings](https://en.wikipedia.org/wiki/Docstring) as an extension of the Nix language would go a long way, which would be far easier to implement than something more involved like a type system for the Nix language.
 
@@ -145,7 +144,7 @@ It's not necessary for these groups to be at odds. Unfortunately, Nix has releas
 
 ### Nix 2.0 and the new `nix` command<a id="sec-4-2-1"></a>
 
-An early complaint of Nix was the non-intuitiveness of Nix's original assortment of command-line tools. To address this, Nix 2.0 introduced a unifying tool called `nix`. Despite appreciable improvements in user experience, the newer `nix` command has taken some time for it to get enough functionality to actually replace the older tools. For a while, it ended up being yet another tool to learn.
+An early complaint of Nix was the non-intuitiveness of Nix's original assortment of command-line tools. To address this, Nix 2.0 introduced a unifying tool called `nix`. Despite appreciable improvements in user experience, the newer `nix` command has taken some time for it to get enough functionality to actually replace the older tools (`nix-build`, `nix-shell`, `nix-store`, etc.). For a while, it's ended up yet another tool to learn.
 
 If you look at the manpage for `nix` there's a clear warning at the top:
 
@@ -161,19 +160,19 @@ Eventually, with the release of Nix 2.4, experimental features were turned into 
 
 In other words, Nix ships with an experimental feature enabled by default.
 
-This almost indicates that the new `nix` command isn't too unstable. Except, Nix 2.4 did indeed change the API of `nix` subcommands, which has absolutely broken industrial scripts calling `nix`.
+This almost indicates that the new `nix` command isn't too unstable. Except, Nix 2.4 did indeed change the API of `nix` subcommands.
 
 In practice, the `nix` subcommands are relatively reliable. They are well-written and functionally robust. But the core maintainers are reserving the right to change input parameterization and output formatting.
 
 They communicate this risk only with the warning atop the manpage, which most users have been training one another to ignore.
 
-### Experimental flags and flakes<a id="sec-4-2-2"></a>
+### Flakes as an experiment<a id="sec-4-2-2"></a>
 
 Though Nix expressions have an incredible potential to be precise and reproducible, there has always been some backdoors to break the reliability of builds. For example, Nix expressions have the potential to evaluate differently depending on the setting of some environment variables like `NIX_PATH`.
 
 The motivation for these relaxations of determinism has been to have a quick way to let personal computing users have a convenient way to manage their environments. Some people are careful to avoid accidentally having non-deterministic builds. Still, accidents have occurred frequently enough for the community to want better. It's frustrating to have a broken build because someone else set an environment variable incorrectly.
 
-Nix 2.4 corrected for this by introducing an experimental feature called *flakes*. Users still have a largely ergonomic way to manage their environments, but builds are strictly deterministic. Determinism is a large reason many turn to Nix in the first place. A nice benefit of strictly enforced determinism is the ability to cache evaluations of Nix expressions, which can be expensive to compute.
+Nix 2.4 corrected for this by introducing an experimental feature called *flakes*. Users still have a largely ergonomic way to manage their environments, but builds are more strictly deterministic. Determinism is a large reason many turn to Nix in the first place. A nice benefit of strictly enforced determinism is the ability to cache evaluations of Nix expressions, which can be expensive to compute.
 
 All this is generally good news. Flakes address problems that industrial users of Nix have long had to deal with.
 
@@ -184,7 +183,7 @@ On top of this, because flakes are experimental, documentation of flakes is extr
 All this puts industrial Nix users in an annoying place. Not using flakes and instead coaching coworkers and customers on how to use Nix safely
 
 -   increases the likelihood of defects as people make honest mistakes
--   reduces the likelihood of adoption, because people get frustrated with the nuances of these corner cases.
+-   reduces the likelihood of adoption, because people get frustrated with poor ergonomics and difficulty understanding nuances and corner cases.
 
 However, if industrial users move to flakes to address these problems we have the following problems:
 
@@ -193,38 +192,48 @@ However, if industrial users move to flakes to address these problems we have th
 
 # Encouraging development with flakes<a id="sec-5"></a>
 
-This project encourages the development of Nix projects using flakes. The benefits seem to outweigh the risks of instability. This is not a choice made lightly, and this document is an exercise of due diligence to inform users of the compromise made.
+This project encourages the development of Nix projects using flakes. The benefits seem to outweigh the risks of instability. This is not a choice made lightly, and this document is an exercise of due diligence to inform users of compromises.
 
-To buffer this compromise, this project uses and encourages the use of the [flake-compat](https://github.com/edolstra/flake-compat) project, which enables an end user who has opted not to enable flakes to still use this project, even if only in a limited capacity.
+Flakes are absolutely the future in Nix. They significantly address prior pains. Furthermore, enough people across the world are using them that we have some confidence that the Nix commands are reliable as implemented. The core contributors have just been very slow to commit to the user interfaces and experience.
+
+There might be documentation and training hurdles with flakes, but it's not actually much better not using flakes. This is why this project includes documentation and guides on Nix itself.
+
+It's also important to keep the risks of using experimental features in perspective. Industrial users are more likely to script heavily against `nix` commands than personal users. Upgrading anything risks small breaks to address. For some industrial users, such breaks are insufferable in aggregate, even if manageable individually. This leads to a desire to only use software that has been officially released as stable and supported. Still, if you've read documents like this one, and feel the history and risks have been well explained, using flakes might be the best option, even with industrial scripting that might break.
+
+Usage of flakes outside scripting has almost no risk at all. By calling `nix` with a few extra arguments `--extra-experimental-features 'nix-command flakes'` we can access flakes commands for single invocations, without needing to enable flakes globally. You can even make an alias for your shell that might look like the following:
+
+```sh
+alias nix-flakes = nix --extra-experimental-features 'nix-command flakes'
+```
+
+This way there's less to type interactively. Just don't script against this command, and there's no worry of scripts breaking if the flakes API changes.
+
+# Helping non-flakes users<a id="sec-6"></a>
+
+A few users make work in organizations or contribute to projects that disallow experimental features such as flakes.
+
+To buffer this compromise, this project uses and encourages the use of the [flake-compat](https://github.com/edolstra/flake-compat) project, which enables an end user who has opted not to enable flakes to at least access the flake's contents, packages or otherwise.
 
 With flake-compat, end users will have a normal (non-flake) Nix expression they can evaluate. However, since dependencies are managed with flakes, the project maintainer must have flakes enabled to manage dependencies (for example, updating to the latest dependencies with `nix flake update`).
 
-# Documenting an end user experience<a id="sec-6"></a>
+# Documenting an end user experience<a id="sec-7"></a>
 
-## Not forcing end users to flakes<a id="sec-6-1"></a>
+To deal with the transition of the Nix community to flake, this project provides two user guides:
 
-Not everyone will be developing Nix projects. Some will just consume Nix packages as end users. For those users unfamiliar with Nix setup and usage, this project provides two guides:
-
--   [Nix Usage with Flakes](nix-usage-flakes.md)
+-   [Nix Usage with Flakes (Recommended) ](nix-usage-flakes.md)
 -   [Nix Usage without Flakes](nix-usage-noflakes.md)
 
-The first guide caters to the user who values improved ergonomics and reproducible builds, and are willing to turn on the `nix-command` and `flakes` experimental features. This comes at the cost of API instability as these features evolve.
+Links generally steer users to the recommended guide, which then links users to the non-flakes guide if they have the interest or need.
 
-The other guide is for users who value API stability. It doesn't force users to enable `flakes`, but it does invite them to use the experimental `nix-command` to help users avoid complexity the Nix community has been working to get rid of.
+The non-flakes guide intentionally avoids commands like `nix-shell` and `nix-channel`. These commands lead users to setting the `NIX_PATH` environment variable, which can lead to unreliable builds.
 
-There is a way to use flakes local to just a single command-line invocation by using `nix --extra-experimental-features 'nix-command flakes' …`, so users avoiding using flakes can try out using flakes for a few commands with little commitment. In that case, reading both guides may be useful.
-
-## Opinionated guidance for non-flakes users<a id="sec-6-2"></a>
-
-As discussed above, one reason the new flakes feature exists is to ensure our builds are reproducible. When not using flakes, we instead have to be cautious of using certain commands, particularly those that are sensitive to `NIX_PATH` when evaluating Nix expressions. The documentation in this project leads users away from these commands, which include `nix-shell` as well as another called `nix-channel`.
-
-The without-flakes guide invites end users to use the experimental `nix-command` to get the following subcommands:
+Though this guide avoid the `flakes` experimental feature, it still invites end users to use the experimental `nix-command` to get the following subcommands:
 
 -   `nix search`
 -   `nix shell`
 -   `nix run`
 
-In general, this guide only explains usage of experimental `nix` subcommands when there exist no other alternatives, or when the alternatives are considered worse for new users.
+In general, the non-flakes guide only explains usage of experimental `nix` subcommands when there exist no other alternatives, or when the alternatives are considered worse for new users.
 
 `nix search` simply has no good alternative within the set of non-experimental Nix tools, but it's too useful to not tell users about. Again, this is an example of the Nix community leading users to experimental features.
 

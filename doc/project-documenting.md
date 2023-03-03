@@ -47,10 +47,7 @@ If you're new to Nix consider reading the provided [introduction](nix-introducti
 
 If you don't have Nix set up yet, see the provided [installation and configuration guide](nix-installation.md). This guide will show you how to use `org2gfm` both with and without Nix's experimental flakes feature enabled. More options are available with flakes.
 
-If you don't know how to use basic Nix commands, one of the following guides:
-
--   [Nix end user guide with flakes](nix-usage-flakes.md)
--   [Nix end user guide without flakes](nix-usage-noflakes.md)
+If you don't know how to use basic Nix commands, see the provided [Nix end user guide](nix-usage-flakes.md).
 
 If you want to integrate documentation generation with a project scaffolded by Nix-project (this project), see the [project development guide](project-developing.md).
 
