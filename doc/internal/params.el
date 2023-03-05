@@ -10,7 +10,7 @@
  ;; run-type must be "executable"
  (run-target-short     . "org2gfm")
  (run-target-long      . "bin/org2gfm")
- (nix-latest           . "2.13")
+ (nix-latest           . "2.14")
  (nixos-latest         . "22.11")
  (platforms            . "\n\
 - Linux on x86-64 machines\n\

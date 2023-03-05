@@ -256,7 +256,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/9w953y5fadsr4p6yhpm25f2iqr5jd8mx-org2gfm
+    /nix/store/0lbyvrsgxdwmjkgnszx9hggjmd8lanqd-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -278,7 +278,7 @@ It's common to configure these “result” symlinks as ignored in source contro
 nix path-info .#org2gfm
 ```
 
-    /nix/store/9w953y5fadsr4p6yhpm25f2iqr5jd8mx-org2gfm
+    /nix/store/0lbyvrsgxdwmjkgnszx9hggjmd8lanqd-org2gfm
 
 ## Running commands in a shell<a id="sec-4-6"></a>
 
@@ -391,7 +391,7 @@ nix shell --ignore-environment \
     --command which org2gfm
 ```
 
-    /nix/store/9w953y5fadsr4p6yhpm25f2iqr5jd8mx-org2gfm/bin/org2gfm
+    /nix/store/0lbyvrsgxdwmjkgnszx9hggjmd8lanqd-org2gfm/bin/org2gfm
 
 This is all a consequence of everything discussed in previous sections, but it's good to see clearly that what we do with local flake references can work just as well with remote flake references.
 
@@ -415,7 +415,7 @@ We can see this installation by querying what's been installed:
 nix profile list
 ```
 
-    0 git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm /nix/store/9w953y5fadsr4p6yhpm25f2iqr5jd8mx-org2gfm
+    0 git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm /nix/store/0lbyvrsgxdwmjkgnszx9hggjmd8lanqd-org2gfm
 
 The output of `nix profile list` is a bit verbose, but each line has three parts:
 
