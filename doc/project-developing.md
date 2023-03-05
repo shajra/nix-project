@@ -294,7 +294,7 @@ See the [official flake-parts documentation](https://flake.parts/module-argument
 
 ## Overlays<a id="sec-4-4"></a>
 
-The scaffolded project provides a perspective on how to structure the Nix expressions to build your flake. Nixpkgs is a giant tree of mostly packages. We Instances of Nixpkgs can be extended with special functions called *overlays*.
+The scaffolded project provides a perspective on how to structure the Nix expressions to build your flake. Nixpkgs is a giant tree of mostly packages. Instances of Nixpkgs can be extended with special functions called *overlays*.
 
 An overlay has the following form:
 

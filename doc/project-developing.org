@@ -389,7 +389,7 @@ as follows:
 ** Overlays
 
 The scaffolded project provides a perspective on how to structure the Nix
-expressions to build your flake. Nixpkgs is a giant tree of mostly packages. We
+expressions to build your flake. Nixpkgs is a giant tree of mostly packages.
 Instances of Nixpkgs can be extended with special functions called /overlays/.
 
 An overlay has the following form:
