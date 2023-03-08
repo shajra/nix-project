@@ -91,7 +91,11 @@ nix --extra-experimental-features nix-command search --file . ''
     
     …
 
-If you have the `nix-command` feature disabled, and typing out `nix --extra-experimental-features nix-command` is too verbose for your tastes, consider setting an alias for it in your shell.
+If you have the `nix-command` feature disabled, and typing out `nix --extra-experimental-features nix-command` is too verbose for your tastes, consider setting an alias in your shell such as the following:
+
+```sh
+alias nix-new = nix --extra-experimental-features 'nix-command'
+```
 
 Passing in `--file .` tells `nix search` to get the attribute tree to search from the `default.nix` file in the current directory. The positional argument is the attribute path to start the search from within this tree. An empty string indicates to start at the root of the tree.
 
@@ -301,7 +305,6 @@ nix-env --install --file . --attr packages.x86_64-linux.org2gfm 2>&1
 ```
 
     installing 'org2gfm'
-    building '/nix/store/hs9xz17vlb2m4qn6kxfmccgjq4jyrvqg-user-environment.drv'...
 
 We can see this installation by querying what's been installed:
 
