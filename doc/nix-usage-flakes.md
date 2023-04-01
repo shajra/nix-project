@@ -202,7 +202,7 @@ As discussed in a previous section, we can use the flakes registry identifier of
 nix search nixpkgs 'gpu|opengl|accel' terminal
 ```
 
-    * legacyPackages.x86_64-linux.alacritty (0.11.0)
+    * legacyPackages.x86_64-linux.alacritty (0.12.0)
       A cross-platform, GPU-accelerated terminal emulator
     
     * legacyPackages.x86_64-linux.darktile (0.0.10)
@@ -211,7 +211,7 @@ nix search nixpkgs 'gpu|opengl|accel' terminal
     * legacyPackages.x86_64-linux.kitty (0.27.1)
       A modern, hackable, featureful, OpenGL based terminal emulator
     
-    * legacyPackages.x86_64-linux.wezterm (20221119-145034-49b9839f)
+    * legacyPackages.x86_64-linux.wezterm (20230326-111934-3666303c)
       GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust
 
 If we're curious what version of WezTerm is available in NixOS's latest release, we can specialize the installable we're searching as follows:
@@ -260,7 +260,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/0lbyvrsgxdwmjkgnszx9hggjmd8lanqd-org2gfm
+    /nix/store/2m80lz7na4pa6z75385wwji95q92h9ld-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -282,7 +282,7 @@ It's common to configure these “result” symlinks as ignored in source contro
 nix path-info .#org2gfm
 ```
 
-    /nix/store/0lbyvrsgxdwmjkgnszx9hggjmd8lanqd-org2gfm
+    /nix/store/2m80lz7na4pa6z75385wwji95q92h9ld-org2gfm
 
 ## Running commands in a shell<a id="sec-4-6"></a>
 
@@ -395,7 +395,7 @@ nix shell --ignore-environment \
     --command which org2gfm
 ```
 
-    /nix/store/0lbyvrsgxdwmjkgnszx9hggjmd8lanqd-org2gfm/bin/org2gfm
+    /nix/store/2m80lz7na4pa6z75385wwji95q92h9ld-org2gfm/bin/org2gfm
 
 This is all a consequence of everything discussed in previous sections, but it's good to see clearly that what we do with local flake references can work just as well with remote flake references.
 
@@ -419,7 +419,7 @@ We can see this installation by querying what's been installed:
 nix profile list
 ```
 
-    0 git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm /nix/store/0lbyvrsgxdwmjkgnszx9hggjmd8lanqd-org2gfm
+    0 git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm /nix/store/2m80lz7na4pa6z75385wwji95q92h9ld-org2gfm
 
 The output of `nix profile list` is a bit verbose, but each line has three parts:
 
