@@ -402,13 +402,13 @@ nix eval --impure --expr '
 ```
 
     {
-      lastModified = 1679895524;
-      lastModifiedDate = "20230327053844";
-      narHash = "sha256-6UQR7pmaeIv4G/eymgrFXXfrh3ODfsqIIAu0A44N/6g=";
-      outPath = "/nix/store/53lazdv036242g777vmsklfb1rf056pw-source";
-      rev = "99db062953e88c26e1b1ae5120b8f8bd9f8d9b90";
-      revCount = 818;
-      shortRev = "99db062";
+      lastModified = 1686219081;
+      lastModifiedDate = "20230608101121";
+      narHash = "sha256-NiJr/7kzLN7gnhgbg/12s7E0qe0TJpncQ05zsDLhUFs=";
+      outPath = "/nix/store/pld79180hfymnyr38kyvhyy6dn2sf07d-source";
+      rev = "519766900c63f3cf227c9a38fc7aa8a53fc4f90c";
+      revCount = 837;
+      shortRev = "5197669";
       submodules = false;
     }
 
