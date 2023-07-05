@@ -94,7 +94,7 @@ Every `flake.nix` file must conform to a standard structure that is an attribute
 	flake-compat    = { url = "github:edolstra/flake-compat"; flake = false; };
 	flake-parts.url = "github:hercules-ci/flake-parts";
 	nix-project.url = "github:shajra/nix-project";
-	nixpkgs.url     = "github:NixOS/nixpkgs/nixos-22.11";
+	nixpkgs.url     = "github:NixOS/nixpkgs/nixos-23.05";
     };
     outputs = inputs@{ flake-parts, nix-project, ... }:
 	# …
@@ -213,7 +213,7 @@ For example, let's say we wanted to just pass through GNU Hello as our own packa
 {
     description = "Without flake-parts";
     inputs = {
-	nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
+	nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
     };
     outputs = inputs: {
 	packages.x86_64-linux.my-hello  =
@@ -230,7 +230,7 @@ This may not seem that bad when just passing through a package. But we end up wi
 {
     description = "Motivating flake-parts";
     inputs = {
-	nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
+	nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
     };
     outputs = inputs:
 	let lib = inputs.nixpkgs.lib;
@@ -252,7 +252,7 @@ Notice how annoying it is to deal with the `system` parameter. Here's what the s
     description = "Illustrating flake-parts";
     inputs = {
 	flake-parts.url = "github:hercules-ci/flake-parts";
-	nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
+	nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
     };
     outputs = inputs@{ flake-parts, ... }:
 	flake-parts.lib.mkFlake { inherit inputs; } {
@@ -280,7 +280,7 @@ See the [official flake-parts documentation](https://flake.parts/module-argument
     description = "Illustrating flake-parts";
     inputs = {
 	flake-parts.url = "github:hercules-ci/flake-parts";
-	nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
+	nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
     };
     outputs = inputs@{ flake-parts, ... }:
 	flake-parts.lib.mkFlake { inherit inputs; } {
