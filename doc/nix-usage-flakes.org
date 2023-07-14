@@ -341,13 +341,13 @@ nix search nixpkgs 'gpu|opengl|accel' terminal | ansifilter
 ,* legacyPackages.x86_64-linux.darktile (0.0.10)
   A GPU rendered terminal emulator designed for tiling window managers
 
-,* legacyPackages.x86_64-linux.kitty (0.28.1)
+,* legacyPackages.x86_64-linux.kitty (0.29.0)
   A modern, hackable, featureful, OpenGL based terminal emulator
 
 ,* legacyPackages.x86_64-linux.rio (0.0.8)
   A hardware-accelerated GPU terminal emulator powered by WebGPU
 
-,* legacyPackages.x86_64-linux.wezterm (20230408-112425-69ae8472)
+,* legacyPackages.x86_64-linux.wezterm (20230712-072601-f4abf8fd)
   GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust
 #+end_example
 
@@ -440,7 +440,7 @@ readlink result*
 #+end_src
 
 #+RESULTS: nix-build-link
-: /nix/store/yl2aljfngyd9i79ipjfdv19w3lbp2a6y-org2gfm
+: /nix/store/v7xksi10srn8ynzk9w2nhlv3311iwzfv-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -469,7 +469,7 @@ nix path-info .#<<get("package-attr-short")>>
 #+end_src
 
 #+results: nix-build-path
-: /nix/store/yl2aljfngyd9i79ipjfdv19w3lbp2a6y-org2gfm
+: /nix/store/v7xksi10srn8ynzk9w2nhlv3311iwzfv-org2gfm
 
 ** Running commands in a shell
 
@@ -584,9 +584,9 @@ nix search --json .#<<get("run-attr-short")>> | jq .
 #+RESULTS: nix-search-details
 : {
 :   "packages.x86_64-linux.org2gfm": {
+:     "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
 :     "pname": "org2gfm",
-:     "version": "",
-:     "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)"
+:     "version": ""
 : …
 
 In the JSON above, the “pname” field indicates the package's name. In practice,
@@ -629,7 +629,7 @@ nix shell --ignore-environment \
 #+end_src
 
 #+RESULTS: nix-shell-remote
-: /nix/store/yl2aljfngyd9i79ipjfdv19w3lbp2a6y-org2gfm/bin/org2gfm
+: /nix/store/v7xksi10srn8ynzk9w2nhlv3311iwzfv-org2gfm/bin/org2gfm
 
 This is all a consequence of everything discussed in previous sections, but it's
 good to see clearly that what we do with local flake references can work just as
@@ -677,7 +677,7 @@ nix profile list --profile /tmp/nix-profile
 #+end_src
 
 #+RESULTS: nix-profile-list
-: 0 git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm /nix/store/yl2aljfngyd9i79ipjfdv19w3lbp2a6y-org2gfm
+: 0 git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm /nix/store/v7xksi10srn8ynzk9w2nhlv3311iwzfv-org2gfm
 
 The output of =nix profile list= is a bit verbose, but each line has three parts:
 - an index to use with other =nix profile= subcommands (like =nix profile remove=)

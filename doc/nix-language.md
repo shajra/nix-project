@@ -104,11 +104,11 @@ As illustrated below, we can't rebind a name:
 nix eval --expr 'let a = 1; a = 2; in a' 2>&1 || true
 ```
 
-    error: attribute 'a' already defined at (string):1:5
+    error: attribute 'a' already defined at «string»:1:5
     
            at «string»:1:12:
     
-                1| let a = 1; a = 2; in a
+                1| let a = 1; a = 2;
                  |            ^
 
 Note that semicolons are mandatory in all Nix forms that have them, including let-expressions. Because of Nix's strict parsing you can neither elide semicolons, nor put extra ones.
@@ -288,7 +288,7 @@ This basic pattern syntax is rigid, and we can't pass in a attribute set with at
 nix eval --expr '({ a }: a + 2 ) { a = 3; b = 4; }' 2>&1 || true
 ```
 
-    error: anonymous function at (string):1:2 called with unexpected argument 'b'
+    error: anonymous function at «string»:1:2 called with unexpected argument 'b'
     
            at «string»:1:1:
     

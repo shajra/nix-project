@@ -235,13 +235,13 @@ nix --experimental-features \
 #+begin_example
 {
   "legacyPackages.aarch64-darwin.ci": {
+    "description": "",
     "pname": "nix-project-ci",
-    "version": "",
-    "description": ""
+    "version": ""
   },
   "legacyPackages.x86_64-darwin.ci": {
+    "description": "",
     "pname": "nix-project-ci",
-    "version": "",
 …
 #+end_example
 
@@ -285,9 +285,9 @@ nix --experimental-features 'nix-command' \
 #+RESULTS: nix-search-specific
 : {
 :   "packages.x86_64-linux.org2gfm": {
+:     "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
 :     "pname": "org2gfm",
-:     "version": "",
-:     "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)"
+:     "version": ""
 :   }
 : }
 
@@ -304,7 +304,7 @@ nix-build --attr <<get("package-attr-long")>> .
 #+end_src
 
 #+RESULTS: nix-build
-: /nix/store/yl2aljfngyd9i79ipjfdv19w3lbp2a6y-org2gfm
+: /nix/store/v7xksi10srn8ynzk9w2nhlv3311iwzfv-org2gfm
 
 If we omit the path to a Nix file, =nix-build= will try to build =default.nix=
 in the current directory. If we omit the =--attr= switch and argument,
@@ -327,7 +327,7 @@ readlink result*
 #+end_src
 
 #+RESULTS: nix-build-link
-: /nix/store/yl2aljfngyd9i79ipjfdv19w3lbp2a6y-org2gfm
+: /nix/store/v7xksi10srn8ynzk9w2nhlv3311iwzfv-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -438,9 +438,9 @@ nix --experimental-features \
 #+RESULTS: nix-search-run
 : {
 :   "packages.x86_64-linux.org2gfm": {
+:     "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
 :     "pname": "org2gfm",
-:     "version": "",
-:     "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)"
+:     "version": ""
 :   }
 : }
 
@@ -592,9 +592,9 @@ nix --experimental-features nix-command \
 #+RESULTS: nix-search-2
 : {
 :   "packages.x86_64-linux.org2gfm": {
+:     "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
 :     "pname": "org2gfm",
-:     "version": "",
-:     "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)"
+:     "version": ""
 :   }
 : }
 

@@ -208,13 +208,13 @@ nix search nixpkgs 'gpu|opengl|accel' terminal
     * legacyPackages.x86_64-linux.darktile (0.0.10)
       A GPU rendered terminal emulator designed for tiling window managers
     
-    * legacyPackages.x86_64-linux.kitty (0.28.1)
+    * legacyPackages.x86_64-linux.kitty (0.29.0)
       A modern, hackable, featureful, OpenGL based terminal emulator
     
     * legacyPackages.x86_64-linux.rio (0.0.8)
       A hardware-accelerated GPU terminal emulator powered by WebGPU
     
-    * legacyPackages.x86_64-linux.wezterm (20230408-112425-69ae8472)
+    * legacyPackages.x86_64-linux.wezterm (20230712-072601-f4abf8fd)
       GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust
 
 If we're curious what version of WezTerm is available in NixOS's latest release, we can specialize the installable we're searching as follows:
@@ -263,7 +263,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/yl2aljfngyd9i79ipjfdv19w3lbp2a6y-org2gfm
+    /nix/store/v7xksi10srn8ynzk9w2nhlv3311iwzfv-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -285,7 +285,7 @@ It's common to configure these “result” symlinks as ignored in source contro
 nix path-info .#org2gfm
 ```
 
-    /nix/store/yl2aljfngyd9i79ipjfdv19w3lbp2a6y-org2gfm
+    /nix/store/v7xksi10srn8ynzk9w2nhlv3311iwzfv-org2gfm
 
 ## Running commands in a shell<a id="sec-4-6"></a>
 
@@ -366,9 +366,9 @@ nix search --json .#org2gfm | jq .
 
     {
       "packages.x86_64-linux.org2gfm": {
+        "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
         "pname": "org2gfm",
-        "version": "",
-        "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)"
+        "version": ""
     …
 
 In the JSON above, the “pname” field indicates the package's name. In practice, this may or may not differ from flake output name of the installable.
@@ -398,7 +398,7 @@ nix shell --ignore-environment \
     --command which org2gfm
 ```
 
-    /nix/store/yl2aljfngyd9i79ipjfdv19w3lbp2a6y-org2gfm/bin/org2gfm
+    /nix/store/v7xksi10srn8ynzk9w2nhlv3311iwzfv-org2gfm/bin/org2gfm
 
 This is all a consequence of everything discussed in previous sections, but it's good to see clearly that what we do with local flake references can work just as well with remote flake references.
 
@@ -422,7 +422,7 @@ We can see this installation by querying what's been installed:
 nix profile list
 ```
 
-    0 git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm /nix/store/yl2aljfngyd9i79ipjfdv19w3lbp2a6y-org2gfm
+    0 git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm /nix/store/v7xksi10srn8ynzk9w2nhlv3311iwzfv-org2gfm
 
 The output of `nix profile list` is a bit verbose, but each line has three parts:
 
