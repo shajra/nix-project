@@ -527,13 +527,13 @@ nix eval --impure --expr '
 #+RESULTS:
 #+begin_example
 {
-  lastModified = 1686219081;
-  lastModifiedDate = "20230608101121";
-  narHash = "sha256-NiJr/7kzLN7gnhgbg/12s7E0qe0TJpncQ05zsDLhUFs=";
-  outPath = "/nix/store/pld79180hfymnyr38kyvhyy6dn2sf07d-source";
-  rev = "519766900c63f3cf227c9a38fc7aa8a53fc4f90c";
-  revCount = 837;
-  shortRev = "5197669";
+  lastModified = 1689839963;
+  lastModifiedDate = "20230720075923";
+  narHash = "sha256-qX0pGkHeX+KssiATwwohzUlGIZQqpIjKsLv32U2nyWA=";
+  outPath = "/nix/store/nln6mqmz3pdis0qv36kvczyfsyafc5wl-source";
+  rev = "c40128936fc804b74abddaa0bc1d8ef6e5dba48e";
+  revCount = 839;
+  shortRev = "c401289";
   submodules = false;
 }
 #+end_example
