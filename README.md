@@ -16,13 +16,13 @@ Specifically, this project helps
 -   generate Github-oriented documentation with evaluated code blocks
 -   build and distribute packages, binary or otherwise.
 
-This source's [doc directory](doc) provides a variety of documents to not only help you use this project, but to also get an introduction to the Nix ecosystem.
+This source's [doc directory](doc) provides a variety of documents to not only help you use this project, but also to get an introduction to the Nix ecosystem.
 
-Among other benefits, Nix gives use an incredible amount of control and repeatability of our software projects. If you don't know much about Nix, consider reading the following provided guides:
+Among other benefits, Nix gives us an incredible amount of control and repeatability of our software projects. If you don't know much about Nix, consider reading the following provided guides:
 
 -   [Introduction to Nix and motivations to use it](doc/nix-introduction.md)
 -   [Nix installation and configuration guide](doc/nix-installation.md)
--   [Nix end user guide](doc/nix-usage-flakes.md)
+-   [Nix end-user guide](doc/nix-usage-flakes.md)
 -   [Introduction to the Nix programming language](doc/nix-language.md)
 
 If you know something about Nix, then these documents will help you get started using this project:
@@ -32,7 +32,7 @@ If you know something about Nix, then these documents will help you get started 
 
 # Release<a id="sec-2"></a>
 
-The "main" branch of the repository on GitHub has the latest released version of this code. There is currently no commitment to either forward or backward compatibility.
+The "main" branch of the GitHub repository has the latest released version of this code. There is currently no commitment to either forward or backward compatibility.
 
 "user/shajra" branches are personal branches that may be force-pushed to. The "main" branch should not experience force-pushes and is recommended for general use.
 
