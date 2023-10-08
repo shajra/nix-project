@@ -7,15 +7,15 @@ nix shell \
     --keep LANG \
     --keep LOCALE_ARCHIVE \
     .#org2gfm \
-    .#nixpkgs.ansifilter \
-    .#nixpkgs.coreutils \
-    .#nixpkgs.git \
-    .#nixpkgs.gnugrep \
-    .#nixpkgs.gnutar \
-    .#nixpkgs.gzip \
-    .#nixpkgs.jq \
-    .#nixpkgs.nixfmt \
-    .#nixpkgs.tree \
+    .#nixpkgs.stable.ansifilter \
+    .#nixpkgs.stable.coreutils \
+    .#nixpkgs.stable.git \
+    .#nixpkgs.stable.gnugrep \
+    .#nixpkgs.stable.gnutar \
+    .#nixpkgs.stable.gzip \
+    .#nixpkgs.stable.jq \
+    .#nixpkgs.stable.nixfmt \
+    .#nixpkgs.stable.tree \
     --command \
     org2gfm \
     --path-bin \

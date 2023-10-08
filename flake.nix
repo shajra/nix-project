@@ -30,7 +30,7 @@
                         org2gfm      = build.nix-project-org2gfm;
                         nix-scaffold = build.nix-project-scaffold;
                     };
-                    legacyPackages.nixpkgs = build;
+                    legacyPackages.nixpkgs = nixpkgs;
                     legacyPackages.ci      = build.nix-project-ci;
                     legacyPackages.lib     = build.nix-project-lib;
                     apps = rec {

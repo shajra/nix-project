@@ -3,25 +3,11 @@
 let
 
     isDarwin = s: builtins.any (x: x == s) lib.platforms.darwin;
-    rejectFile = path: type: regex:
-        type != "regular" || builtins.match regex path == null;
-    rejectDir = path: type: regex:
-        type != "directory" || builtins.match regex path == null;
-    nix-project = builtins.path {
-        path = ../../.;
-        name = "nix-project";
-        filter = path: type:
-            (rejectFile path type ".*[.](md|org)")
-            && (rejectDir path type "[.]git")
-            && (rejectDir path type "[.]github")
-            && (rejectFile path type "result.*");
-    };
-    defaultInputs = (builtins.getFlake (toString nix-project)).inputs;
 
     lookupOpt = { inputs', system, ... }: type:
         let name = "nixpkgs-${type}";
         in inputs'."${name}".legacyPackages
-            or defaultInputs."${name}".legacyPackages."${system}";
+            or inputs'.nix-project.legacyPackages.nixpkgs."${type}";
 
 in {
     config = {
