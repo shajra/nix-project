@@ -304,7 +304,7 @@ nix-build --attr <<get("package-attr-long")>> .
 #+end_src
 
 #+RESULTS: nix-build
-: /nix/store/wjfd604mqvnr1zkbv8k1sd63ffhdf7fn-org2gfm
+: /nix/store/sn8kmywg7kp4z6d467h92b0p5xdyvlhd-org2gfm
 
 If we omit the path to a Nix file, =nix-build= will try to build =default.nix=
 in the current directory. If we omit the =--attr= switch and argument,
@@ -327,7 +327,7 @@ readlink result*
 #+end_src
 
 #+RESULTS: nix-build-link
-: /nix/store/wjfd604mqvnr1zkbv8k1sd63ffhdf7fn-org2gfm
+: /nix/store/sn8kmywg7kp4z6d467h92b0p5xdyvlhd-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -341,7 +341,7 @@ tree -l result*
 : └── bin
 :     └── org2gfm
 : 
-: 1 directory, 1 file
+: 2 directories, 1 file
 
 It's common to configure these “result” symlinks as ignored in source control
 tools (for instance, for Git within a =.gitignore= file).
@@ -554,6 +554,7 @@ nix-env --profile /tmp/nix-profile \
 
 #+RESULTS: nix-env-install
 : installing 'org2gfm'
+: building '/nix/store/hs9xz17vlb2m4qn6kxfmccgjq4jyrvqg-user-environment.drv'...
 
 We can see this installation by querying what's been installed:
 
