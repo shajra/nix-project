@@ -136,13 +136,16 @@ nix eval --expr '
     in "${a_number} is a terrible number"' 2>&1 || true
 ```
 
-    error: cannot coerce an integer to a string
+    error:
+           … while evaluating a path segment
     
-           at «string»:3:9:
+             at «string»:3:9:
     
                 2|     let a_number = 42;
                 3|     in "${a_number} is a terrible number"
                  |         ^
+    
+           error: cannot coerce an integer to a string
 
 We can use a builtin `toString` function to coerce types to strings:
 
@@ -288,12 +291,20 @@ This basic pattern syntax is rigid, and we can't pass in a attribute set with at
 nix eval --expr '({ a }: a + 2 ) { a = 3; b = 4; }' 2>&1 || true
 ```
 
-    error: anonymous function at «string»:1:2 called with unexpected argument 'b'
+    error:
+           … from call site
     
-           at «string»:1:1:
+             at «string»:1:1:
     
                 1| ({ a }: a + 2 ) { a = 3; b = 4; }
                  | ^
+    
+           error: function 'anonymous lambda' called with unexpected argument 'b'
+    
+           at «string»:1:2:
+    
+                1| ({ a }: a + 2 ) { a = 3; b = 4; }
+                 |  ^
            Did you mean a?
 
 If we want to relax the destructuring to accept sets with other attributes we can use a “&#x2026;” form:

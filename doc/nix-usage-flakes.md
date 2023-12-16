@@ -19,9 +19,9 @@
 
 This document explains how to take advantage of software provided by Nix for people new to [the Nix package manager](https://nixos.org/nix). This guide uses this project for examples, but it focused on introducing general Nix usage, which applies to other projects using Nix as well.
 
-This project supports a still-experimental feature of Nix called *flakes*, which this guide shows users how to use. [Another guide](../nix-usage-noflakes.md) explains how to do everything illustrated in this document, but without flakes.
+This project supports a still-experimental feature of Nix called *flakes*, which this guide shows users how to use. [Another guide](nix-usage-noflakes.md) explains how to do everything illustrated in this document, but without flakes.
 
-> **<span class="underline">NOTE:</span>** If you're new to flakes, please read the provided [supplemental introduction to Nix](../nix-introduction.md) to understand the experimental nature of flakes and how it may or may not affect you. Hopefully you'll find these trade-offs acceptable so you can take advantage of the improved experience flakes offer.
+> **<span class="underline">NOTE:</span>** If you're new to flakes, please read the provided [supplemental introduction to Nix](nix-introduction.md) to understand the experimental nature of flakes and how it may or may not affect you. Hopefully you'll find these trade-offs acceptable so you can take advantage of the improved experience flakes offer.
 
 # How this project uses Nix<a id="sec-2"></a>
 
@@ -115,21 +115,21 @@ nix flake show .
     ├───apps
     │   ├───aarch64-darwin
     …
+    ├───flakeModules: unknown
+    ├───legacyPackages
     │   ├───aarch64-darwin omitted (use '--legacy' to show)
     │   ├───x86_64-darwin omitted (use '--legacy' to show)
     │   └───x86_64-linux omitted (use '--legacy' to show)
     ├───lib: unknown
-    ├───nixosConfigurations
-    ├───nixosModules
     ├───overlays
     │   └───default: Nixpkgs overlay
     ├───packages
     │   ├───aarch64-darwin
-    │   │   ├───nix-scaffold: package 'nix-scaffold'
-    │   │   └───org2gfm: package 'org2gfm'
+    │   │   ├───nix-scaffold omitted (use '--all-systems' to show)
+    │   │   └───org2gfm omitted (use '--all-systems' to show)
     │   ├───x86_64-darwin
-    │   │   ├───nix-scaffold: package 'nix-scaffold'
-    │   │   └───org2gfm: package 'org2gfm'
+    │   │   ├───nix-scaffold omitted (use '--all-systems' to show)
+    │   │   └───org2gfm omitted (use '--all-systems' to show)
     │   └───x86_64-linux
     │       ├───nix-scaffold: package 'nix-scaffold'
     │       └───org2gfm: package 'org2gfm'
@@ -211,7 +211,7 @@ nix search nixpkgs 'gpu|opengl|accel' terminal
     * legacyPackages.x86_64-linux.kitty (0.31.0)
       A modern, hackable, featureful, OpenGL based terminal emulator
     
-    * legacyPackages.x86_64-linux.rio (0.0.29)
+    * legacyPackages.x86_64-linux.rio (0.0.32)
       A hardware-accelerated GPU terminal emulator powered by WebGPU
     
     * legacyPackages.x86_64-linux.wezterm (20230712-072601-f4abf8fd)
@@ -422,22 +422,19 @@ We can see this installation by querying what's been installed:
 nix profile list
 ```
 
-    0 git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm git+file:///home/tnks/src/shajra/nix-project#packages.x86_64-linux.org2gfm /nix/store/sn8kmywg7kp4z6d467h92b0p5xdyvlhd-org2gfm
+    Index:              [1m0[0m
+    Flake attribute:    packages.x86_64-linux.org2gfm
+    Original flake URL: git+file:///home/tnks/src/shajra/nix-project
+    Locked flake URL:   git+file:///home/tnks/src/shajra/nix-project
+    Store paths:        /nix/store/sn8kmywg7kp4z6d467h92b0p5xdyvlhd-org2gfm
 
-The output of `nix profile list` is a bit verbose, but each line has three parts:
-
--   an index to use with other `nix profile` subcommands (like `nix profile remove`)
--   the specified installable reference
--   the resolved reference actually installed
--   the store path in `/nix/store`
-
-And if we want to uninstall a program from our profile, we do so by the index
+If we want to uninstall a program from our profile, we do so by the index from this list:
 
 ```sh
 nix profile remove 0
 ```
 
-we can also provide a regex matching the full attribute path of the flake:
+We can also provide a regex matching the full attribute path of the flake:
 
 ```sh
 nix profile remove '.*org2gfm'
