@@ -625,7 +625,7 @@ all in the same invocation:
 nix shell --ignore-environment \
     nixpkgs#which \
     .#<<get("run-attr-short")>> \
-    --command which <<get("run-attr-short")>>
+    --command which <<get("run-target-short")>>
 #+end_src
 
 #+RESULTS: nix-shell-remote
