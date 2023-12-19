@@ -11,14 +11,12 @@
 #+link: nix-flake-outputs https://nixos.wiki/wiki/Flakes#Output_schema
 #+link: nix-flake-parts https://github.com/hercules-ci/flake-parts
 #+link: nix-flake-parts-doc https://flake.parts
-#+link: nix-flake-parts-doc-options https://flake.parts/options/flake-parts.html
 #+link: nix-flake-parts-doc-modargs https://flake.parts/module-arguments.html
 #+link: nix-install-manual https://nixos.org/manual/nix/stable/installation/installation.html
 #+link: nix-install-quick https://nixos.org/download.html#download-nix
 #+link: nix-language-manual https://nixos.org/manual/nix/stable/language/index.html
 #+link: nix-language-tutorial https://nixos.org/guides/nix-language.html
 #+link: nix-learn https://nixos.org/learn.html
-#+link: nix-manual https://nixos.org/nix/manual
 #+link: nixos https://nixos.org
 #+link: nixos-search https://search.nixos.org/packages
 #+link: nixpkgs https://github.com/NixOS/nixpkgs
