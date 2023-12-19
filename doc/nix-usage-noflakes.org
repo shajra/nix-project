@@ -27,7 +27,7 @@ following macros and source code blocks (using Noweb).
 #+macro: run-attr-long {{{get(run-attr-long,=,=)}}}
 #+macro: run-name {{{get(run-target-short,“,”)}}}
 #+macro: run-target-short {{{get(run-target-short,=,=)}}}
-#+macro: run-target-long {{{get(run-target-long,=,=)}}}
+#+macro: run-target-long {{{get(run-target-short,=bin/,=)}}}
 #+macro: nixos-latest {{{get(nixos-latest)}}}
 #+macro: platforms {{{get(platforms)}}}
 
@@ -554,6 +554,7 @@ nix-env --profile /tmp/nix-profile \
 
 #+RESULTS: nix-env-install
 : installing 'org2gfm'
+: building '/nix/store/hs9xz17vlb2m4qn6kxfmccgjq4jyrvqg-user-environment.drv'...
 
 We can see this installation by querying what's been installed:
 

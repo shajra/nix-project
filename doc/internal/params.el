@@ -9,7 +9,7 @@
  ;; run-name must be the same as run-target-short
  ;; run-type must be "executable"
  (run-target-short     . "org2gfm")
- (run-target-long      . "bin/org2gfm")
+ ;; run-target-long will always prefix "bin/"
  (nix-latest           . "2.19")
  (nixos-latest         . "23.11")
  (platforms            . "\n\
