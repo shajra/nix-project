@@ -211,7 +211,7 @@ nix search nixpkgs 'gpu|opengl|accel' terminal
     * legacyPackages.x86_64-linux.kitty (0.31.0)
       A modern, hackable, featureful, OpenGL based terminal emulator
     
-    * legacyPackages.x86_64-linux.rio (0.0.32)
+    * legacyPackages.x86_64-linux.rio (0.0.33)
       A hardware-accelerated GPU terminal emulator powered by WebGPU
     
     * legacyPackages.x86_64-linux.wezterm (20230712-072601-f4abf8fd)
