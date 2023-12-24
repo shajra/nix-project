@@ -21,7 +21,7 @@ This document explains how to take advantage of software provided by Nix for peo
 
 This project supports a still-experimental feature of Nix called *flakes*, which this guide shows users how to use. [Another guide](nix-usage-noflakes.md) explains how to do everything illustrated in this document, but without flakes.
 
-> **<span class="underline">NOTE:</span>** If you're new to flakes, please read the provided [supplemental introduction to Nix](nix-introduction.md) to understand the experimental nature of flakes and how it may or may not affect you. Hopefully you'll find these trade-offs acceptable so you can take advantage of the improved experience flakes offer.
+> **<span class="underline">NOTE:</span>** If you're new to flakes, please read the provided [supplemental introduction to Nix](nix-introduction.md) to understand the experimental nature of flakes and how it may or may not affect you. Hopefully, you'll find these trade-offs acceptable to take advantage of the improved experience flakes offer.
 
 # How this project uses Nix<a id="sec-2"></a>
 

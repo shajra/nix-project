@@ -39,9 +39,9 @@ The "main" branch of the GitHub repository has the latest released version of
 this code. There is currently no commitment to either forward or backward
 compatibility.
 
-"user/shajra" branches are personal branches that may be force-pushed to. The
-"main" branch should not experience force-pushes and is recommended for
-general use.
+"user/shajra" branches are personal branches that may be force-pushed. The
+"main" branch should not experience force-pushes and is recommended for general
+use.
 
 * License
 
