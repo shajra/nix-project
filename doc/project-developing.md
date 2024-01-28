@@ -19,9 +19,9 @@ This document shows how to get started managing a software project using the fol
 -   an experimental feature of Nix called [flakes](https://nixos.wiki/wiki/Flakes)
 -   this project, Nix-project.
 
-> **<span class="underline">WARNING:</span>** The decision to author projects with an experimental feature such as flakes comes with trade-offs. Please read the provided [supplemental documentation on Nix](nix-introduction.md) if you're unfamiliar with flakes or these trade-offs.
+Nix-project provides library support that helps ease the ergonomics of using Nix with flakes.
 
-Nix-project provides library support that helps ease the ergonomics of using Nix with flakes. This guide attempts to explain Nix-project without obscuring how to use flakes directly.
+> **<span class="underline">NOTE:</span>** To understand more about why to use an experimental feature such as flakes, as well as known trade-offs, please read the provided [supplemental documentation on Nix](nix-introduction.md).
 
 Nix-project uses all the features it provides itself, so you can look through this repository for concrete examples of how to do what's discussed in this document.
 
@@ -29,7 +29,7 @@ Nix-project uses all the features it provides itself, so you can look through th
 
 If you're new to Nix consider reading the provided [introduction](nix-introduction.md).
 
-If you don't have Nix set up yet, see the provided [installation and configuration guide](nix-installation.md). To continue following this development guide, you will need Nix's experimental flakes feature enabled.
+If you don't have Nix set up yet, see the provided [installation and configuration guide](nix-installation.md). You will need Nix's experimental flakes feature enabled to continue following this development guide.
 
 If you don't know how to use basic Nix commands, see the provided [usage guide](nix-usage-flakes.md).
 
@@ -49,7 +49,7 @@ nix --extra-experimental-features nix-command \
 
     SUCCESS: Scaffolded Nix project at /tmp/my-project
 
-The `--refresh` just assures that you get the latest version of the scaffolding script from the internet in case you've made this `nix run` invocation before.
+The `--refresh` assures that you get the latest version of the scaffolding script from the internet if you've made this `nix run` invocation before.
 
 In the freshly scaffolded project, you'll see the following files:
 
@@ -66,9 +66,7 @@ In the freshly scaffolded project, you'll see the following files:
 
 `README.org` and `support/docs-generate` are used to document your project and are discussed in [another document](project-documenting.md).
 
-If you're new to flakes, read the provided [guide on using Nix with flakes](nix-usage-flakes.md). This guide illustrates how end users with flakes can use this scaffolded project.
-
-`default.nix` and `nix/compat.nix` provide non-flakes support for users of your project who have decided not to enable flakes in their Nix installation. These are static files that you shouldn't typically have to modify. They expose the flake defined in `flake.nix` as a Nix expression of packages. The provided [guide on using Nix without flakes](nix-usage-noflakes.md) illustrates how end users without flakes can use the `default.nix` and `nix/compat.nix` files in the scaffolded project.
+`default.nix` and `nix/compat.nix` provide non-flakes support for users of your project who have decided not to enable flakes in their Nix installation. These are static files that you shouldn't typically have to modify. They expose the flake defined in `flake.nix` as a Nix expression of packages. The provided [guide on using Nix without flakes](nix-usage-noflakes.md) illustrates how end users without flakes can use the `default.nix` and `nix/compat.nix` files in the scaffolded project. The [guide on using Nix with flakes](nix-usage-flakes.md) will match other user's experience.
 
 You'll modify the top-level `flake.nix` file and the Nix files under the `nix` directory (with exception of `compat.nix`) to customize the scaffolded project to your needs.
 
@@ -78,14 +76,14 @@ As documented in the provided [introduction to Nix](nix-introduction.md), we're 
 
 -   more assurances of a deterministic and reproducible build
 -   faster evaluation from improved caching
--   an improved ergonomic experience both for authors of Nix projects
--   an improved ergonomic experience both for end users consuming Nix projects
+-   an improved ergonomic experience for authors of Nix projects
+-   an improved ergonomic experience for end users consuming Nix projects
 
 ## Overview of `flake.nix`<a id="sec-4-1"></a>
 
-The best way to start understanding a flakes-based project is to start reading the `flake.nix` file at the project's root. This is written in the Nix language. See the provided [introduction to the Nix language](nix-language.md) if you're new to the language.
+The best way to start understanding a flakes-based project is to read the `flake.nix` file at the project's root. This file is written in the Nix programming language. See the provided [introduction to the Nix language](nix-language.md) if you're new to the language.
 
-Every `flake.nix` file must conform to a standard structure that is an attribute set with three attributes, `description`, `inputs`, and `outputs`. Here's some highlights from the `flake.nix` of our scaffolded project:
+Every `flake.nix` file must conform to a standard structure of an attribute set with three attributes, `description`, `inputs`, and `outputs`. Here are some highlights from the `flake.nix` of our scaffolded project:
 
 ```nix
 {
@@ -108,25 +106,27 @@ The `description` is just a simple textual string.
 
 The scaffolded project has four dependencies:
 
--   [flake-compat](https://github.com/edolstra/flake-compat), to support users not using flakes (`nix/compat.nix`)
--   [flake-parts](https://github.com/hercules-ci/flake-parts), for an improved ergonomic experience when defining flake outputs.
--   nix-project (this project), for document generation (`support/docs-generations`)
--   [nixpkgs](https://github.com/NixOS/nixpkgs), a central library for Nix almost all packages build off of
+-   [`flake-compat`](https://github.com/edolstra/flake-compat), to support users not using flakes (`nix/compat.nix`)
+-   [`flake-parts`](https://github.com/hercules-ci/flake-parts), for an improved ergonomic experience when defining flake outputs.
+-   `nix-project` (this project), for document generation (`support/docs-generations`)
+-   [`nixpkgs`](https://github.com/NixOS/nixpkgs), a central library for Nix almost all packages build off of
 
-The `outputs` attribute is where we specify what our flake provides. We define it as a function. The head of this function is an attribute set mapping input names to their respective outputs. The body of the function return an attribute set of everything our flake provides.
+The `outputs` attribute is where we specify what our flake provides. We define it as a function. The head of this function is an attribute set mapping input names to their respective outputs. The function's body returns an attribute set of everything our flake provides.
 
-The schema of the outputs returned by this function is not strictly enforced by Nix, however some attributes are special with respect to defaults searched by various `nix` subcommands. You can run `nix flake check` to see that your flake passes basic checks, including warnings for any outputs not recognized as standard.
+Note that what is specified in `inputs` describes how to get our dependencies, but this is different from the inputs supplied to the `outputs` function, which are the dependencies themselves.
+
+Nix does not strictly enforce the schema of the outputs returned by `outputs` function. However, some attributes are special with respect to defaults searched by various `nix` subcommands. You can run `nix flake check` to see that your flake passes basic checks, including warnings for any outputs not recognized as standard.
 
 The official Nix documentation doesn't yet have a specification of all standard outputs in one place. The Nix wiki, though, has a [useful section on outputs](https://nixos.wiki/wiki/Flakes#Output_schema).
 
 ## System-specific flake outputs<a id="sec-4-2"></a>
 
-Flakes, by design, disallow the build platform from being queried, even to see which chipset we will be building on. This ensures some portability and reproducibility, but introduces some complexity when defining and accessing flake outputs. For every package, a flake must provide a different output for each system supported.
+Flakes, by design, disallow the build platform from being queried, even to see which chipset we will be building on. This restriction ensures some portability and reproducibility, but introduces some complexity when defining and accessing flake outputs. For every package, a flake must provide a different output for each system supported.
 
-This leads to outputs with attribute paths like
+Flake outputs end up with attribute paths like
 
 -   `packages.<system>.<name>` (how most flakes output packages)
--   `legacyPackages.<system>.<attribute path>` (how Nixpkgs outputs packages)
+-   `legacyPackages.<system>.<attribute path>` (how [Nixpkgs](https://github.com/NixOS/nixpkgs) outputs packages)
 
 You can see all the systems used by Nix with the following command:
 
@@ -136,14 +136,14 @@ nix eval nixpkgs#lib.platforms.all
 
 ## Authoring flake outputs with `flake-parts`<a id="sec-4-3"></a>
 
-Raw flakes are an improvement over not using flakes at all, but using it directly requires some requisite boilerplate. This is why the scaffold pulls in [flake-parts](https://github.com/hercules-ci/flake-parts), which helps in two notable ways:
+Raw flakes are an improvement over not using them, but using flakes without library assistance requires some requisite boilerplate. The scaffold pulls in [`flake-parts`](https://github.com/hercules-ci/flake-parts) reduce this boilerplate with
 
--   it gives us an improved DSL for defining the `outputs` attribute
--   it's extensible so the DSL can be improved by importing *flake modules*.
+-   an improved DSL for defining the `outputs` attribute
+-   a *flake modules* framework to allow users to extend the DSL.
 
-You should eventually read the [official flake-parts documentation](https://flake.parts), but we'll cover an introduction here.
+Below is the fully general way of entering the `flake-parts` DSL:
 
-This is the fully general way of entering the flake-parts DSL:
+You should eventually read the [official `flake-parts` documentation](https://flake.parts), but we'll cover an introduction here.
 
 ```nix
 {
@@ -155,9 +155,9 @@ This is the fully general way of entering the flake-parts DSL:
 }
 ```
 
-Note that bindings we have in scope include our dependencies (bound to `inputs` above) and flake-parts top-level module arguments (bound to the `topLevelModArgs` attribute set above). These are [documented fully in the flake-parts documentation](https://flake.parts/module-arguments.html).
+Note that bindings we have in scope include our dependencies (bound to `inputs` above) and `flake-parts` top-level module arguments (bound to the `topLevelModArgs` attribute set above). These are [documented fully in the `flake-parts` documentation](https://flake.parts/module-arguments.html).
 
-If you don't need the top-level arguments when defining your outputs, you can call flake-parts with a simpler form, as done in the scaffolded project:
+If you don't need the top-level arguments when defining your outputs, you can call `flake-parts` with a more straightforward form (though our scaffolded project uses top-level arguments):
 
 ```nix
 {
@@ -203,11 +203,11 @@ Otherwise, all our system-specific outputs are returned by the function we set f
 -   top-level module arguments (`topLevelModArgs` above)
 -   per-system module arguments (`perSystemModArgs` above)
 
-The per-system module arguments are also [documented fully in the flake-parts documentation](https://flake.parts/module-arguments.html). In general, these arguments help us avoid having to deal with the system we're targeting.
+The per-system module arguments are also [documented fully in the flake-parts documentation](https://flake.parts/module-arguments.html). These arguments help us avoid dealing with the system we're targeting.
 
 For example, one of the per-system arguments is `pkgs`. If you use this argument, you are expected to have Nixpkgs bound as an input to the specially treated `nixpkgs` name.
 
-For example, let's say we wanted to just pass through GNU Hello as our own package. Without `flake-parts` we could do the following:
+For example, let's say we wanted to pass through GNU Hello as a package provided by our project. Without `flake-parts` we could do the following:
 
 ```nix
 {
@@ -224,7 +224,7 @@ For example, let's say we wanted to just pass through GNU Hello as our own packa
 }
 ```
 
-This may not seem that bad when just passing through a package. But we end up with a lot of boilerplate if we wanted to factor out code common code for building a package. It could look as obtuse as the following:
+This example not using `flake-parts` may not seem that bad when just passing through a package. But we end up with a lot of boilerplate if we wanted to factor out code common code for building a package. It could look as obtuse as the following:
 
 ```nix
 {
@@ -264,7 +264,7 @@ Notice how annoying it is to deal with the `system` parameter. Here's what the s
 }
 ```
 
-Hopefully the improvement in this DSL is appreciable upon inspection. We don't have to mess with a parameterization for the system. And merging everything together for each system is done for us.
+Hopefully, the improvement in this DSL is appreciable upon inspection. We don't have to mess with a parameterization for the system. And merging everything for each system is done for us.
 
 In the example above, rather than accessing the `hello` package from the `inputs.nixpkgs` parameter, we get it from the per-system module argument `pkgs`, which looks for `inputs.nixpkgs` by name, and selects out the appropriate `legacyPackages` for whatever system we're targeting (one of those listed in `systems`).
 
@@ -273,7 +273,7 @@ Additionally, in our `perSystem` we set a `packages.my-hello` attribute, and the
 -   `packages.x86_64-linux.my-hello`
 -   `packages.aarch64-darwin.my-hello`
 
-See the [official flake-parts documentation](https://flake.parts/module-arguments.html) for more per-system module arguments available beyond `pkgs`. Particularly useful is `inputs'`, which can be traversed just like `inputs`, but ignoring the system component of the attribute path. So though a little more verbose, we could use `inputs'` instead of `pkgs` as follows:
+See the [official flake-parts documentation](https://flake.parts/module-arguments.html) for more per-system module arguments available beyond `pkgs`. Particularly useful is `inputs'`, which can be traversed just like `inputs`, but ignoring the system component of the attribute path. So, though a little more verbose, we could use `inputs'` instead of `pkgs` as follows:
 
 ```nix
 {
@@ -294,7 +294,7 @@ See the [official flake-parts documentation](https://flake.parts/module-argument
 
 ## Overlays<a id="sec-4-4"></a>
 
-The scaffolded project provides a perspective on how to structure the Nix expressions to build your flake. Nixpkgs is a giant tree of mostly packages. Instances of Nixpkgs can be extended with special functions called *overlays*.
+The scaffolded project provides a perspective on structuring the Nix expressions to build your flake. Nixpkgs is a giant tree that is mainly made of packages. Instances of Nixpkgs can be extended with special functions called *overlays*.
 
 An overlay has the following form:
 
@@ -310,32 +310,29 @@ We start with an instance of Nixpkgs, and can chain overlays:
 (nixpkgs.extend overlay1).extend overlay2
 ```
 
-The `prev` parameter of the overlay allows us to access the version of Nixpkgs the overlay is directly extending. The `final` parameter allows us to access the version of Nixpkgs we'll get when all overlays have been applied.
+The `prev` parameter of the overlay allows us to access the version of Nixpkgs the overlay is directly extending. The `final` parameter enables us to access the version of Nixpkgs we'll get when all overlays have been applied.
 
-For those familiar, `final` is the kind of open recursion we get with the `self` or `this` parameter in object-oriented (OO) languages. Similarly `prev` is like `super`. Similar to OO languages, we can use overlays to override packages referenced from `final` in any other overlay. References from `prev` can only be overridden by previous overlays. Overriding is very powerful because we can override *all* references to a dependency. This helps keep everything in our Nixpkgs instance on the same version for consistency and compatibility.
+For those familiar, `final` is the kind of open recursion we get with the `self` or `this` parameter in object-oriented (OO) languages. Similarly `prev` is like `super`. Similar to OO languages, we can use overlays to override packages referenced from `final` in any other overlay. References from `prev` can only be overridden by previous overlays. Overriding is powerful because we can override *all* references to a dependency. Overriding all references helps keep everything in our Nixpkgs instance on the same version for consistency and compatibility.
 
-A common pattern is to start with Nixpkgs, and extend it with more packages via overlays, until we finally have packages we want to distribute.
+A typical pattern is to start with Nixpkgs, and extend it with more packages via overlays, until we finally have packages we want to distribute.
 
 The scaffolded project has a `nix/overlay.nix` file that defines the overlay distributed by its flake:
 
 ```nix
-inputs:
-
-let get = pkgs: input: name:
-	let system = pkgs.stdenv.hostPlatform.system;
-	in inputs.${input}.packages.${system}.${name};
-
-in final: prev: {
-    nix-project-org2gfm = get final "nix-project" "org2gfm";
+withSystem:
+final: prev:
+let system = prev.stdenv.hostPlatform.system;
+in withSystem system ({ inputs', ... }: {
+    nix-project-org2gfm = inputs'.nix-project.packages.org2gfm;
     my-app = final.callPackage ./my-app.nix {};
-}
+})
 ```
 
-This generator of an overlay takes `inputs` as an argument, so that we can pluck out `nix-project-org2gfm`, which is used by the scaffolded project to generate documentation for itself. Notice that because overlays are common for all target systems, we can't use the `perSystem` assistance of `flake-parts`. This leads to some boilerplate to figure out which system we're targeting from the instance of Nixpkgs we're extending.
+This generator of an overlay takes a `withSystem` function as an argument. We get `withSystem` as a top-level module argument from `flake-parts`. `withSystem` allows access to the `inputs'` attribute set specialized to a specific platform. Within our overlay, we assume that Nixpkgs has already been specialized to a specific platform, which we can get from `prev.stdenv.hostPlatform.system`.
 
 Additionally, the overlay defines a small application using the `callPackage` function from Nixpkgs. This is discussed in the next section.
 
-Remember, anything either in Nixpkgs or provided by an overlay can be overridden by another overlay. If building a package involves building some intermediate artifacts, you might want to expose those artifacts in the distributed overlay. This enables others to use the overlay, but override these intermediate artifacts to get a different build.
+Remember, another overlay can override anything in Nixpkgs or provided by a previous overlay. If building a package involves building some intermediate artifacts, you might want to expose those artifacts in the distributed overlay. Distributing overlays enables others to use the overlay and override these intermediate artifacts to get a different build.
 
 ## Making applications with `callPackage`<a id="sec-4-5"></a>
 
@@ -372,7 +369,7 @@ Some people recognize this kind of utility as *dependency injection*. The `callP
 1.  the function (or path to a Nix file evaluating to it) with dependencies to be injected
 2.  an attribute set to overlay on top of Nixpkgs when looking up dependencies.
 
-Using `final.callPackage`, various package depending on one another can be defined in the same overlay. Here's an example:
+Using `final.callPackage`, various packages that depend on one another can be defined in the same overlay. Here's an example:
 
 ```nix
 final: prev: {
@@ -398,10 +395,10 @@ nix flake update
 
 # Next Steps<a id="sec-6"></a>
 
-This guide and the scaffolded project used as an example, shows how to make packages providing a simple shell script. You will likely want to start making packages for other languages.
+This guide and the scaffolded project used as an example, show how to make packages providing a simple shell script. You will likely want to start making packages for other languages.
 
 Nix has an [official learning starting point](https://nixos.org/learn.html), that is a good next step. In particular, you will find yourself reading the [Nixpkgs manual](https://nixos.org/nixpkgs/manual).
 
-The guides included with this project cover more of the language-general aspects of Nix and Nixpkgs. Each programming language ecosystems has its set of unique requirements and idiosyncrasies. Nixpkgs provide functions to assist with each language, which can lead to some divergent experiences packaging and developing with Nix. The Nixpkgs manual has [dedicated sections for each language](https://nixos.org/manual/nixpkgs/stable/#chap-language-support). Eventually, you will find yourself diving into [Nixpkgs source code](https://github.com/NixOS/nixpkgs).
+The guides included in this project cover more of the language-agnostic aspects of Nix and Nixpkgs. Each programming language ecosystem has its set of unique requirements and idiosyncrasies. Nixpkgs provide functions to assist with each language, which can lead to some divergent experiences when packaging and developing with Nix. The Nixpkgs manual has [dedicated sections for each language](https://nixos.org/manual/nixpkgs/stable/#chap-language-support). Eventually, you will find yourself diving into [Nixpkgs source code](https://github.com/NixOS/nixpkgs).
 
-The Nix ecosystem is vast. This project and documentation illustrates just a small sample of what Nix can do.
+The Nix ecosystem is vast. This project and documentation illustrate just a small sample of what Nix can do.

@@ -88,7 +88,7 @@ OPTIONS:
     -b --path-bin        include /bin on path (perhaps for /bin/sh)
     -e --evaluate        evaluate all SRC blocks before exporting
     -E --no-evaluate     don't evaluate before exporting (default)
-    -N --nix PATH        filepath to 'nix' binary to put on PATH
+    -N --nix PATH        file path to 'nix' binary to put on PATH
     -x --exclude PATTERN exclude matched when searching
     -k --keep-going      don't stop if Babel executes non-zero
     -K --no-keep-going   stop if Babel executes non-zero (default)

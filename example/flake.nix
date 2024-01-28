@@ -9,19 +9,18 @@
     };
 
     outputs = inputs@{ flake-parts, nix-project, ... }:
-        let overlay = import nix/overlay.nix inputs;
-        in flake-parts.lib.mkFlake { inherit inputs; } {
+        flake-parts.lib.mkFlake { inherit inputs; } ({withSystem, config, ... }: {
             systems = [
                 "x86_64-linux"
                 "x86_64-darwin"
                 "aarch64-darwin"
             ];
             perSystem = { pkgs, ... }:
-                let build = pkgs.extend overlay;
+                let build = pkgs.extend config.flake.overlays.default;
                 in {
                     packages = rec {
                         default = my-app;
-                        my-app   = build.my-app;
+                        my-app = build.my-app;
                     };
                     legacyPackages.nixpkgs = build;
                     apps = rec {
@@ -33,7 +32,7 @@
                     };
                 };
             flake = {
-                overlays.default = overlay;
+                overlays.default = import nix/overlay.nix withSystem;
             };
-        };
+        });
 }

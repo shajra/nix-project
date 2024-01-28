@@ -87,7 +87,7 @@ rec {
             if [ -x "$nix_exe" ] \
                 && [ "$("${coreutils}/bin/basename" "$nix_exe")" = "nix" ]
             then PATH="$(path_for "$nix_exe"):$PATH"
-            else die "invalid filepath of 'nix' executable: $nix_exe"
+            else die "invalid file path of 'nix' executable: $nix_exe"
             fi
             export PATH
         }

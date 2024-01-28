@@ -1,10 +1,7 @@
-inputs:
-
-let get = pkgs: input: name:
-        let system = pkgs.stdenv.hostPlatform.system;
-        in inputs.${input}.packages.${system}.${name};
-
-in final: prev: {
-    nix-project-org2gfm = get final "nix-project" "org2gfm";
+withSystem:
+final: prev:
+let system = prev.stdenv.hostPlatform.system;
+in withSystem system ({ inputs', ... }: {
+    nix-project-org2gfm = inputs'.nix-project.packages.org2gfm;
     my-app = final.callPackage ./my-app.nix {};
-}
+})

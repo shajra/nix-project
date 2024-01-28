@@ -16,6 +16,8 @@ Specifically, this project helps
 -   generate Github-oriented documentation with evaluated code blocks
 -   build and distribute packages, binary or otherwise.
 
+There's not a lot of code in Nix-project. Most of the work is done by Nix and third-party libraries. If you scaffolded a new project and removed the dependency on Nix-project, then you'd have a project set up using Nix with recommended practices.
+
 This source's [doc directory](doc) provides a variety of documents to not only help you use this project, but also to get an introduction to the Nix ecosystem.
 
 Among other benefits, Nix gives us an incredible amount of control and repeatability of our software projects. If you don't know much about Nix, consider reading the following provided guides:

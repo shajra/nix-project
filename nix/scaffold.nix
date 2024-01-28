@@ -63,7 +63,7 @@ OPTIONS:
     -h --help            print this help message
     -t --target-dir DIR  directory of project to manage
                           (default: current directory)
-    -N --nix PATH        filepath of 'nix' executable to use
+    -N --nix PATH        file path of 'nix' executable to use
 
     '${progName}' pins all dependencies except for Nix itself,
      which it finds on the path if possible.  Otherwise set

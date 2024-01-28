@@ -3,13 +3,14 @@
 
 * About this document
 
-This document shows a way to document your code with the =org2gfm= script
+This document shows one way to document your code with the =org2gfm= script
 provided by this project, Nix-project. This script converts [[org][Emac's Org-mode]]
 files into [[gfm][GitHub Flavored Markdown (GFM)]]. It can evaluate all source blocks in
-the Org files first to generate results to include in the documentation or check
-that source code snippets work as intended.
+the Org files to generate results to include in the documentation or check that
+source code snippets work as intended.
 
-The document you're reading right now was generated with =org2gfm=.
+If you're reading this document right now as Markdown it was generated with
+=org2gfm=.
 
 As its name indicates, =org2gfm= currently only exports to GFM, so this script
 only applies to projects maintained on GitHub.
@@ -18,37 +19,39 @@ You can install =org2gfm= with Nix to use stand-alone, or you can get the script
 integrated into a Nix-based project scaffolded with Nix-project as discussed in
 the [[file:project-developing.org][project development guide]].
 
-Finally, this document explains =org2gfm='s design decisions, and recommends a
+Finally, this document explains =org2gfm='s design decisions and recommends a
 style for its use.
 
 * About Org2gfm
 
 Documenting programming projects often requires embedding code snippets. We
-often want to check that these snippets are well-formed. Other times we might
-want to process the code to obtain a result to also embed in the document.
+generally want to check that these snippets are well-formed. Other times, we
+might want to process the code to obtain a result to embed in the document.
 
 Some may recognize this as similar to [[litprog][literate programming]]. The Emacs text
 editor has long has long shipped with a feature called [[org][Org-mode]] used for this
 kind of documentation. The Org-mode input files used by =org2gfm= are
-more-or-less a human-readable markdown files, though they support a lot of
+more-or-less human-readable markdown files, though they support a lot of
 features for document processing.
 
-To avoid having to bring up an entire text editor, just to generate
-documentation, Emacs can be run in a headless mode from the command-line. This
-is what =org2gfm= does. The script manages the execution of Emacs on the user's
-behalf.
+Emacs can be run in a headless mode from the command-line to avoid bringing up
+an entire text editor to generate documentation. This is what =org2gfm= does.
+The script manages the execution of Emacs on the user's behalf.
 
-Because =org2gfm= is provided by Nix, its instance of Emacs is safely isolated
-and hidden from any other instance of Emacs a user might have installed
-otherwise. This is helpful because instances of Emacs can be finicky to keep
-configured correctly.
+Because Nix provides =org2gfm= and all its dependencies, its instance of Emacs
+is safely isolated and hidden from any other instance of Emacs a user might have
+installed otherwise.  This isolation is helpful because instances of Emacs can
+be finicky to keep configured correctly.
 
-We can also call =org2gfm= with an invocation of =nix shell= to make sure our
+We can also call =org2gfm= with an invocation of =nix shell= to ensure our
 documentation is executed in a controlled environment. This way, any commands
-referenced by code snippets can be guaranteed to be on =PATH=. This makes
-documentation generation even more repeatable, regardless of which machine we
-generate documentation on. New projects scaffolded with Nix-project are set up
-this way to call =org2gfm= with =nix shell=.
+referenced by code snippets can be guaranteed to be on =PATH=. This sandboxing
+makes documentation generation even more repeatable, regardless of which machine
+we generate documentation on. New projects scaffolded with Nix-project are set
+up this way to call =org2gfm= with =nix shell=.
+
+The =org2gfm= is very small.  Most of the work is done by Emacs.  The script
+mainly simplifies the complexity of configuring and running Emacs.
 
 * Prerequisites
 
@@ -74,9 +77,9 @@ Nix-project (this project), see the [[file:project-developing.org][project devel
 
 ** Calling =org2gfm= directly
 
-You can call =org2gfm= directly both with and without flakes. Using flakes, you
-can run =org2gfm= directly from GitHub with =nix shell= without even installing
-=org2gfm=:
+You can call =org2gfm= directly, either with or without flakes. Using flakes,
+you can run =org2gfm= directly from GitHub with =nix shell= without even
+installing =org2gfm=:
 
 #+begin_src sh :eval no
 nix --extra-experimental-features 'nix-command flakes' \
@@ -98,7 +101,7 @@ By default, =org2gfm= finds all Org files recursively from the current directory
 and exports each one to a sibling Markdown file.
 
 If called with the =--evaluate= switch, the code snippets in the Org file
-are evaluated, changing the Org file in-place.
+are evaluated, changing the Org file in place.
 
 #+begin_quote
 *_WARNING_*: Since =org2gfm --evaluate= writes over files in-place, source
@@ -110,11 +113,11 @@ specified as positional arguments, or the =--exclude= switch can be used to
 exclude filenames matching a regular expression.
 
 We can use the =--ignore-environment= of =nix search= to sandbox execution of
-=org2gfm=. This clears out all environment variables. If we want to keep a few,
-we can use =nix search='s =--keep= switch.
+=org2gfm=. Sandboxing clears out all environment variables. If we want to keep a
+few, we can use =nix shell='s =--keep= switch.
 
-If we want more packages on the path than just =org2gfm= we can reference more
-flake packages. Here's an example:
+If we want more packages on the path than =org2gfm= we can reference more flake
+packages. Here's an example:
 
 #+begin_src sh :eval no
 nix --extra-experimental-features 'nix-command flakes' \
@@ -129,11 +132,11 @@ nix --extra-experimental-features 'nix-command flakes' \
 
 #+RESULTS:
 
-Here we're running the latest released version of =org2gfm= found on GitHub in a
-sandboxed environment. Only the =LANG= and =LOCALE_ARCHIVE= environment
+Here, we're running the latest released version of =org2gfm= found on GitHub in
+a sandboxed environment. Only the =LANG= and =LOCALE_ARCHIVE= environment
 variables are kept from the calling environment. The only tools on the path are
-=org2gfm= and a variety of Unix tools provided by the =coreutils= package which
-is take from the latest =nixpkgs-unstable= release of Nixpkgs.
+=org2gfm= and a variety of Unix tools provided by the =coreutils= package, which
+is taken from the latest =nixpkgs-unstable= release of Nixpkgs.
 
 You can still use =org2gfm= if you have decided not to enable =flakes=
 experimental feature. However, you should still use =nix-command=. Here's an
@@ -151,17 +154,16 @@ nix --extra-experimental-features 'nix-command' \
     --command org2gfm --evaluate
 #+end_src
 
-Note when using =nix shell= with the =--file= we need all the packages for our
+Note when using =nix shell= with the =--file=, we need all the packages for our
 sandbox to come from a single file (we can only use =--file= once). As a
 convenience, the Nix-project's =default.nix= file (accessed directly from a
 tarball retrieved from GitHub above) includes a snapshot of the latest stable
-release of Nixpkgs. We access this under =currentSystem.legacyPackages.nixpkgs=,
-as illustrated above.
+release of Nixpkgs. As illustrated above, we access this under
+=currentSystem.legacyPackages.nixpkgs=.
 
-If you need packages beyond what's provided in the Nixpkgs snapshot, you will
-need to create your own Nix expression in a file including everything you need
-for your =nix shell= execution. Explaining how is beyond the scope of this
-document.
+If you need packages beyond what's provided in the Nixpkgs snapshot, you need to
+create your own Nix expression in a file, including everything you need for your
+=nix shell= execution. Explaining how is beyond the scope of this document.
 
 ** Using =org2gfm= from a project scaffolded by Nix-project
 
@@ -190,33 +192,40 @@ the sandbox.
 
 * Org2gfm design
 
-The =org2gfm= script provided by this project constrains the full flexibility of
-[[org][Emac's Org-mode]], particularly with respect to evaluation and exporting. This
-section discusses the design of =org2gfm= and how to use it as intended.
+The =org2gfm= script provided by this project constrains the total flexibility
+of [[org][Emac's Org-mode]], particularly with respect to evaluation and
+exporting. This section discusses the design of =org2gfm= and how to use it as
+intended.
 
 ** GitHub Flavored Markdown (GFM) exporting only
 
 One obvious constraint of Org2gfm is that it only exports [[gfm][GitHub Flavored
-Markdown (GFM)]]. This assumes that all projects are hosted on GitHub, but if
-they are then GitHub's online rendering of markdown files is the first
-documentation a user encounters when finding the code. It's nice to make sure
-users find great documentation next to the code itself.
+Markdown (GFM)]]. Many projects are hosted on GitHub, and GitHub's online
+rendering of Markdown files is the first documentation a user encounters.  We
+want to ensure that users find excellent documentation next to the code.
+
+** All evaluation should exit non-zero
+
+=org2gfm= will halt with an error if any code block exits with a non-zero
+status.  If you want to illustrate an error condition, you should handle it in
+the code block.  This way, the user has confidence that they can reproduce the
+code block successfully, even when illustrating an error case.
 
 ** No evaluation when exporting
 
-With vanilla Org-mode, You can evaluate source blocks within the original Org
-files. But when you export the Org files to another format evaluation occurs
-again. This can be confusing, because side-effecting functions (even the =date=
-command), can lead to different evaluations between the Org file and the
-exported file. By convention, we can try to minimize and manage these
-differences, but it's tedious to have to look at two files to check if
-side-effects have caused a problem in one file, but not another.
+You can evaluate source blocks within the original Org files with vanilla
+Org-mode. But when you export the Org files to another format, the evaluation
+occurs again.  This reevaluation can be confusing because side-effecting
+functions (even the =date= command) can lead to different evaluations between
+the Org and the exported files. By convention, we can try to minimize and manage
+these differences, but it's tedious to look at two files to check if
+side-effects have caused a problem in one file but not another.
 
 Instead, =org2gfm= adds ~(:eval . "no-export")~ to
 ~org-babel-default-header-args~, which makes a global default of disabling all
 evaluation during exporting. This way, we do all of our evaluations in the Org
 file, and these evaluated source blocks and their result blocks are exported
-verbatim. Code or results exported in the markdown file should also exist in the
+verbatim. Code or results exported in the Markdown file should also exist in the
 Org file. However, not everything in the Org file needs to be exported.
 
 The ~org-babel-default-header-args~ setting is just a default. If you like, you
@@ -224,16 +233,16 @@ can always override this default with explicit header arguments.
 
 * Org2gfm recommended usage for source blocks
 
-It can be confusing figuring out [[org-blocks-src][how Org-mode processes source blocks]].
-Hopefully, the defaults of =org2gfm= simplifies our usage.
+Figuring out [[org-blocks-src][how Org-mode processes source blocks]] can be confusing.  Hopefully,
+the defaults of =org2gfm= simplify our usage.
 
-The following process to decide on arguments covers a good majority of common
-cases. For less common cases, you still have the full array of all header
-arguments supported by Org-mode.
+The following process to decide on arguments covers the most common cases. For
+less common cases, you still have the full array of all header arguments
+supported by Org-mode.
 
 ** Evaluation of source blocks
 
-To start, for each source block, we have to chose how it evaluates, which we
+To start, for each source block, we have to choose how it evaluates, which we
 typically control with ~:eval~ header arguments:
 
 | ~:eval~ Header Argument | Evaluated in Org file       | Evaluated in export |
@@ -242,14 +251,14 @@ typically control with ~:eval~ header arguments:
 | ~:eval no~              | no                          | no                  |
 | ~:eval yes~             | yes                         | yes                 |
 
-If you call =org2gfm= with the =--evaluate= switch, then all sources will be
+If you call =org2gfm= with the =--evaluate= switch, all sources will be
 evaluated unless the block is explicitly set ~:eval no~. Without this switch,
-=org2gfm= performs no evaluation at all.
+=org2gfm= does not evaluate at all.
 
-In general, we'd like to avoid using ~:eval yes~, because it leads to the
+In general, we'd like to avoid using ~:eval yes~ because it leads to the
 possibility of our exported files unexpectedly differing from our source Org
-files. However, there are some instances where evaluation during export makes
-sense, for instance when taking advantage of [[org-blocks-src-noweb][Noweb expansion]] in exporting.
+files.  However, there are some instances where evaluation during export makes
+sense, for example, when taking advantage of [[org-blocks-src-noweb][Noweb expansion]] in exporting.
 
 The official Org-mode documentation covers [[org-blocks-src-eval][more options for evaluation]].
 
@@ -258,7 +267,7 @@ The official Org-mode documentation covers [[org-blocks-src-eval][more options f
 There are a lot of options for controlling the [[org-blocks-src-results][results of an evaluated source
 block]] with the ~:results~ header.
 
-Note that if not evaluating a block (for example with ~:eval no~), you don't
+Note that if not evaluating a block (for example, with ~:eval no~), you don't
 need the ~:results~ header at all.
 
 Here are typical ways to use the ~:result~ header:
@@ -272,20 +281,33 @@ Here are typical ways to use the ~:result~ header:
 
 When evaluating source code, we need to consider whether the results are
 collected as the value we get after evaluating the code as an expression, or
-whether the results are collected from standard output as a side effect. For
-instance, consider Python's ~print("hello")~. The returned value of printing is
-Python's ~None~. But when the code is executed we can collect the string "hello"
-from standard output.
+whether the results are collected from standard output as a side effect.
+Consider Python's ~print("hello")~. The returned value of printing is Python's
+~None~. But when the code is executed, we can collect the string "hello" from
+standard output.
 
 We also want to decide whether our results are placed below the evaluated source
-block in the Org file, replacing old results if there. This is done by default.
-Otherwise, with ~silent~ we can evaluate the source block, but not render the
-results for the reader.
+block in the Org file, replacing old results if there. This replacement is done
+by default.  Otherwise, with ~silent~, we can evaluate the source block but not
+render the results for the reader.
+
+A helpful tip is to name all your evaluating source blocks that have not been
+silenced.  This is done with "name" line above the source block:
+
+#+begin_example
+#+name: whoami
+#+begin_src sh :results output :exports both
+whoami
+#+end_src
+#+end_example
+
+When you name a source block, you will get better error reporting by =org2gfm=
+if a source block exits with a non-zero result.
 
 ** Exporting source blocks
 
-Finally we decide what will be exported into the markdown file. Fortunately, the
-[[org-blocks-src-export][options for the ~:exports~ header argument]] are more straight-forward:
+Finally, we decide what to export into the Markdown file. Fortunately, the
+[[org-blocks-src-export][options for the ~:exports~ header argument]] are more straightforward:
 
 | ~:exports~ Header Argument | Exports                    |
 |----------------------------+----------------------------|
@@ -294,10 +316,9 @@ Finally we decide what will be exported into the markdown file. Fortunately, the
 | ~:exports none~            | nothing                    |
 | ~:exports results~         | results only (less common) |
 
-Note that by design, =org2gfm= only exports code or results of source blocks
-that exist in the Org file (since there's no evaluation of the export). So
-~:results silent :exports both~ will only output code, because there's no
-results to export.
+Note that by design, =org2gfm= only exports code or results of source blocks in
+the Org file (since there's no evaluation of the export). So ~:results silent
+:exports both~ will only output code, because there are no results to export.
 
 Also, note that you can prevent exporting of entire subtrees by [[org-tags][tagging]] headings
 in an outline with [[org-export-settings][~noexport~]].
