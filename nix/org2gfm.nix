@@ -68,7 +68,7 @@ ERR_REGEX="$ERR_REGEX\|^Unable to resolve link"
 ERR_REGEX="$ERR_REGEX\|^Debugger entered--Lisp error"
 
 
-. "${nix-project-lib.scripts.scriptCommon}/share/nix-project/common.bash"
+. "${nix-project-lib.scripts.scriptCommon}/share/nix-project/common.sh"
 
 print_usage()
 {

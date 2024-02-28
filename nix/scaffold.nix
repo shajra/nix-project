@@ -47,7 +47,7 @@ NIX_EXE="$(command -v nix || true)"
 TARGET_DIR="$(pwd)"
 
 
-. "${nix-project-lib.scripts.scriptCommon}/share/nix-project/common.bash"
+. "${nix-project-lib.scripts.scriptCommon}/share/nix-project/common.sh"
 
 print_usage()
 {

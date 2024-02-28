@@ -61,7 +61,7 @@ rec {
     writeShellCheckedShareLib = name: packagePath:
         { meta ? {}
         , baseName ? name
-        , dialect ? "bash"
+        , dialect ? "sh"
         }:
         body:
         writeShellChecked name {
@@ -83,11 +83,10 @@ rec {
         ''
         add_nix_to_path()
         {
-            local nix_exe="$1"
-            if [ -x "$nix_exe" ] \
-                && [ "$("${coreutils}/bin/basename" "$nix_exe")" = "nix" ]
-            then PATH="$(path_for "$nix_exe"):$PATH"
-            else die "invalid file path of 'nix' executable: $nix_exe"
+            if [ -x "$1" ] \
+                && [ "$("${coreutils}/bin/basename" "$1")" = "nix" ]
+            then PATH="$(path_for "$1"):$PATH"
+            else die "invalid file path of 'nix' executable: $1"
             fi
             export PATH
         }
