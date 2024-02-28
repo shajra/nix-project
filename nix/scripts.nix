@@ -77,7 +77,10 @@ rec {
 
     scriptCommon = writeShellCheckedShareLib
         "nix-project-lib-common" "nix-project" {
-            meta.description = "Common Bash functions";
+            # DESIGN: keeping these POSIX-compliant so they can be used in Dash
+            # scripts as well.  If functions that really need Bash come up, they
+            # can go in another common module.
+            meta.description = "Common POSIX-compliant functions";
             baseName = "common";
         }
         ''
