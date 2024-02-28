@@ -111,7 +111,7 @@ We can use `nix flake show` to see the outputs provided by any flake, local or r
 nix flake show .
 ```
 
-    git+file:///home/tnks/src/shajra/nix-project
+    git+file:///home/shajra/src/nix-project
     ├───apps
     │   ├───aarch64-darwin
     …
@@ -429,8 +429,8 @@ nix profile list
 
     Index:              0
     Flake attribute:    packages.x86_64-linux.org2gfm
-    Original flake URL: git+file:///home/tnks/src/shajra/nix-project
-    Locked flake URL:   git+file:///home/tnks/src/shajra/nix-project
+    Original flake URL: git+file:///home/shajra/src/nix-project
+    Locked flake URL:   git+file:///home/shajra/src/nix-project
     Store paths:        /nix/store/fqybp0zzx1wjn9bwz2h8vy37pscgjc7a-org2gfm
 
 If we want to uninstall a program from our profile, we do so by the index from this list:
