@@ -26,8 +26,8 @@ two user guides:
 - [[file:nix-usage-flakes.org][Nix Usage with Flakes (Recommended) ]]
 - [[file:nix-usage-noflakes.org][Nix Usage without Flakes]]
 
-Links generally steer users to the recommended guide, which then links users to
-the non-flakes guide if they have the interest or need.
+Links generally steer users to the recommended flakes guide, which then links
+users to the non-flakes guide if they have the interest or need.
 
 The non-flakes guide intentionally avoids commands like =nix-shell= and
 =nix-channel=. These commands lead users to set the =NIX_PATH= environment
