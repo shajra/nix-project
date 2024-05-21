@@ -97,7 +97,7 @@ nix registry list
 
 For example, rather than referencing the flake on the `nixpkgs-unstable` branch of the Nixpkgs GitHub repository with `github:NixOS/nixpkgs/nixpkgs-unstable`, we can use the simpler identifier `nixpkgs`.
 
-If we want to point to a different branch but still use an identifier from the registry, we can do so by extending it with the branch. For example, the flakes identifier `nixpkgs` is the same as `nixpkgs/nixpkgs-ustable`, but we can also use `nixpkgs/nixos-23.11` to override the branch and point to the NixOS 23.11 release branch.
+If we want to point to a different branch but still use an identifier from the registry, we can do so by extending it with the branch. For example, the flakes identifier `nixpkgs` is the same as `nixpkgs/nixpkgs-ustable`, but we can also use `nixpkgs/nixos-24.05` to override the branch and point to the NixOS 24.05 release branch.
 
 Note that registries have mutable references, but Nix knows how to rebuild the snapshot referenced for some of these references deterministically. For example, when referencing a GitHub repository via a registry reference, Nix will take note of the commit ID of the snapshot retrieved. Nix typically stores this information required for reproducibility in a *lock file* called `flake.lock` adjacent to `flake.nix`.
 
@@ -225,13 +225,13 @@ nix search nixpkgs 'gpu|opengl|accel' terminal | ansifilter
 If we're curious about what version of WezTerm is available in NixOS's latest release, we can specialize the installable we're searching as follows:
 
 ```sh
-nix search nixpkgs/nixos-23.11#wezterm
+nix search nixpkgs/nixos-24.05#wezterm
 ```
 
-    * legacyPackages.x86_64-linux.wezterm (20230712-072601-f4abf8fd)
+    * legacyPackages.x86_64-linux.wezterm (20240203-110809-5046fc22)
       GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust
 
-Here `/nixos-23.11` overrides the default `nixpkgs-unstable` branch of the registry entry, and the `#wezterm` suffix searches not just the flake, but a specific package named `wezterm`, which will either be found or not (there's no need for regexes to filter further).
+Here `/nixos-24.05` overrides the default `nixpkgs-unstable` branch of the registry entry, and the `#wezterm` suffix searches not just the flake, but a specific package named `wezterm`, which will either be found or not (there's no need for regexes to filter further).
 
 You may also notice that the Nixpkgs flake outputs packages under the `legacyPackages` attribute instead of the `packages`. The primary difference is that packages are flatly organized under `packages`, while `legacyPackages` can be an arbitrary tree. `legacyPackages` exists specifically for the Nixpkgs project, a central project to the Nix ecosystem that has existed long before flakes. Beyond Nixpkgs, you don't have to think much about `legacyPackages`. Packages from all other flakes should generally be found under `packages`.
 
@@ -268,7 +268,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/v18ldhbax1lb3nfngnqwhmlb2q3xn74s-org2gfm
+    /nix/store/1rvrv83fswn96pgn7f5zyh96j4v36hlc-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -290,7 +290,7 @@ It's common to configure these “result” symlinks as ignored in source contro
 nix path-info .#org2gfm
 ```
 
-    /nix/store/v18ldhbax1lb3nfngnqwhmlb2q3xn74s-org2gfm
+    /nix/store/1rvrv83fswn96pgn7f5zyh96j4v36hlc-org2gfm
 
 ## Running commands in a shell<a id="sec-4-6"></a>
 
@@ -403,7 +403,7 @@ nix shell --ignore-environment \
     --command which org2gfm
 ```
 
-    /nix/store/v18ldhbax1lb3nfngnqwhmlb2q3xn74s-org2gfm/bin/org2gfm
+    /nix/store/1rvrv83fswn96pgn7f5zyh96j4v36hlc-org2gfm/bin/org2gfm
 
 What we do with local flake references can work just as well with remote flake references.
 
@@ -431,7 +431,7 @@ nix profile list
     Flake attribute:    packages.x86_64-linux.org2gfm
     Original flake URL: git+file:///home/shajra/src/nix-project
     Locked flake URL:   git+file:///home/shajra/src/nix-project
-    Store paths:        /nix/store/v18ldhbax1lb3nfngnqwhmlb2q3xn74s-org2gfm
+    Store paths:        /nix/store/1rvrv83fswn96pgn7f5zyh96j4v36hlc-org2gfm
 
 If we want to uninstall a program from our profile, we do so by the index from this list:
 

@@ -62,7 +62,7 @@ KEEP_GOING=false
 EXCLUDE_ARGS=()
 QUERY_ANSWER=
 
-ERR_REGEX="^Babel evaluation exited"
+ERR_REGEX="^Babel evaluation exited with code [1-9]"
 ERR_REGEX="$ERR_REGEX\|^No org-babel-execute function"
 ERR_REGEX="$ERR_REGEX\|^Unable to resolve link"
 ERR_REGEX="$ERR_REGEX\|^Debugger entered--Lisp error"

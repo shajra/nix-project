@@ -89,13 +89,13 @@ Every `flake.nix` file must conform to a standard structure of an attribute set 
 {
     description = "A foundation to build Nix-based projects from.";
     inputs = {
-	flake-compat    = { url = "github:edolstra/flake-compat"; flake = false; };
-	flake-parts.url = "github:hercules-ci/flake-parts";
-	nix-project.url = "github:shajra/nix-project";
-	nixpkgs.url     = "github:NixOS/nixpkgs/nixos-23.11";
+        flake-compat    = { url = "github:edolstra/flake-compat"; flake = false; };
+        flake-parts.url = "github:hercules-ci/flake-parts";
+        nix-project.url = "github:shajra/nix-project";
+        nixpkgs.url     = "github:NixOS/nixpkgs/nixos-24.05";
     };
     outputs = inputs@{ flake-parts, nix-project, ... }:
-	# …
+        # …
     ;
 }
 ```
@@ -149,9 +149,9 @@ You should eventually read the [official `flake-parts` documentation](https://fl
 {
     # …
     outputs = inputs@{ flake-parts, ... }:
-	flake-parts.lib.mkFlake { inherit inputs; } (topLevelModArgs: {
-	    # …
-	});
+        flake-parts.lib.mkFlake { inherit inputs; } (topLevelModArgs: {
+            # …
+        });
 }
 ```
 
@@ -163,9 +163,9 @@ If you don't need the top-level arguments when defining your outputs, you can ca
 {
     # …
     outputs = inputs@{ flake-parts, ... }:
-	flake-parts.lib.mkFlake { inherit inputs; } {
-	    # …
-	};
+        flake-parts.lib.mkFlake { inherit inputs; } {
+            # …
+        };
 }
 ```
 
@@ -181,17 +181,17 @@ In practice, this looks something like the following:
 {
     # …
     outputs = inputs@{ flake-parts, ... }:
-	flake-parts.lib.mkFlake { inherit inputs; } (topLevelModArgs: {
-	    systems = [
-		# …
-	    ];
-	    perSystem = perSystemModArgs: {
-		# …
-	    };
-	    flake = {
-		# …
-	    };
-	});
+        flake-parts.lib.mkFlake { inherit inputs; } (topLevelModArgs: {
+            systems = [
+                # …
+            ];
+            perSystem = perSystemModArgs: {
+                # …
+            };
+            flake = {
+                # …
+            };
+        });
 }
 ```
 
@@ -213,13 +213,13 @@ For example, let's say we wanted to pass through GNU Hello as a package provided
 {
     description = "Without flake-parts";
     inputs = {
-	nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     };
     outputs = inputs: {
-	packages.x86_64-linux.my-hello  =
-	    inputs.nixpkgs.legacyPackages.x86_64-linux.hello;
-	packages.aarch64-darwin.my-hello =
-	    inputs.nixpkgs.legacyPackages.aarch64-darwin.hello;
+        packages.x86_64-linux.my-hello  =
+            inputs.nixpkgs.legacyPackages.x86_64-linux.hello;
+        packages.aarch64-darwin.my-hello =
+            inputs.nixpkgs.legacyPackages.aarch64-darwin.hello;
     };
 }
 ```
@@ -230,18 +230,18 @@ This example not using `flake-parts` may not seem that bad when just passing thr
 {
     description = "Motivating flake-parts";
     inputs = {
-	nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     };
     outputs = inputs:
-	let lib = inputs.nixpkgs.lib;
-	    systems = [ "x86_64-linux" "aarch64-darwin" ];
-	    build = system: {
-		${system}.my-hello =
-		    inputs.nixpkgs.legacyPackages.${system}.hello;
-	    };
-	    packages =
-		lib.foldr lib.recursiveUpdate {} (map build systems);
-	in { inherit packages; };
+        let lib = inputs.nixpkgs.lib;
+            systems = [ "x86_64-linux" "aarch64-darwin" ];
+            build = system: {
+                ${system}.my-hello =
+                    inputs.nixpkgs.legacyPackages.${system}.hello;
+            };
+            packages =
+                lib.foldr lib.recursiveUpdate {} (map build systems);
+        in { inherit packages; };
 }
 ```
 
@@ -251,16 +251,16 @@ Notice how annoying it is to deal with the `system` parameter. Here's what the s
 {
     description = "Illustrating flake-parts";
     inputs = {
-	flake-parts.url = "github:hercules-ci/flake-parts";
-	nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+        flake-parts.url = "github:hercules-ci/flake-parts";
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     };
     outputs = inputs@{ flake-parts, ... }:
-	flake-parts.lib.mkFlake { inherit inputs; } {
-	    systems = [ "x86_64-linux" "aarch64-darwin" ];
-	    perSystem = { pkgs, ... }: {
-		packages.my-hello = pkgs.hello;
-	    };
-	};
+        flake-parts.lib.mkFlake { inherit inputs; } {
+            systems = [ "x86_64-linux" "aarch64-darwin" ];
+            perSystem = { pkgs, ... }: {
+                packages.my-hello = pkgs.hello;
+            };
+        };
 }
 ```
 
@@ -279,16 +279,16 @@ See the [official flake-parts documentation](https://flake.parts/module-argument
 {
     description = "Illustrating flake-parts";
     inputs = {
-	flake-parts.url = "github:hercules-ci/flake-parts";
-	nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+        flake-parts.url = "github:hercules-ci/flake-parts";
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     };
     outputs = inputs@{ flake-parts, ... }:
-	flake-parts.lib.mkFlake { inherit inputs; } {
-	    systems = [ "x86_64-linux" "aarch64-darwin" ];
-	    perSystem = { inputs', ... }: {
-		packages.my-hello = inputs'.nixpkgs.legacyPackages.hello;
-	    };
-	};
+        flake-parts.lib.mkFlake { inherit inputs; } {
+            systems = [ "x86_64-linux" "aarch64-darwin" ];
+            perSystem = { inputs', ... }: {
+                packages.my-hello = inputs'.nixpkgs.legacyPackages.hello;
+            };
+        };
 }
 ```
 
@@ -348,7 +348,7 @@ writeShellApplication {
     name = "my-app";
     runtimeInputs = [ curl w3m ];
     text = ''
-	curl -s 'https://nixos.org' | w3m -dump -T text/html
+        curl -s 'https://nixos.org' | w3m -dump -T text/html
     '';
 }
 ```
