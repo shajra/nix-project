@@ -103,7 +103,7 @@ Since the latest release of Nix is already at 2.22, if you installed Nix recentl
 nix --version
 ```
 
-    nix (Nix) 2.18.1
+    nix (Nix) 2.18.2
 
 The easiest way to turn on experimental features is to create a file `~/.config/nix/nix.conf` if it doesn't already exist, and in it, put the following line:
 
