@@ -10,7 +10,7 @@
  ;; run-type must be "executable"
  (run-target-short     . "org2gfm")
  ;; run-target-long will always prefix "bin/"
- (nix-latest           . "2.22")
+ (nix-latest           . "2.23")
  (nixos-latest         . "24.05")
  (platforms            . "\n\
 - Linux on x86-64 machines\n\
