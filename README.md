@@ -5,6 +5,8 @@
 
 [![img](https://github.com/shajra/nix-project/workflows/CI/badge.svg)](https://github.com/shajra/nix-project/actions)
 
+[![img](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fgarnix.io%2Fapi%2Fbadges%2Fshajra%2Fnix-project%3Fbranch%3Dmain)](https://garnix.io)
+
 # About this project<a id="sec-1"></a>
 
 This project, Nix-project, assists the setup of other projects with the [Nix package manager](https://nixos.org/nix) leaning on [flakes](https://nixos.wiki/wiki/Flakes), an experimental Nix feature.

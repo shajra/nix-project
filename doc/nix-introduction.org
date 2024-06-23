@@ -152,10 +152,10 @@ What makes Nix unique is that these expressions specify a way to build that's
 - guaranteed not to conflict with anything already installed
 
 For some, it's easy to miss the degree to which Nix-built packages are precise
-and repeatable. If you build a package from a Nix expression on one system and
-then build the same expression on a system of the same architecture, you should
-get the same result. In most cases, the built artifacts will be identical
-bit-for-bit.
+and repeatable. Nix builds in highly controlled sandbox environments. If you
+build a package from a Nix expression on one system and then build the same
+expression on a system of the same architecture, you should get the same result.
+In many cases, the built artifacts will be identical bit-for-bit.
 
 A system of thorough hashing accomplishes this degree of precision. In Nix, the
 dependencies needed to build packages are also themselves Nix packages.  Every
@@ -171,12 +171,13 @@ builds more easily without worrying about deviations in environment
 configuration.
 
 Nix has a central substituter at https://cache.nixos.org, but there are
-third-party ones as well, like [[cachix][Cachix]]. Before building a package, the hash for
-the package is calculated. If any configured substituter has a build for the
-hash, it's pulled down as a substitute. A certificate-based protocol is used to
-establish the trust of substituters. Between this protocol and the algorithm for
-calculating hashes in Nix, you can have confidence that a package pulled from a
-substituter will be identical to what you would have built locally.
+third-party ones as well, like [[cachix][Cachix]] and [[garnix][Garnix]]. Before building a package, the
+hash for the package is calculated. If any configured substituter has a build
+for the hash, it's pulled down as a substitute. A certificate-based protocol is
+used to establish the trust of substituters. Between this protocol and the
+algorithm for calculating hashes in Nix, you can have confidence that a package
+pulled from a substituter will be equivalent to what you would have built
+locally.
 
 Finally, all packages are stored in =/nix/store= by their hash. This simple
 scheme allows us to install multiple versions of the same package without

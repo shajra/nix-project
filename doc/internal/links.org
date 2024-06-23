@@ -1,6 +1,7 @@
 #+link: cachix https://cachix.org
 #+link: docstring https://en.wikipedia.org/wiki/Docstring
 #+link: fhs https://www.pathname.com/fhs/
+#+link: garnix https://garnix.io/docs/caching
 #+link: gfm https://github.github.com/gfm/
 #+link: github-actions https://github.com/shajra/nix-project/actions
 #+link: litprog https://en.wikipedia.org/wiki/Literate_programming
