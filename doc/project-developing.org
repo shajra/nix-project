@@ -65,7 +65,7 @@ writable directory and invoke the following =nix= call:
 #+begin_src sh :eval no
 nix --extra-experimental-features nix-command \
     --refresh run github:shajra/nix-project/main#nix-scaffold \
-    -- --target-dir my-project
+    -- --target-dir /tmp/my-project  # or whereever you like
 #+end_src
 
 #+name: scaffold

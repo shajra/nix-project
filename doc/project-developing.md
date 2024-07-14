@@ -44,7 +44,7 @@ If you want to scaffold a new project set up similarly, you can go into a writab
 ```sh
 nix --extra-experimental-features nix-command \
     --refresh run github:shajra/nix-project/main#nix-scaffold \
-    -- --target-dir my-project
+    -- --target-dir /tmp/my-project  # or whereever you like
 ```
 
     SUCCESS: Scaffolded Nix project at /tmp/my-project
