@@ -2,7 +2,6 @@
 #+link: docstring https://en.wikipedia.org/wiki/Docstring
 #+link: fhs https://www.pathname.com/fhs/
 #+link: garnix https://garnix.io
-#+link: garnix-config https://garnix.io/docs/caching
 #+link: gfm https://github.github.com/gfm/
 #+link: litprog https://en.wikipedia.org/wiki/Literate_programming
 #+link: nix https://nixos.org/nix
