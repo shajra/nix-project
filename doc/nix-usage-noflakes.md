@@ -80,13 +80,13 @@ We can use an `--extra-experimental-features nix-command` switch to use an exper
 nix --extra-experimental-features nix-command search --file . ''
 ```
 
-    * legacyPackages.aarch64-darwin.ci
-    
-    * legacyPackages.x86_64-darwin.ci
-    
-    * legacyPackages.x86_64-linux.ci
-    
     * packages.aarch64-darwin.nix-scaffold
+      Script to scaffold a Nix project
+    
+    * packages.aarch64-darwin.org2gfm
+      Script to export Org-mode files to GitHub Flavored Markdown (GFM)
+    
+    * packages.x86_64-darwin.nix-scaffold
       Script to scaffold a Nix project
     
     …
@@ -119,14 +119,14 @@ nix --extra-experimental-features \
 ```
 
     {
-      "legacyPackages.aarch64-darwin.ci": {
-        "description": "",
-        "pname": "nix-project-ci",
+      "packages.aarch64-darwin.nix-scaffold": {
+        "description": "Script to scaffold a Nix project",
+        "pname": "nix-scaffold",
         "version": ""
       },
-      "legacyPackages.x86_64-darwin.ci": {
-        "description": "",
-        "pname": "nix-project-ci",
+      "packages.aarch64-darwin.org2gfm": {
+        "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
+        "pname": "org2gfm",
     …
 
 Additional data includes the package's name (from the “pname” field), a version string, and a textual description of the package.
@@ -305,6 +305,7 @@ nix-env --install --file . --attr packages.x86_64-linux.org2gfm 2>&1
 ```
 
     installing 'org2gfm'
+    building '/nix/store/hs9xz17vlb2m4qn6kxfmccgjq4jyrvqg-user-environment.drv'...
 
 We can see this installation by querying what's been installed:
 

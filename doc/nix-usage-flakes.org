@@ -304,8 +304,6 @@ nix search . | ansifilter
 : 
 : * packages.x86_64-linux.org2gfm
 :   Script to export Org-mode files to GitHub Flavored Markdown (GFM)
-: 
-: * legacyPackages.x86_64-linux.ci
 
 If a flake has a lot of packages, you can pass regexes to prune down the search.
 Returned values will match all the regexes provided.
