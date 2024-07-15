@@ -31,7 +31,6 @@
                         nix-scaffold = build.nix-project-scaffold;
                     };
                     checks.ci              = build.nix-project-ci;
-                    legacyPackages.ci      = build.nix-project-ci;
                     legacyPackages.lib     = build.nix-project-lib;
                     legacyPackages.nixpkgs = nixpkgs;
                     apps = rec {
