@@ -438,7 +438,7 @@ readlink result*
 #+end_src
 
 #+RESULTS: nix-build-link
-: /nix/store/bbwha5hip8nz5w73h43pz8z7h92ydlsf-org2gfm
+: /nix/store/xy83cwqla6rp9y25cninwrai0av1dcdm-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -467,7 +467,7 @@ nix path-info .#<<get("package-attr-short")>>
 #+end_src
 
 #+results: nix-build-path
-: /nix/store/bbwha5hip8nz5w73h43pz8z7h92ydlsf-org2gfm
+: /nix/store/xy83cwqla6rp9y25cninwrai0av1dcdm-org2gfm
 
 ** Running commands in a shell
 
@@ -629,7 +629,7 @@ nix shell --ignore-environment \
 #+end_src
 
 #+RESULTS: nix-shell-remote
-: /nix/store/bbwha5hip8nz5w73h43pz8z7h92ydlsf-org2gfm/bin/org2gfm
+: /nix/store/xy83cwqla6rp9y25cninwrai0av1dcdm-org2gfm/bin/org2gfm
 
 What we do with local flake references can work just as well with remote flake
 references.
@@ -680,7 +680,7 @@ nix profile list --profile /tmp/nix-profile | ansifilter
 : Flake attribute:    packages.x86_64-linux.org2gfm
 : Original flake URL: git+file:///home/shajra/src/nix-project
 : Locked flake URL:   git+file:///home/shajra/src/nix-project
-: Store paths:        /nix/store/bbwha5hip8nz5w73h43pz8z7h92ydlsf-org2gfm
+: Store paths:        /nix/store/xy83cwqla6rp9y25cninwrai0av1dcdm-org2gfm
 
 If we want to uninstall a program from our profile, we do so by the index from
 this list:
