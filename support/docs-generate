@@ -14,7 +14,7 @@ nix shell \
     .#nixpkgs.stable.gnutar \
     .#nixpkgs.stable.gzip \
     .#nixpkgs.stable.jq \
-    .#nixpkgs.stable.nixfmt \
+    .#nixpkgs.stable.nixfmt-rfc-style \
     .#nixpkgs.stable.tree \
     --command \
     org2gfm \
