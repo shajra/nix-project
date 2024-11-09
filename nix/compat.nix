@@ -5,7 +5,7 @@ let
     sha256 = lock.nodes.flake-compat.locked.narHash;
     flake-compat = import (fetchTarball { inherit url sha256; });
     compat = flake-compat { src = ../.; };
-    defaultNix = compat.defaultNix;
+    inherit (compat) defaultNix;
     defNixOutNames = builtins.attrNames defaultNix;
     augmentDefNix = acc: name:
         let output = defaultNix.${name};

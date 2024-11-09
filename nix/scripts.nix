@@ -41,7 +41,7 @@ rec {
         let
             pathSuffix = if pathPure then "" else ":$PATH";
             pathDecl =
-                if isNull path
+                if (path == null)
                 then ""
                 else "PATH=\"" + lib.makeBinPath path + pathSuffix + "\"";
         in
