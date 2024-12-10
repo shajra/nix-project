@@ -77,7 +77,7 @@ Though experimental, the command `nix search` is safe and helpful. Just be aware
 We can use an `--extra-experimental-features nix-command` switch to use an experimental feature with `nix` for a single call. Putting this all together, this is how we'd search the provided `default.nix` file:
 
 ```sh
-nix --extra-experimental-features nix-command search --file . ''
+nix --extra-experimental-features nix-command search --file . '' ^
 ```
 
     * packages.aarch64-darwin.nix-scaffold
@@ -97,11 +97,13 @@ If you have disabled the `nix-command` feature, and typing out `nix --extra-expe
 alias nix-new = nix --extra-experimental-features 'nix-command'
 ```
 
-Passing in `--file .` tells `nix search` to get the attribute tree to search from the `default.nix` file in the current directory. The positional argument is the attribute path to start the search from within this tree. An empty string indicates to start at the root of the tree.
+Passing in `--file .` tells `nix search` to get the attribute tree to search from the `default.nix` file in the current directory.
+
+The first positional argument is the attribute path to start the search from within this tree. An empty string indicates to start at the root of the tree.
+
+Remaining arguments are regexes to filter our search results with. Above we've passed `^` to match everything and return all results.
 
 Note, there are some projects for which `nix search` won't work. These projects require extra approaches to work with `nix search` that are beyond the scope of this document. You can still navigate these projects' attribute tree with `nix repl`. Or you can try to read the source code of the Nix expressions.
-
-We can filter search results down by supplying regexes as an additional position parameters:
 
 ```sh
 nix --extra-experimental-features nix-command \
@@ -115,7 +117,7 @@ We can also use `--json` to get more details about found packages:
 
 ```sh
 nix --extra-experimental-features \
-    nix-command search --json --file . '' | jq .
+    nix-command search --json --file . '' ^ | jq .
 ```
 
     {
@@ -234,11 +236,11 @@ Remember, the package's *name* is not the same as the *attribute* used to select
 
 ```sh
 nix --extra-experimental-features \
-    nix-command search --file . '' --json 'packages.x86_64-linux.org2gfm' | jq .
+    nix-command search --file . --json 'packages.x86_64-linux.org2gfm' ^ | jq .
 ```
 
     {
-      "packages.x86_64-linux.org2gfm": {
+      "": {
         "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
         "pname": "org2gfm",
         "version": ""
@@ -305,6 +307,7 @@ nix-env --install --file . --attr packages.x86_64-linux.org2gfm 2>&1
 ```
 
     installing 'org2gfm'
+    building '/nix/store/hs9xz17vlb2m4qn6kxfmccgjq4jyrvqg-user-environment.drv'...
 
 We can see this installation by querying what's been installed:
 

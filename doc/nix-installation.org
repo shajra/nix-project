@@ -217,4 +217,7 @@ nix show-config experimental-features
 #+end_src
 
 #+RESULTS: nix-show-config
-: flakes nix-command
+: fetch-tree flakes nix-command
+
+Note that the =fetch-tree= experimental feature is required and automatically
+enabled with the enablement of =flakes=.
