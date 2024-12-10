@@ -150,4 +150,6 @@ Then you should see that the appropriate features are enabled:
 nix show-config experimental-features
 ```
 
+    fetch-tree flakes nix-command
+
 Note that the `fetch-tree` experimental feature is required and automatically enabled with the enablement of `flakes`.
