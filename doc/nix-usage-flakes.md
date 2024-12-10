@@ -431,16 +431,10 @@ nix profile list
     Locked flake URL:   git+file:///home/shajra/src/nix-project
     Store paths:        /nix/store/islqrpxqp250lq2f8mda3jfngbcm280l-org2gfm
 
-If we want to uninstall a program from our profile, we do so by the index from this list:
+If we want to uninstall a program from our profile, we can reference it by name:
 
 ```sh
-nix profile remove 0
-```
-
-We can also provide a regex matching the full attribute path of the flake:
-
-```sh
-nix profile remove '.*org2gfm'
+nix profile remove org2gfm
 ```
 
 Also, if you look at the symlink-resolved location for your profile, you'll see that Nix retains the symlink trees of previous generations of your profile. You can even roll back to an earlier profile with the `nix profile rollback` subcommand. You can delete old generations of your profile with the `nix profile wipe-history` subcommand.
