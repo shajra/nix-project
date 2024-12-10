@@ -14,5 +14,5 @@ let
         in { ${outputName} = found; } // acc;
     currentSystem = builtins.foldl' augmentDefNix {} defNixOutNames;
 in compat // {
-    defaultNix = compat.defaultNix // { inherit currentSystem; };
+    defaultNix = compat.defaultNix; # // { inherit currentSystem; };
 }

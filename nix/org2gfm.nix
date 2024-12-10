@@ -1,5 +1,5 @@
 { coreutils
-, emacsWithPackages
+, emacs
 , fd
 , git
 , gnugrep
@@ -11,7 +11,7 @@
 
 let
 
-    emacs = emacsWithPackages (epkgs: [
+    emacsWithPkgs = emacs.pkgs.withPackages (epkgs: [
         epkgs.melpaStablePackages.dash
         epkgs.melpaStablePackages.f
         epkgs.melpaStablePackages.ox-gfm
@@ -225,7 +225,7 @@ generate_gfm_file()
         "$KEEP_GOING" \
             || "${gnugrep}/bin/grep" --invert-match --quiet \
                 "$ERR_REGEX" <(echo "$line")
-    done < <("${emacs}/bin/emacs" \
+    done < <("${emacsWithPkgs}/bin/emacs" \
         --batch \
         --kill \
         --load ${init} \

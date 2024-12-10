@@ -305,7 +305,7 @@ nix-build --attr <<get("package-attr-long")>> .
 #+end_src
 
 #+RESULTS: nix-build
-: /nix/store/0hrm7139k2h5chl74bw0issgaxib361b-org2gfm
+: /nix/store/islqrpxqp250lq2f8mda3jfngbcm280l-org2gfm
 
 If we omit the path to a Nix file, =nix-build= will try to build =default.nix=
 in the current directory. If we omit the =--attr= switch and argument,
@@ -328,7 +328,7 @@ readlink result*
 #+end_src
 
 #+RESULTS: nix-build-link
-: /nix/store/0hrm7139k2h5chl74bw0issgaxib361b-org2gfm
+: /nix/store/islqrpxqp250lq2f8mda3jfngbcm280l-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -490,7 +490,7 @@ the =--file= switch. For example, here we reference a tarball of the
 #+begin_src sh :eval no :noweb yes
 nix --extra-experimental-features 'nix-command' \
     run \
-    --file https://github.com/NixOS/nixpkgs/archive/<<get("nixos-latest")>>.tar.gz \
+    --file https://github.com/NixOS/nixpkgs/archive/nixos-<<get("nixos-latest")>>.tar.gz \
     hello
 #+end_src
 
@@ -498,7 +498,7 @@ nix --extra-experimental-features 'nix-command' \
 #+begin_src sh :results output :exports results :noweb yes
 nix --experimental-features 'nix-command' \
     run \
-    --file https://github.com/NixOS/nixpkgs/archive/<<get("nixos-latest")>>.tar.gz \
+    --file https://github.com/NixOS/nixpkgs/archive/nixos-<<get("nixos-latest")>>.tar.gz \
     hello
 #+end_src
 
@@ -557,7 +557,6 @@ nix-env --profile /tmp/nix-profile \
 
 #+RESULTS: nix-env-install
 : installing 'org2gfm'
-: building '/nix/store/hs9xz17vlb2m4qn6kxfmccgjq4jyrvqg-user-environment.drv'...
 
 We can see this installation by querying what's been installed:
 

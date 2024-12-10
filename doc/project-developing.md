@@ -92,7 +92,7 @@ Every `flake.nix` file must conform to a standard structure of an attribute set 
         flake-compat    = { url = "github:edolstra/flake-compat"; flake = false; };
         flake-parts.url = "github:hercules-ci/flake-parts";
         nix-project.url = "github:shajra/nix-project";
-        nixpkgs.url     = "github:NixOS/nixpkgs/nixos-24.05";
+        nixpkgs.url     = "github:NixOS/nixpkgs/nixos-24.11";
     };
     outputs = inputs@{ flake-parts, nix-project, ... }:
         # …
@@ -213,7 +213,7 @@ For example, let's say we wanted to pass through GNU Hello as a package provided
 {
     description = "Without flake-parts";
     inputs = {
-        nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     };
     outputs = inputs: {
         packages.x86_64-linux.my-hello  =
@@ -230,7 +230,7 @@ This example not using `flake-parts` may not seem that bad when just passing thr
 {
     description = "Motivating flake-parts";
     inputs = {
-        nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     };
     outputs = inputs:
         let lib = inputs.nixpkgs.lib;
@@ -252,7 +252,7 @@ Notice how annoying it is to deal with the `system` parameter. Here's what the s
     description = "Illustrating flake-parts";
     inputs = {
         flake-parts.url = "github:hercules-ci/flake-parts";
-        nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     };
     outputs = inputs@{ flake-parts, ... }:
         flake-parts.lib.mkFlake { inherit inputs; } {
@@ -280,7 +280,7 @@ See the [official flake-parts documentation](https://flake.parts/module-argument
     description = "Illustrating flake-parts";
     inputs = {
         flake-parts.url = "github:hercules-ci/flake-parts";
-        nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     };
     outputs = inputs@{ flake-parts, ... }:
         flake-parts.lib.mkFlake { inherit inputs; } {
