@@ -306,7 +306,7 @@ nix-build --attr <<get("package-attr-long")>> .
 #+end_src
 
 #+RESULTS: nix-build
-: /nix/store/41lr0s3di6pck4g8kjp3a1xlmlp0widw-org2gfm
+: /nix/store/rvcljbncyshda3gif0mlmr37c50sqpj3-org2gfm
 
 If we omit the path to a Nix file, =nix-build= will try to build =default.nix=
 in the current directory. If we omit the =--attr= switch and argument,
@@ -329,7 +329,7 @@ readlink result*
 #+end_src
 
 #+RESULTS: nix-build-link
-: /nix/store/41lr0s3di6pck4g8kjp3a1xlmlp0widw-org2gfm
+: /nix/store/rvcljbncyshda3gif0mlmr37c50sqpj3-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -558,6 +558,7 @@ nix-env --profile /tmp/nix-profile \
 
 #+RESULTS: nix-env-install
 : installing 'org2gfm'
+: building '/nix/store/hs9xz17vlb2m4qn6kxfmccgjq4jyrvqg-user-environment.drv'...
 
 We can see this installation by querying what's been installed:
 
