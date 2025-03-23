@@ -23,8 +23,8 @@ updating to the latest dependencies with =nix flake update=).
 To deal with the transition of the Nix community to flake, this project provides
 two user guides:
 
-- [[file:nix-usage-flakes.org][Nix Usage with Flakes (Recommended) ]]
-- [[file:nix-usage-noflakes.org][Nix Usage without Flakes]]
+- [[file:../nix-usage-flakes.org][Nix Usage with Flakes (Recommended) ]]
+- [[file:../nix-usage-noflakes.org][Nix Usage without Flakes]]
 
 Links generally steer users to the recommended flakes guide, which then links
 users to the non-flakes guide if they have the interest or need.
