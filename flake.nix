@@ -5,8 +5,8 @@
         flake-compat.url          = "https://flakehub.com/f/edolstra/flake-compat/*.tar.gz";
         flake-parts.url           = "github:hercules-ci/flake-parts";
         nixpkgs-master.url        = "github:NixOS/nixpkgs/master";
-        nixpkgs-stable-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
-        nixpkgs-stable-linux.url  = "github:NixOS/nixpkgs/nixos-24.11";
+        nixpkgs-stable-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
+        nixpkgs-stable-linux.url  = "github:NixOS/nixpkgs/nixos-25.05";
         nixpkgs-unstable.url      = "github:NixOS/nixpkgs/nixpkgs-unstable";
         ox-gfm            = { url = "github:syl20bnr/ox-gfm"; flake = false; };
     };
