@@ -266,7 +266,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/9p1fr5fwax4ycqmf6dl9sypn2gwqr37w-org2gfm
+    /nix/store/apbjhdlirasx68s2ba0xlp7gjn081vk8-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -288,7 +288,7 @@ It's common to configure these “result” symlinks as ignored in source contro
 nix path-info .#org2gfm
 ```
 
-    /nix/store/9p1fr5fwax4ycqmf6dl9sypn2gwqr37w-org2gfm
+    /nix/store/apbjhdlirasx68s2ba0xlp7gjn081vk8-org2gfm
 
 ## Running commands in a shell<a id="sec-4-6"></a>
 
@@ -401,7 +401,7 @@ nix shell --ignore-environment \
     --command which org2gfm
 ```
 
-    /nix/store/9p1fr5fwax4ycqmf6dl9sypn2gwqr37w-org2gfm/bin/org2gfm
+    /nix/store/apbjhdlirasx68s2ba0xlp7gjn081vk8-org2gfm/bin/org2gfm
 
 What we do with local flake references can work just as well with remote flake references.
 
@@ -429,7 +429,7 @@ nix profile list
     Flake attribute:    packages.x86_64-linux.org2gfm
     Original flake URL: git+file:///home/shajra/src/nix-project
     Locked flake URL:   git+file:///home/shajra/src/nix-project
-    Store paths:        /nix/store/9p1fr5fwax4ycqmf6dl9sypn2gwqr37w-org2gfm
+    Store paths:        /nix/store/apbjhdlirasx68s2ba0xlp7gjn081vk8-org2gfm
 
 If we want to uninstall a program from our profile, we can reference it by name:
 
