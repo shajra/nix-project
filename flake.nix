@@ -38,6 +38,7 @@
                         nix-scaffold = {
                             type = "app";
                             program = "${build.nix-project-scaffold}/bin/nix-scaffold";
+                            inherit (build.nix-project-scaffold) meta;
                         };
                     };
                     lib = build.nix-project-lib;
