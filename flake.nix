@@ -30,9 +30,6 @@
                         org2gfm      = build.nix-project-org2gfm;
                         nix-scaffold = build.nix-project-scaffold;
                     };
-                    checks.ci              = build.nix-project-ci;
-                    legacyPackages.lib     = build.nix-project-lib;
-                    legacyPackages.nixpkgs = nixpkgs;
                     apps = rec {
                         default = nix-scaffold;
                         nix-scaffold = {
@@ -42,6 +39,9 @@
                         };
                     };
                     lib = build.nix-project-lib;
+                    checks.ci              = build.nix-project-ci;
+                    legacyPackages.lib     = build.nix-project-lib;
+                    legacyPackages.nixpkgs = nixpkgs;
                 };
             flake = {
                 overlays.default = overlay;
