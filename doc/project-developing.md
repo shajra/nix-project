@@ -319,13 +319,17 @@ A typical pattern is to start with Nixpkgs, and extend it with more packages via
 The scaffolded project has a `nix/overlay.nix` file that defines the overlay distributed by its flake:
 
 ```nix
-withSystem:
-final: prev:
-let inherit (prev.stdenv.hostPlatform) system;
-in withSystem system ({ inputs', ... }: {
+withSystem: final: prev:
+let
+  inherit (prev.stdenv.hostPlatform) system;
+in
+withSystem system (
+  { inputs', ... }:
+  {
     nix-project-org2gfm = inputs'.nix-project.packages.org2gfm;
-    my-app = final.callPackage ./my-app.nix {};
-})
+    my-app = final.callPackage ./my-app.nix { };
+  }
+)
 ```
 
 This generator of an overlay takes a `withSystem` function as an argument. We get `withSystem` as a top-level module argument from `flake-parts`. `withSystem` allows access to the `inputs'` attribute set specialized to a specific platform. Within our overlay, we assume that Nixpkgs has already been specialized to a specific platform, which we can get from `prev.stdenv.hostPlatform.system`.
@@ -339,17 +343,21 @@ Remember, another overlay can override anything in Nixpkgs or provided by a prev
 The scaffolded project contains the definition of an application in `nix/my-app.nix`, which has been written in a conventional style:
 
 ```nix
-{ writeShellApplication
-, curl
-, w3m
+{
+  writeShellApplication,
+  curl,
+  w3m,
 }:
 
 writeShellApplication {
-    name = "my-app";
-    runtimeInputs = [ curl w3m ];
-    text = ''
-        curl -s 'https://nixos.org' | w3m -dump -T text/html
-    '';
+  name = "my-app";
+  runtimeInputs = [
+    curl
+    w3m
+  ];
+  text = ''
+    curl -s 'https://nixos.org' | w3m -dump -T text/html
+  '';
 }
 ```
 
