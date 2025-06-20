@@ -115,8 +115,6 @@ nix flake show .
     ├───apps
     │   ├───aarch64-darwin
     …
-    │   └───x86_64-linux: package 'treefmt'
-    ├───legacyPackages
     │   ├───aarch64-darwin omitted (use '--legacy' to show)
     │   ├───x86_64-darwin omitted (use '--legacy' to show)
     │   └───x86_64-linux omitted (use '--legacy' to show)
@@ -125,16 +123,18 @@ nix flake show .
     │   └───default: Nixpkgs overlay
     ├───packages
     │   ├───aarch64-darwin
-    │   │   ├───nix-scaffold omitted (use '--all-systems' to show)
+    │   │   ├───default omitted (use '--all-systems' to show)
     │   │   └───org2gfm omitted (use '--all-systems' to show)
     │   ├───x86_64-darwin
-    │   │   ├───nix-scaffold omitted (use '--all-systems' to show)
+    │   │   ├───default omitted (use '--all-systems' to show)
     │   │   └───org2gfm omitted (use '--all-systems' to show)
     │   └───x86_64-linux
-    │       ├───nix-scaffold: package 'nix-scaffold'
+    │       ├───default: package 'org2gfm'
     │       └───org2gfm: package 'org2gfm'
     └───templates
-        └───default: template: A starter project using shajra/nix-project.
+        ├───default: template: Starter project including hercules-ci/flake-parts.
+        ├───less: template: Starter project with less third-party dependencies
+        └───more: template: Starter project including hercules-ci/flake-parts.
 
 Flake outputs are organized in a tree of *attributes*. References to paths of attributes are dot-delimited. There is a standard schema for the output attribute tree of a flake. Nix permits outputs outside this schema.
 
@@ -180,11 +180,11 @@ We can use the `nix search` command to see what package derivations a flake cont
 nix search . ^
 ```
 
-    * packages.x86_64-linux.nix-scaffold
-      Script to scaffold a Nix project
+    * packages.x86_64-linux.default
+      Exports Org-mode files to GitHub Flavored Markdown (GFM)
     
     * packages.x86_64-linux.org2gfm
-      Script to export Org-mode files to GitHub Flavored Markdown (GFM)
+      Exports Org-mode files to GitHub Flavored Markdown (GFM)
 
 We're required to pass regexes as final arguments to prune down the search. Above we've passed `^` to match everything and return all results.
 
@@ -237,8 +237,11 @@ You may also notice that the Nixpkgs flake outputs packages under the `legacyPac
 
 The following result is one returned by our prior execution of `nix search .`:
 
+    * packages.x86_64-linux.default
+      Exports Org-mode files to GitHub Flavored Markdown (GFM)
+    
     * packages.x86_64-linux.org2gfm
-      Script to export Org-mode files to GitHub Flavored Markdown (GFM)
+      Exports Org-mode files to GitHub Flavored Markdown (GFM)
 
 We can see that a package can be accessed with the `packages.x86_64-linux.org2gfm` output attribute path of the project's flake. Not shown in the search results above, this package happens to provide the executable `bin/org2gfm`.
 
@@ -266,7 +269,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/3ir8vj507wqwpl97kkpdfzwph393iiwm-org2gfm
+    /nix/store/vyvcmfrz5knphhhf0p9h8h0c693hqicw-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -288,7 +291,7 @@ It's common to configure these “result” symlinks as ignored in source contro
 nix path-info .#org2gfm
 ```
 
-    /nix/store/3ir8vj507wqwpl97kkpdfzwph393iiwm-org2gfm
+    /nix/store/vyvcmfrz5knphhhf0p9h8h0c693hqicw-org2gfm
 
 ## Running commands in a shell<a id="sec-4-6"></a>
 
@@ -369,7 +372,7 @@ nix search --json .#org2gfm ^ | jq .
 
     {
       "packages.x86_64-linux.org2gfm": {
-        "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
+        "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
         "pname": "org2gfm",
         "version": ""
     …
@@ -401,7 +404,7 @@ nix shell --ignore-environment \
     --command which org2gfm
 ```
 
-    /nix/store/3ir8vj507wqwpl97kkpdfzwph393iiwm-org2gfm/bin/org2gfm
+    /nix/store/vyvcmfrz5knphhhf0p9h8h0c693hqicw-org2gfm/bin/org2gfm
 
 What we do with local flake references can work just as well with remote flake references.
 
@@ -429,7 +432,7 @@ nix profile list
     Flake attribute:    packages.x86_64-linux.org2gfm
     Original flake URL: git+file:///home/shajra/src/nix-project
     Locked flake URL:   git+file:///home/shajra/src/nix-project
-    Store paths:        /nix/store/3ir8vj507wqwpl97kkpdfzwph393iiwm-org2gfm
+    Store paths:        /nix/store/vyvcmfrz5knphhhf0p9h8h0c693hqicw-org2gfm
 
 If we want to uninstall a program from our profile, we can reference it by name:
 

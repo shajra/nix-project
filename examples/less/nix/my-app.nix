@@ -6,6 +6,7 @@
 
 writeShellApplication {
   name = "my-app";
+  meta.description = "Example application";
   runtimeInputs = [
     curl
     w3m

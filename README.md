@@ -16,23 +16,25 @@ Specifically, this project helps
 -   scaffold new projects
 -   maintain dependencies, which may mix different language ecosystems
 -   generate Github-oriented documentation with evaluated code blocks
--   build and distribute packages, binary or otherwise.
+-   build and distribute packages, binary or otherwise
+-   document Nix and recommended practices for absolute beginners.
 
-There's not a lot of code in Nix-project. Most of the work is done by Nix and third-party libraries. If you scaffolded a new project and removed the dependency on Nix-project, then you'd have a project set up using Nix with recommended practices.
+There's not a lot of code in Nix-project. Most of the work is done by Nix and third-party libraries. If you scaffolded a new project and removed the dependency on Nix-project, then you'd have a small project set up using Nix with recommended practices.
 
 This source's [doc directory](doc) provides a variety of documents to not only help you use this project, but also to get an introduction to the Nix ecosystem.
 
 Among other benefits, Nix gives us an incredible amount of control and repeatability of our software projects. If you don't know much about Nix, consider reading the following provided guides:
 
--   [Introduction to Nix and motivations to use it](doc/nix-introduction.md)
--   [Nix installation and configuration guide](doc/nix-installation.md)
--   [Nix end-user guide](doc/nix-usage-flakes.md)
--   [Introduction to the Nix programming language](doc/nix-language.md)
+-   [Introduction to Nix and Motivations to Use It](doc/nix-introduction.md)
+-   [Nix Installation and Configuration Guide](doc/nix-installation.md)
+-   [Nix End-user Guide](doc/nix-usage-flakes.md)
+-   [Introduction to the Nix Programming Language](doc/nix-language.md)
 
-If you know something about Nix, then these documents will help you get started using this project:
+If you already know Nix basics, then these documents will help you get started using Nix-project:
 
--   [Developing a Nix project with Nix-Project](doc/project-developing.md)
--   [Documenting a Nix project with Nix-project](doc/project-documenting.md)
+-   [Flakes Basics Development Guide](doc/project-developing-basics.md)
+-   [Flake Module (with `flake-parts`) Development Guide](doc/project-developing-modules.md)
+-   [Documenting a Nix Project with Nix-project](doc/project-documenting.md)
 
 # Release<a id="sec-2"></a>
 

@@ -1,4 +1,4 @@
-#+title: Nix Setup and Usage without Flakes
+#+title: Nix End-user Guide with Flakes
 #+setupfile: internal/links.org
 
 * Org-mode setup :noexport:
@@ -171,14 +171,14 @@ nix --experimental-features nix-command search --file . '' ^ | ansifilter
 
 #+RESULTS: nix-search-local
 #+begin_example
-,* packages.aarch64-darwin.nix-scaffold
-  Script to scaffold a Nix project
+,* default
+  Exports Org-mode files to GitHub Flavored Markdown (GFM)
+
+,* packages.aarch64-darwin.default
+  Exports Org-mode files to GitHub Flavored Markdown (GFM)
 
 ,* packages.aarch64-darwin.org2gfm
-  Script to export Org-mode files to GitHub Flavored Markdown (GFM)
-
-,* packages.x86_64-darwin.nix-scaffold
-  Script to scaffold a Nix project
+  Exports Org-mode files to GitHub Flavored Markdown (GFM)
 
 …
 #+end_example
@@ -217,8 +217,11 @@ nix --experimental-features nix-command \
 #+end_src
 
 #+RESULTS: nix-search-filtered
+: * packages.x86_64-linux.default
+:   Exports Org-mode files to GitHub Flavored Markdown (GFM)
+: 
 : * packages.x86_64-linux.org2gfm
-:   Script to export Org-mode files to GitHub Flavored Markdown (GFM)
+:   Exports Org-mode files to GitHub Flavored Markdown (GFM)
 
 We can also use =--json= to get more details about found packages:
 
@@ -236,13 +239,13 @@ nix --experimental-features \
 #+RESULTS: nix-search-json
 #+begin_example
 {
-  "packages.aarch64-darwin.nix-scaffold": {
-    "description": "Script to scaffold a Nix project",
-    "pname": "nix-scaffold",
+  "default": {
+    "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
+    "pname": "org2gfm",
     "version": ""
   },
-  "packages.aarch64-darwin.org2gfm": {
-    "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
+  "packages.aarch64-darwin.default": {
+    "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
     "pname": "org2gfm",
 …
 #+end_example
@@ -287,7 +290,7 @@ nix --experimental-features 'nix-command' \
 #+RESULTS: nix-search-specific
 : {
 :   "packages.x86_64-linux.org2gfm": {
-:     "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
+:     "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
 :     "pname": "org2gfm",
 :     "version": ""
 :   }
@@ -306,7 +309,7 @@ nix-build --attr <<get("package-attr-long")>> .
 #+end_src
 
 #+RESULTS: nix-build
-: /nix/store/3ir8vj507wqwpl97kkpdfzwph393iiwm-org2gfm
+: /nix/store/vyvcmfrz5knphhhf0p9h8h0c693hqicw-org2gfm
 
 If we omit the path to a Nix file, =nix-build= will try to build =default.nix=
 in the current directory. If we omit the =--attr= switch and argument,
@@ -329,7 +332,7 @@ readlink result*
 #+end_src
 
 #+RESULTS: nix-build-link
-: /nix/store/3ir8vj507wqwpl97kkpdfzwph393iiwm-org2gfm
+: /nix/store/vyvcmfrz5knphhhf0p9h8h0c693hqicw-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -440,7 +443,7 @@ nix --experimental-features \
 #+RESULTS: nix-search-run
 : {
 :   "": {
-:     "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
+:     "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
 :     "pname": "org2gfm",
 :     "version": ""
 :   }
@@ -594,13 +597,20 @@ nix --experimental-features nix-command \
 #+end_src
 
 #+RESULTS: nix-search-2
-: {
-:   "packages.x86_64-linux.org2gfm": {
-:     "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
-:     "pname": "org2gfm",
-:     "version": ""
-:   }
-: }
+#+begin_example
+{
+  "packages.x86_64-linux.default": {
+    "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
+    "pname": "org2gfm",
+    "version": ""
+  },
+  "packages.x86_64-linux.org2gfm": {
+    "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
+    "pname": "org2gfm",
+    "version": ""
+  }
+}
+#+end_example
 
 And if we want to uninstall a program from our active profile, we do so by the
 package's name (“pname” above), in this case {{{package-name}}}:

@@ -1,0 +1,42 @@
+#+title: Example Nix Flake-based Project Using Less
+#+link: _org https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html
+#+link: _nix-project https://github.com/shajra/nix-project
+#+link: _flake-utils https://github.com/numtide/flake-utils
+#+link: _flake-parts https://flake.parts/
+#+link: _nix-project https://github.com/shajra/nix-project
+
+This is a skeleton project illustrating how to use [[_nix-project][shajra/nix-project]] to
+build/maintain software projects with Nix, but without library assistance like
+[[_flake-utils][flake-utils]] or [[_flake-parts][flake-parts]].
+
+This project has been configured to set up a developer environment, which you
+can enter by with =nix develop=, which enters an interactive shell.  In this
+shell, you'll find a few commands set up on the =PATH=:
+
+#+begin_example
+❯ menu
+
+[[general commands]]
+
+  menu            - prints this menu
+  project-check   - run all checks/tests/linters
+  project-doc-gen - generate Github Markdown from Org files
+  project-format  - format all files in one command
+#+end_example
+
+These tools can be called with no arguments for reasonable defaults.
+
+=project-doc-gen= notably executes source blocks, as it processes [[_org][Emacs Org-mode]]
+files (such as this =README.org= file). The results are written to the Org-mode
+files in-place, as well as included in the generated GitHub-flavored Markdown
+file.
+
+Here's an example source block illustrating evaluation of =whoami=:
+
+#+name: whoami
+#+begin_src sh :results output :exports both
+whoami
+#+end_src
+
+Check this repository into source control, enter a developer environment, and
+run =project-doc-gen= to see what changes documentation generation makes.

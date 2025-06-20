@@ -9,7 +9,6 @@
     nixpkgs-stable-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
     nixpkgs-stable-linux.url = "github:NixOS/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     ox-gfm = {
       url = "github:syl20bnr/ox-gfm";
@@ -20,12 +19,15 @@
   outputs =
     inputs@{ flake-parts, ... }:
     let
+      inherit (flake-parts.lib) importApply;
       overlay = import nix/overlay.nix inputs;
+      module-org2gfm = importApply ./nix/module/org2gfm.nix inputs;
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         nix/module/lib-persystem.nix
         nix/module/nixpkgs.nix
+        module-org2gfm
         inputs.devshell.flakeModule
         inputs.treefmt-nix.flakeModule
       ];
@@ -40,46 +42,100 @@
           build = nixpkgs.stable.extend overlay;
         in
         {
-          packages = {
+          _module.args.pkgs = nixpkgs.stable;
+          packages = rec {
+            default = org2gfm;
             org2gfm = build.nix-project-org2gfm;
-            nix-scaffold = build.nix-project-scaffold;
           };
           apps = rec {
-            default = nix-scaffold;
-            nix-scaffold = {
+            default = org2gfm;
+            org2gfm = {
               type = "app";
-              program = "${build.nix-project-scaffold}/bin/nix-scaffold";
-              inherit (build.nix-project-scaffold) meta;
+              program = "${build.nix-project-org2gfm}/bin/org2gfm";
             };
           };
           lib = build.nix-project-lib;
-          checks.ci = build.nix-project-ci;
+          checks.build = build.nix-project-checks;
+          checks.org2gfm-hermetic = config.org2gfm.finalPackage;
           legacyPackages.lib = build.nix-project-lib;
           legacyPackages.nixpkgs = nixpkgs;
-          devshells.default.packages = [
-            config.treefmt.build.wrapper
-          ];
+          devshells.default = {
+            commands = [
+              {
+                name = "project-check";
+                help = "run all checks/tests/linters";
+                command = "nix -L flake check --show-trace";
+              }
+              {
+                name = "project-format";
+                help = "format all files in one command";
+                command = ''treefmt "$@"'';
+              }
+              {
+                name = "project-doc-gen";
+                help = "generate Github Markdown from Org files";
+                command = ''org2gfm-hermetic "$@"'';
+              }
+            ];
+            packages = [
+              config.treefmt.build.wrapper
+              config.org2gfm.finalPackage
+            ];
+          };
           treefmt.pkgs = nixpkgs.unstable;
           treefmt.programs = {
             deadnix.enable = true;
             nixfmt.enable = true;
             nixf-diagnose.enable = true;
-            shellcheck.enable = true;
-            shellcheck.includes = [ "support/*" ];
-            shfmt.enable = true;
-            shfmt.indent_size = 4;
-            shfmt.includes = [ "support/*" ];
+          };
+          org2gfm = {
+            settings = {
+              ignoreEnvironment = true;
+              keepEnvVars = [
+                "LANG"
+                "LOCALE_ARCHIVE"
+              ];
+              pathPackages = [
+                nixpkgs.stable.ansifilter
+                nixpkgs.stable.coreutils
+                nixpkgs.stable.git
+                nixpkgs.stable.gnugrep
+                nixpkgs.stable.gnutar
+                nixpkgs.stable.gzip
+                nixpkgs.stable.jq
+                nixpkgs.stable.nixfmt-rfc-style
+                nixpkgs.stable.tree
+              ];
+              extraPaths = [
+                "/bin"
+              ];
+              pathIncludesActiveNix = true;
+              pathIncludesPrevious = false;
+              exclude = [
+                "internal"
+                "examples"
+              ];
+              evaluate = true;
+            };
           };
         };
       flake = {
         overlays.default = overlay;
-        templates.default = {
-          path = ./example;
-          description = "A starter project using shajra/nix-project.";
+        templates = rec {
+          default = more;
+          less = {
+            path = ./examples/less;
+            description = "Starter project with less third-party dependencies";
+          };
+          more = {
+            path = ./examples/more;
+            description = "Starter project including hercules-ci/flake-parts.";
+          };
         };
         flakeModules = {
           lib-persystem = nix/module/lib-persystem.nix;
           nixpkgs = nix/module/nixpkgs.nix;
+          org2gfm = module-org2gfm;
         };
       };
     };

@@ -1,4 +1,4 @@
-#+title: Nix Installation
+#+title: Nix Installation and Configuration Guide
 #+setupfile: internal/links.org
 
 * Org-mode setup :noexport:
@@ -99,10 +99,10 @@ NIX_STORE_PATHS_URL=https://github.com/NixOS/nixpkgs/raw/$NIXOS_VERSION/nixos/mo
 sudo nix upgrade-nix --nix-store-paths-url "$NIX_STORE_PATHS_URL"
 #+end_src
 
-For [[nixos-releases][new releases of NixOS]], use the same command with new =NIXOS_VERSION=.
+For [[nixos-manual-releases][new releases of NixOS]], use the same command with new =NIXOS_VERSION=.
 
-The Nix manual describes [[nix-install-manual][other methods of installing Nix]] that may suit you more.
-If you later want to uninstall Nix, see the [[nix-uninstall][uninstallation steps documented in
+The Nix manual describes [[nix-manual-install][other methods of installing Nix]] that may suit you more.
+If you later want to uninstall Nix, see the [[nix-manual-uninstall][uninstallation steps documented in
 the Nix manual]].
 
 * Cache setup

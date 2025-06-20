@@ -1,4 +1,4 @@
-#+title: The Nix Language
+#+title: Introduction to the Nix Programming Language
 #+setupfile: internal/links.org
 
 * Org-mode setup :noexport:
@@ -18,10 +18,10 @@ develop your own Nix packages and read the source code of others. A lot of this
 code is in [[nixpkgs][Nixpkgs]], a centralized repository of Nix code for the entire Nix
 ecosystem.
 
-The Nix community has recently developed [[nix-language-tutorial][a tutorial for the language]], which may
+The Nix community has recently developed [[nix-guide-language][a tutorial for the language]], which may
 be a good alternative or supplement to this document.
 
-This document is no substitute for the [[nix-language-manual][official Nix language documentation]],
+This document is no substitute for the [[nix-manual-language][official Nix language documentation]],
 which is not that long for a programming language. Nix does not have much syntax
 relative to other general-purpose programming languages.
 

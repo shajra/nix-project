@@ -42,20 +42,20 @@ let
   '';
 
   progName = "org2gfm";
-  meta.description = "Script to export Org-mode files to GitHub Flavored Markdown (GFM)";
+  meta.description = "Exports Org-mode files to GitHub Flavored Markdown (GFM)";
 
 in
 
 nix-project-lib.scripts.writeShellCheckedExe progName
   {
     inherit meta;
+    pathIncludesPrevious = true;
   }
   ''
     set -eu
     set -o pipefail
 
 
-    NIX_EXE="$(command -v nix || true)"
     EVALUATE=false
     KEEP_GOING=false
     EXCLUDE_ARGS=()
@@ -84,22 +84,17 @@ nix-project-lib.scripts.writeShellCheckedExe progName
     OPTIONS:
 
         -h --help            print this help message
-        -b --path-bin        include /bin on path (perhaps for /bin/sh)
         -e --evaluate        evaluate all SRC blocks before exporting
         -E --no-evaluate     don't evaluate before exporting (default)
-        -N --nix PATH        file path to 'nix' binary to put on PATH
         -x --exclude PATTERN exclude matched when searching
         -k --keep-going      don't stop if Babel executes non-zero
         -K --no-keep-going   stop if Babel executes non-zero (default)
         -y --yes             answer "yes" to all queries for evaluation
         -n --no              answer "no" to all queries for evaluation
 
-        This script is recommended for use in a clean environment
-        with a PATH controlled by Nix.  This helps make executed
-        source blocks more deterministic.  However, if the source
-        blocks need to execute Nix commands, it's best to use the Nix
-        version already installed on the system, rather than a pinned
-        version.  This is what the '-N' option is for.
+        Recommended usage is with a clean environment using Nix to
+        control the PATH.  This helps make executed source blocks more
+        deterministic.
 
         If using both '-e' and '-E' options the last one is overriding
         (useful for automation/defaults).
@@ -121,9 +116,6 @@ nix-project-lib.scripts.writeShellCheckedExe progName
                 print_usage
                 exit 0
                 ;;
-            -b|--path-bin)
-                PATH="$PATH:/bin"
-                ;;
             -e|--evaluate)
                 EVALUATE="true"
                 ;;
@@ -135,13 +127,6 @@ nix-project-lib.scripts.writeShellCheckedExe progName
                 ;;
             -K|--no-keep-going)
                 KEEP_GOING="false"
-                ;;
-            -N|--nix)
-                if [ -z "''${2:-}" ]
-                then die "$1 requires argument"
-                fi
-                NIX_EXE="''${2:-}"
-                shift
                 ;;
             -y|--yes)
                 QUERY_ANSWER=yes
@@ -169,9 +154,6 @@ nix-project-lib.scripts.writeShellCheckedExe progName
             shift
         done
 
-        if [ -n "$NIX_EXE" ]
-        then add_nix_to_path "$NIX_EXE"
-        fi
         if [ -n "$QUERY_ANSWER" ]
         then "${coreutils}/bin/yes" "$QUERY_ANSWER" | generate_gfm "$@"
         else generate_gfm "$@"

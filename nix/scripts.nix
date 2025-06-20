@@ -46,13 +46,19 @@ rec {
       meta ? { },
       exeName ? name,
       runtimeShell ? runtimeShell',
-      path ? null,
-      pathPure ? true,
+      pathIncludesPrevious ? false,
+      pathIncludesActiveNix ? false,
+      pathPackages ? [ ],
+      extraPaths ? [ ],
     }:
     body:
     let
-      pathSuffix = if pathPure then "" else ":$PATH";
-      pathDecl = if (path == null) then "" else "PATH=\"" + lib.makeBinPath path + pathSuffix + "\"";
+      pathComponents =
+        (lib.optionals (pathPackages != [ ]) [ (lib.makeBinPath pathPackages) ])
+        ++ (lib.optionals (extraPaths != [ ]) [ (lib.concatStringsSep ":" extraPaths) ])
+        ++ (lib.optionals pathIncludesActiveNix [ "$(path_for \"$(command -v nix)\")" ])
+        ++ (lib.optionals pathIncludesPrevious [ "$PATH" ]);
+      pathDecl = "PATH=\"" + lib.concatStringsSep ":" pathComponents + "\"";
     in
     writeShellChecked name
       {
@@ -63,7 +69,12 @@ rec {
       ''
         #!${runtimeShell}
 
+        . "${scriptCommon}/share/nix-project/common.sh"
+
+        # DESIGN: Dynamically constructed PATH has allowable corner cases
+        # shellcheck disable=SC2123 disable=SC2269
         ${pathDecl}
+        export PATH
 
         ${body}
       '';

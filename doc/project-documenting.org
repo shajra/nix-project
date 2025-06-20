@@ -1,4 +1,4 @@
-#+title: Org2gfm Design and Usage Recommendations
+#+title: Documenting a Nix Project with Nix-project (=org2gfm=)
 #+setupfile: internal/links.org
 
 * About this document
@@ -17,7 +17,7 @@ only applies to projects maintained on GitHub.
 
 You can install =org2gfm= with Nix to use stand-alone, or you can get the script
 integrated into a Nix-based project scaffolded with Nix-project as discussed in
-the [[file:project-developing.org][project development guide]].
+the [[file:project-developing-basics.org][project development guide]].
 
 Finally, this document explains =org2gfm='s design decisions and recommends a
 style for its use.
@@ -71,7 +71,7 @@ If you don't know how to use basic Nix commands, see the provided [[file:nix-usa
 guide]].
 
 If you want to integrate documentation generation with a project scaffolded by
-Nix-project (this project), see the [[file:project-developing.org][project development guide]].
+Nix-project (this project), see the [[file:project-developing-basics.org][project development guide]].
 
 * Usage
 
@@ -112,7 +112,7 @@ If you don't want to evaluate all Org files found, files can be explicitly
 specified as positional arguments, or the =--exclude= switch can be used to
 exclude filenames matching a regular expression.
 
-We can use the =--ignore-environment= of =nix search= to sandbox execution of
+We can use the =--ignore-environment= of =nix shell= to sandbox execution of
 =org2gfm=. Sandboxing clears out all environment variables. If we want to keep a
 few, we can use =nix shell='s =--keep= switch.
 
@@ -167,28 +167,26 @@ create your own Nix expression in a file, including everything you need for your
 
 ** Using =org2gfm= from a project scaffolded by Nix-project
 
-As discussed in the [[file:project-developing.org][project development guide]] we can scaffold a project with the
-following call using Nix flakes:
+As discussed in the [[file:project-developing-basics.org][project development guide]] we can scaffold a project with =nix
+flake new=.  For example, to scaffold with the =less= template:
 
 #+begin_src sh :eval no
-nix --extra-experimental-features nix-command \
-    --refresh run github:shajra/nix-project#nix-scaffold \
-    -- --target-dir my-project
+nix --refresh \
+    flake new \
+    --template github:shajra/nix-project/main#less \
+    /tmp/my-project  # or whereever you want your new project
 #+end_src
 
 A freshly scaffolded project will have a =README.org= file in its root. This
-file has an example call to =whoami= in it. When you call
-=support/docs-generate=, you'll see that the =README.org= file is modified in
-place to include the result of the =whoami= call. Additionally, a =README.md=
-file is exported as a sibling document.
+file has an example call to =whoami= in it. When you call ~nix develop --command
+project-doc-gen~, you'll run =org2gfm= in a sandboxed environment.  Upon
+completion, the =README.org= file will be modified in place to include the result
+of the =whoami= call. Additionally, a =README.md= file is exported as a sibling
+document.
 
-The =docs-generate= script includes a call to =nix shell= for sandboxing
-document generation, similar to what's been described in previous sections.
-The scaffolded project's flake provides an instance of Nixpkgs under its
-=legacyPackages.nixpkgs= flake output. This is how the =docs-generate= script
-references =coreutils= with ~.#nixpkgs.coreutils~. You can modify the
-=docs-generate= script for the scaffolded project to include other packages in
-the sandbox.
+You can control the execution of =org2gfm= by modifying [[file:../examples/less/config.nix][=config.nix=]] of the =less=
+template, or modifying [[file:../examples/more/flake.nix][=flake.nix=]] of the =more= template, using options as
+[[file:../nix/module/org2gfm.nix][defined by the =org2gfm= flake module]].
 
 * Org2gfm design
 

@@ -1,4 +1,4 @@
-#+title: Deciding to use Nix
+#+title: Introduction to Nix and Motivations to Use It
 #+setupfile: internal/links.org
 
 * Org-mode setup :noexport:

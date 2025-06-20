@@ -22,7 +22,7 @@ If you're reading this document right now as Markdown it was generated with `org
 
 As its name indicates, `org2gfm` currently only exports to GFM, so this script only applies to projects maintained on GitHub.
 
-You can install `org2gfm` with Nix to use stand-alone, or you can get the script integrated into a Nix-based project scaffolded with Nix-project as discussed in the [project development guide](project-developing.md).
+You can install `org2gfm` with Nix to use stand-alone, or you can get the script integrated into a Nix-based project scaffolded with Nix-project as discussed in the [project development guide](project-developing-basics.md).
 
 Finally, this document explains `org2gfm`'s design decisions and recommends a style for its use.
 
@@ -52,7 +52,7 @@ If you don't have Nix set up yet, see the provided [installation and configurati
 
 If you don't know how to use basic Nix commands, see the provided [Nix end user guide](nix-usage-flakes.md).
 
-If you want to integrate documentation generation with a project scaffolded by Nix-project (this project), see the [project development guide](project-developing.md).
+If you want to integrate documentation generation with a project scaffolded by Nix-project (this project), see the [project development guide](project-developing-basics.md).
 
 # Usage<a id="sec-4"></a>
 
@@ -75,7 +75,7 @@ If called with the `--evaluate` switch, the code snippets in the Org file are ev
 
 If you don't want to evaluate all Org files found, files can be explicitly specified as positional arguments, or the `--exclude` switch can be used to exclude filenames matching a regular expression.
 
-We can use the `--ignore-environment` of `nix search` to sandbox execution of `org2gfm`. Sandboxing clears out all environment variables. If we want to keep a few, we can use `nix shell`'s `--keep` switch.
+We can use the `--ignore-environment` of `nix shell` to sandbox execution of `org2gfm`. Sandboxing clears out all environment variables. If we want to keep a few, we can use `nix shell`'s `--keep` switch.
 
 If we want more packages on the path than `org2gfm` we can reference more flake packages. Here's an example:
 
@@ -112,17 +112,18 @@ If you need packages beyond what's provided in the Nixpkgs snapshot, you need to
 
 ## Using `org2gfm` from a project scaffolded by Nix-project<a id="sec-4-2"></a>
 
-As discussed in the [project development guide](project-developing.md) we can scaffold a project with the following call using Nix flakes:
+As discussed in the [project development guide](project-developing-basics.md) we can scaffold a project with `nix flake new`. For example, to scaffold with the `less` template:
 
 ```sh
-nix --extra-experimental-features nix-command \
-    --refresh run github:shajra/nix-project#nix-scaffold \
-    -- --target-dir my-project
+nix --refresh \
+    flake new \
+    --template github:shajra/nix-project/main#less \
+    /tmp/my-project  # or whereever you want your new project
 ```
 
-A freshly scaffolded project will have a `README.org` file in its root. This file has an example call to `whoami` in it. When you call `support/docs-generate`, you'll see that the `README.org` file is modified in place to include the result of the `whoami` call. Additionally, a `README.md` file is exported as a sibling document.
+A freshly scaffolded project will have a `README.org` file in its root. This file has an example call to `whoami` in it. When you call `nix develop --command project-doc-gen`, you'll run `org2gfm` in a sandboxed environment. Upon completion, the `README.org` file will be modified in place to include the result of the `whoami` call. Additionally, a `README.md` file is exported as a sibling document.
 
-The `docs-generate` script includes a call to `nix shell` for sandboxing document generation, similar to what's been described in previous sections. The scaffolded project's flake provides an instance of Nixpkgs under its `legacyPackages.nixpkgs` flake output. This is how the `docs-generate` script references `coreutils` with `.#nixpkgs.coreutils`. You can modify the `docs-generate` script for the scaffolded project to include other packages in the sandbox.
+You can control the execution of `org2gfm` by modifying [`config.nix`](../examples/less/config.nix) of the `less` template, or modifying [`flake.nix`](../examples/more/flake.nix) of the `more` template, using options as [defined by the `org2gfm` flake module](../nix/module/org2gfm.nix).
 
 # Org2gfm design<a id="sec-5"></a>
 

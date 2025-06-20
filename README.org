@@ -9,18 +9,19 @@
 * About this project
 
 This project, Nix-project, assists the setup of other projects with the [[nix][Nix
-package manager]] leaning on [[nix-flake][flakes]], an experimental Nix feature.
+package manager]] leaning on [[nix-wiki-flakes][flakes]], an experimental Nix feature.
 
 Specifically, this project helps
 
 - scaffold new projects
 - maintain dependencies, which may mix different language ecosystems
 - generate Github-oriented documentation with evaluated code blocks
-- build and distribute packages, binary or otherwise.
+- build and distribute packages, binary or otherwise
+- document Nix and recommended practices for absolute beginners.
 
 There's not a lot of code in Nix-project. Most of the work is done by Nix and
 third-party libraries. If you scaffolded a new project and removed the
-dependency on Nix-project, then you'd have a project set up using Nix with
+dependency on Nix-project, then you'd have a small project set up using Nix with
 recommended practices.
 
 This source's [[file:doc][doc directory]] provides a variety of documents to not only help you
@@ -30,16 +31,17 @@ Among other benefits, Nix gives us an incredible amount of control and
 repeatability of our software projects. If you don't know much about Nix,
 consider reading the following provided guides:
 
-- [[file:doc/nix-introduction.org][Introduction to Nix and motivations to use it]]
-- [[file:doc/nix-installation.org][Nix installation and configuration guide]]
-- [[file:doc/nix-usage-flakes.org][Nix end-user guide]]
-- [[file:doc/nix-language.org][Introduction to the Nix programming language]]
+- [[file:doc/nix-introduction.org][Introduction to Nix and Motivations to Use It]]
+- [[file:doc/nix-installation.org][Nix Installation and Configuration Guide]]
+- [[file:doc/nix-usage-flakes.org][Nix End-user Guide]]
+- [[file:doc/nix-language.org][Introduction to the Nix Programming Language]]
 
-If you know something about Nix, then these documents will help you get started
-using this project:
+If you already know Nix basics, then these documents will help you get started
+using Nix-project:
 
-- [[file:doc/project-developing.org][Developing a Nix project with Nix-Project]]
-- [[file:doc/project-documenting.org][Documenting a Nix project with Nix-project]]
+- [[file:doc/project-developing-basics.org][Flakes Basics Development Guide]]
+- [[file:doc/project-developing-modules.org][Flake Module (with =flake-parts=) Development Guide]]
+- [[file:doc/project-documenting.org][Documenting a Nix Project with Nix-project]]
 
 * Release
 

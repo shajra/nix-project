@@ -80,14 +80,14 @@ We can use an `--extra-experimental-features nix-command` switch to use an exper
 nix --extra-experimental-features nix-command search --file . '' ^
 ```
 
-    * packages.aarch64-darwin.nix-scaffold
-      Script to scaffold a Nix project
+    * default
+      Exports Org-mode files to GitHub Flavored Markdown (GFM)
+    
+    * packages.aarch64-darwin.default
+      Exports Org-mode files to GitHub Flavored Markdown (GFM)
     
     * packages.aarch64-darwin.org2gfm
-      Script to export Org-mode files to GitHub Flavored Markdown (GFM)
-    
-    * packages.x86_64-darwin.nix-scaffold
-      Script to scaffold a Nix project
+      Exports Org-mode files to GitHub Flavored Markdown (GFM)
     
     …
 
@@ -110,8 +110,11 @@ nix --extra-experimental-features nix-command \
     search --file . '' linux org2gfm
 ```
 
+    * packages.x86_64-linux.default
+      Exports Org-mode files to GitHub Flavored Markdown (GFM)
+    
     * packages.x86_64-linux.org2gfm
-      Script to export Org-mode files to GitHub Flavored Markdown (GFM)
+      Exports Org-mode files to GitHub Flavored Markdown (GFM)
 
 We can also use `--json` to get more details about found packages:
 
@@ -121,13 +124,13 @@ nix --extra-experimental-features \
 ```
 
     {
-      "packages.aarch64-darwin.nix-scaffold": {
-        "description": "Script to scaffold a Nix project",
-        "pname": "nix-scaffold",
+      "default": {
+        "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
+        "pname": "org2gfm",
         "version": ""
       },
-      "packages.aarch64-darwin.org2gfm": {
-        "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
+      "packages.aarch64-darwin.default": {
+        "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
         "pname": "org2gfm",
     …
 
@@ -149,7 +152,7 @@ The following result is one returned by an execution of `nix search` or tab-comp
 
     {
       "packages.x86_64-linux.org2gfm": {
-        "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
+        "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
         "pname": "org2gfm",
         "version": ""
       }
@@ -163,7 +166,7 @@ We can build this package with `nix-build` from the project root:
 nix-build --attr packages.x86_64-linux.org2gfm .
 ```
 
-    /nix/store/3ir8vj507wqwpl97kkpdfzwph393iiwm-org2gfm
+    /nix/store/vyvcmfrz5knphhhf0p9h8h0c693hqicw-org2gfm
 
 If we omit the path to a Nix file, `nix-build` will try to build `default.nix` in the current directory. If we omit the `--attr` switch and argument, `nix-build` will try to build packages it finds in the root of the attribute tree.
 
@@ -175,7 +178,7 @@ The output of `nix-build` shows us where in `/nix/store` our package has been bu
 readlink result*
 ```
 
-    /nix/store/3ir8vj507wqwpl97kkpdfzwph393iiwm-org2gfm
+    /nix/store/vyvcmfrz5knphhhf0p9h8h0c693hqicw-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -241,7 +244,7 @@ nix --extra-experimental-features \
 
     {
       "": {
-        "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
+        "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
         "pname": "org2gfm",
         "version": ""
       }
@@ -327,8 +330,13 @@ nix --extra-experimental-features nix-command \
 ```
 
     {
+      "packages.x86_64-linux.default": {
+        "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
+        "pname": "org2gfm",
+        "version": ""
+      },
       "packages.x86_64-linux.org2gfm": {
-        "description": "Script to export Org-mode files to GitHub Flavored Markdown (GFM)",
+        "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
         "pname": "org2gfm",
         "version": ""
       }
