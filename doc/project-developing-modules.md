@@ -13,7 +13,7 @@
 
 # About this document<a id="sec-1"></a>
 
-This document is a continuation of [Flakes Basics Development Guide](project-developing-basics.md). Specifically, it explains how to author [`flake-parts`](https://github.com/hercules-ci/flake-parts) modules, to address some points of tension when using the plain flakes API.
+This document is a continuation of [Flakes Basics Development Guide](project-developing-basics.md). Specifically, it explains how to use and author your own [`flake-parts`](https://github.com/hercules-ci/flake-parts) modules, to address some points of tension when using the plain flakes API.
 
 # Prerequisites<a id="sec-2"></a>
 

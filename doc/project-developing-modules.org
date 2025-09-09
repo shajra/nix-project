@@ -44,8 +44,8 @@ rm --recursive --force /tmp/my-project-more
 * About this document
 
 This document is a continuation of [[file:project-developing-basics.org][Flakes Basics Development Guide]].
-Specifically, it explains how to author [[nix-flakes-parts][=flake-parts=]] modules, to address some
-points of tension when using the plain flakes API.
+Specifically, it explains how to use and author your own [[nix-flakes-parts][=flake-parts=]] modules,
+to address some points of tension when using the plain flakes API.
 
 * Prerequisites
 
