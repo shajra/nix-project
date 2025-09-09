@@ -39,7 +39,7 @@ consider reading the following provided guides:
 If you already know Nix basics, then these documents will help you get started
 using Nix-project:
 
-- [[file:doc/project-developing-basics.org][Flakes Basics Development Guide]]
+- [[file:doc/project-developing-basics.org][Flakes Basic Development Guide]]
 - [[file:doc/project-developing-modules.org][Flake Module (with =flake-parts=) Development Guide]]
 - [[file:doc/project-documenting.org][Documenting a Nix Project with Nix-project]]
 

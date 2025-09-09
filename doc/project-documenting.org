@@ -17,7 +17,7 @@ only applies to projects maintained on GitHub.
 
 You can install =org2gfm= with Nix to use stand-alone, or you can get the script
 integrated into a Nix-based project scaffolded with Nix-project as discussed in
-the [[file:project-developing-basics.org][project development guide]].
+the [[file:project-developing-basics.org][Flakes Basic Development Guide]] or the [[file:project-developing-modules.org][Flake Module Development Guide]].
 
 Finally, this document explains =org2gfm='s design decisions and recommends a
 style for its use.
@@ -38,17 +38,15 @@ Emacs can be run in a headless mode from the command-line to avoid bringing up
 an entire text editor to generate documentation. This is what =org2gfm= does.
 The script manages the execution of Emacs on the user's behalf.
 
-Because Nix provides =org2gfm= and all its dependencies, its instance of Emacs
-is safely isolated and hidden from any other instance of Emacs a user might have
+Because Nix provides =org2gfm= and all its dependencies, its instance of Emacs is
+safely isolated and hidden from any other instance of Emacs a user might have
 installed otherwise.  This isolation is helpful because instances of Emacs can
 be finicky to keep configured correctly.
 
-We can also call =org2gfm= with an invocation of =nix shell= to ensure our
-documentation is executed in a controlled environment. This way, any commands
-referenced by code snippets can be guaranteed to be on =PATH=. This sandboxing
-makes documentation generation even more repeatable, regardless of which machine
-we generate documentation on. New projects scaffolded with Nix-project are set
-up this way to call =org2gfm= with =nix shell=.
+We can further use Nix to ensure  =org2gfm= is invoked in a controlled
+environment. This way, any commands referenced by code snippets can be
+guaranteed to be on =PATH=. This sandboxing makes documentation generation even
+more repeatable, regardless of which machine we generate documentation on.
 
 The =org2gfm= is very small.  Most of the work is done by Emacs.  The script
 mainly simplifies the complexity of configuring and running Emacs.
@@ -71,11 +69,17 @@ If you don't know how to use basic Nix commands, see the provided [[file:nix-usa
 guide]].
 
 If you want to integrate documentation generation with a project scaffolded by
-Nix-project (this project), see the [[file:project-developing-basics.org][project development guide]].
+Nix-project (this project), see the [[file:project-developing-basics.org][Flakes Basic Development Guide]] and the [[file:project-developing-modules.org][Flake
+Module Development Guide]].
 
 * Usage
 
-** Calling =org2gfm= directly
+#+begin_quote
+*_WARNING_*: Since =org2gfm by default writes over files in-place, source control
+is highly recommended to protect against the loss of documentation.
+#+end_quote
+
+** Calling the =org2gfm= executable directly
 
 You can call =org2gfm= directly, either with or without flakes. Using flakes,
 you can run =org2gfm= directly from GitHub with =nix shell= without even
@@ -88,8 +92,6 @@ nix --extra-experimental-features 'nix-command flakes' \
     --command org2gfm
 #+end_src
 
-#+RESULTS:
-
 #+begin_src sh :dir .. :results output silent :exports none
 nix --experimental-features 'nix-command flakes' \
     shell \
@@ -100,75 +102,28 @@ nix --experimental-features 'nix-command flakes' \
 By default, =org2gfm= finds all Org files recursively from the current directory
 and exports each one to a sibling Markdown file.
 
-If called with the =--evaluate= switch, the code snippets in the Org file
+If called with the =--evaluate= option, the code snippets in the Org file
 are evaluated, changing the Org file in place.
 
-#+begin_quote
-*_WARNING_*: Since =org2gfm --evaluate= writes over files in-place, source
-control is highly recommended to protect against the loss of documentation.
-#+end_quote
-
 If you don't want to evaluate all Org files found, files can be explicitly
-specified as positional arguments, or the =--exclude= switch can be used to
+specified as positional arguments, or the =--exclude= option can be used to
 exclude filenames matching a regular expression.
 
-We can use the =--ignore-environment= of =nix shell= to sandbox execution of
-=org2gfm=. Sandboxing clears out all environment variables. If we want to keep a
-few, we can use =nix shell='s =--keep= switch.
+Use the =--help= option to see a complete list of options (or look at [[file:../nix/org2gfm.nix][the =org2gfm=
+source code]]).
 
-If we want more packages on the path than =org2gfm= we can reference more flake
-packages. Here's an example:
+** Controlling the environment with =org2gfm-hermetic=
 
-#+begin_src sh :eval no
-nix --extra-experimental-features 'nix-command flakes' \
-    shell \
-    --ignore-environment \
-    --keep LANG \
-    --keep LOCALE_ARCHIVE \
-    github:shajra/nix-project#org2gfm \
-    nixpkgs#coreutils \
-    --command org2gfm --evaluate
-#+end_src
+The Nix-project flake exports at =#lib.<system>.org2gfm-hermetic= a function you
+can use to wrap the =org2gfm= script with another script to tightly control the
+environment =org2gfm= executes in.
 
-#+RESULTS:
+See the [[file:../nix/org2gfm-hermetic.nix][comments in the source code]] for details on how to call this function.
 
-Here, we're running the latest released version of =org2gfm= found on GitHub in
-a sandboxed environment. Only the =LANG= and =LOCALE_ARCHIVE= environment
-variables are kept from the calling environment. The only tools on the path are
-=org2gfm= and a variety of Unix tools provided by the =coreutils= package, which
-is taken from the latest =nixpkgs-unstable= release of Nixpkgs.
+See the [[file:../examples/less][=less= template]] for an example of integrating this flake module into a
+project. This template is discussed in the [[file:project-developing-basics.org][Flakes Basic Development Guide]].
 
-You can still use =org2gfm= if you have decided not to enable =flakes=
-experimental feature. However, you should still use =nix-command=. Here's an
-example to compliment the example using flakes from the previous section:
-
-#+begin_src sh :eval no
-nix --extra-experimental-features 'nix-command' \
-    shell \
-    --ignore-environment \
-    --keep LANG \
-    --keep LOCALE_ARCHIVE \
-    --file https://github.com/shajra/nix-project/archive/main.tar.gz \
-    currentSystem.packages.org2gfm \
-    currentSystem.legacyPackages.nixpkgs.coreutils \
-    --command org2gfm --evaluate
-#+end_src
-
-Note when using =nix shell= with the =--file=, we need all the packages for our
-sandbox to come from a single file (we can only use =--file= once). As a
-convenience, the Nix-project's =default.nix= file (accessed directly from a
-tarball retrieved from GitHub above) includes a snapshot of the latest stable
-release of Nixpkgs. As illustrated above, we access this under
-=currentSystem.legacyPackages.nixpkgs=.
-
-If you need packages beyond what's provided in the Nixpkgs snapshot, you need to
-create your own Nix expression in a file, including everything you need for your
-=nix shell= execution. Explaining how is beyond the scope of this document.
-
-** Using =org2gfm= from a project scaffolded by Nix-project
-
-As discussed in the [[file:project-developing-basics.org][project development guide]] we can scaffold a project with =nix
-flake new=.  For example, to scaffold with the =less= template:
+If you like, you can scaffold a new project with the =less= template:
 
 #+begin_src sh :eval no
 nix --refresh \
@@ -177,16 +132,36 @@ nix --refresh \
     /tmp/my-project  # or whereever you want your new project
 #+end_src
 
-A freshly scaffolded project will have a =README.org= file in its root. This
-file has an example call to =whoami= in it. When you call ~nix develop --command
-project-doc-gen~, you'll run =org2gfm= in a sandboxed environment.  Upon
-completion, the =README.org= file will be modified in place to include the result
-of the =whoami= call. Additionally, a =README.md= file is exported as a sibling
-document.
+See the scaffolded project's =README.org= for a steps to experience =org2gfm=
+first-hand via a alias set up in the developer environment called
+=project-doc-gen=.
 
 You can control the execution of =org2gfm= by modifying [[file:../examples/less/config.nix][=config.nix=]] of the =less=
-template, or modifying [[file:../examples/more/flake.nix][=flake.nix=]] of the =more= template, using options as
-[[file:../nix/module/org2gfm.nix][defined by the =org2gfm= flake module]].
+template.
+
+** Using the =org2gfm= flake module
+
+The Nix-project flake exports a flake module at =#flakeModules.org2gfm= that
+allows you to configure your project using [[flake-parts][=flake-parts=]] to compile a version of
+=org2gfm=hermetic= tailored to your needs.
+
+See the [[file:../nix/module/org2gfm.nix][flake module source code]] for details on the options this module accepts.
+
+See the [[file:../examples/more][=more= template]] for an example of integrating this flake module into
+a project. This template is discussed in the [[file:project-developing-modules.org][Flake Module Development Guide]].
+
+If you like, you can scaffold a new project with the =more= template:
+
+#+begin_src sh :eval no
+nix --refresh \
+    flake new \
+    --template github:shajra/nix-project/main#more \
+    /tmp/my-project  # or whereever you want your new project
+#+end_src
+
+See the scaffolded project's =README.org= for a steps to experience =org2gfm=
+first-hand via a alias set up in the developer environment called
+=project-doc-gen=.
 
 * Org2gfm design
 
@@ -249,9 +224,9 @@ typically control with ~:eval~ header arguments:
 | ~:eval no~              | no                          | no                  |
 | ~:eval yes~             | yes                         | yes                 |
 
-If you call =org2gfm= with the =--evaluate= switch, all sources will be
-evaluated unless the block is explicitly set ~:eval no~. Without this switch,
-=org2gfm= does not evaluate at all.
+If you call =org2gfm= with the =--evaluate= option, all sources will be evaluated
+unless the block is explicitly set ~:eval no~. Without this option, =org2gfm= does
+not evaluate at all.
 
 In general, we'd like to avoid using ~:eval yes~ because it leads to the
 possibility of our exported files unexpectedly differing from our source Org

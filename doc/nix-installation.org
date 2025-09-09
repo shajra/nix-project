@@ -81,7 +81,7 @@ version of Nix.  Note, this script will require =sudo= access.
 sh <(curl -L https://releases.nixos.org/nix/nix-<<get("nix-stable")>>/install) --daemon
 #+end_src
 
-The =--daemon= switch installs Nix in the multi-user mode, which is generally
+The =--daemon= option installs Nix in the multi-user mode, which is generally
 recommended (single-user installation with =--no-daemon= instead is recommended
 for WSL). The script reports everything it does and touches.
 
@@ -187,7 +187,7 @@ As you can guess, the =flakes= feature enables flakes functionality in Nix. The
 =nix-command= feature enables a variety of subcommands of Nix's newer =nix=
 command-line tool, some of which allow us to work with flakes.
 
-If you don't enable experimental features globally, there is a switch to enable
+If you don't enable experimental features globally, there is a option to enable
 features local to just a single command-line invocation. For example, to use
 flakes-related commands, we call ~nix --extra-experimental-features 'nix-command
 flakes' …~.  When not configuring globally, setting an alias for this can be

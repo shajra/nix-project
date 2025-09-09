@@ -269,7 +269,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/vyvcmfrz5knphhhf0p9h8h0c693hqicw-org2gfm
+    /nix/store/gl4r2qzzhnc2y97kp3msr64l8505s8xq-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -285,13 +285,13 @@ tree -l result*
 
 It's common to configure these “result” symlinks as ignored in source control tools (for instance, for Git within a `.gitignore` file).
 
-`nix build` has a `--no-link` switch in case you want to build packages without creating “result” symlinks. To get the paths where your packages are located, you can use `nix path-info` after a successful build:
+`nix build` has a `--no-link` option in case you want to build packages without creating “result” symlinks. To get the paths where your packages are located, you can use `nix path-info` after a successful build:
 
 ```sh
 nix path-info .#org2gfm
 ```
 
-    /nix/store/vyvcmfrz5knphhhf0p9h8h0c693hqicw-org2gfm
+    /nix/store/gl4r2qzzhnc2y97kp3msr64l8505s8xq-org2gfm
 
 ## Running commands in a shell<a id="sec-4-6"></a>
 
@@ -316,9 +316,9 @@ nix shell \
 
 Similarly to `nix build`, `nix shell` accepts installables as positional arguments to select packages to put on the `PATH`.
 
-The command to run within the shell is specified after the `--command` switch. `nix shell` runs the command in a shell set up with a `PATH` environment variable that includes all the `bin` directories provided by the selected packages.
+The command to run within the shell is specified after the `--command` option. `nix shell` runs the command in a shell set up with a `PATH` environment variable that includes all the `bin` directories provided by the selected packages.
 
-If you only want to enter an interactive shell with the configured `PATH`, you can drop the `--command` switch and following arguments.
+If you only want to enter an interactive shell with the configured `PATH`, you can drop the `--command` option and following arguments.
 
 `nix shell` also supports an `--ignore-environment` flag that restricts `PATH` to only packages selected, rather than extending the `PATH` of the caller's environment. With `--ignore-environment`, the invocation is more sandboxed.
 
@@ -330,7 +330,7 @@ As with `nix build`, `nix shell` will select default packages for any installabl
 
 ## Running installables<a id="sec-4-7"></a>
 
-The `nix run` command allows us to run executables from packages with a more concise syntax than `nix shell` with a `--command` switch.
+The `nix run` command allows us to run executables from packages with a more concise syntax than `nix shell` with a `--command` option.
 
 The main difference from `nix shell` is that `nix run` detects which executable to run from a package. If we want something other than what can be detected, we must continue using `nix shell` with `--command`.
 
@@ -364,7 +364,7 @@ nix run .#org2gfm  -- --help
         Uses Emacs to export Org-mode files to GitHub Flavored
     …
 
-We can see some of the metadata of this package with the `--json` switch of `nix search`:
+We can see some of the metadata of this package with the `--json` option of `nix search`:
 
 ```sh
 nix search --json .#org2gfm ^ | jq .
@@ -404,15 +404,15 @@ nix shell --ignore-environment \
     --command which org2gfm
 ```
 
-    /nix/store/vyvcmfrz5knphhhf0p9h8h0c693hqicw-org2gfm/bin/org2gfm
+    /nix/store/gl4r2qzzhnc2y97kp3msr64l8505s8xq-org2gfm/bin/org2gfm
 
 What we do with local flake references can work just as well with remote flake references.
 
 ## Installing and uninstalling programs<a id="sec-4-9"></a>
 
-We've seen that we can build programs with `nix build` and execute them using the “result” symlink (`result/bin/*`). Additionally, we've seen that you can run programs with `nix shell` and `nix run`. But these additional steps and switches/arguments can feel extraneous. It would be nice to have the programs on our `PATH`. This is what `nix profile` is for.
+We've seen that we can build programs with `nix build` and execute them using the “result” symlink (`result/bin/*`). Additionally, we've seen that you can run programs with `nix shell` and `nix run`. But these additional steps and options/arguments can feel extraneous. It would be nice to have the programs on our `PATH`. This is what `nix profile` is for.
 
-`nix profile` maintains a symlink tree of installed programs called a *profile*. The default profile is at `~/.nix-profile`. For non-root users, if this doesn't exist, `nix profile` will create it as a symlink pointing to `/nix/var/nix/profiles/per-user/$USER/profile`. But you can point `nix profile` to another profile at any writable location with the `--profile` switch.
+`nix profile` maintains a symlink tree of installed programs called a *profile*. The default profile is at `~/.nix-profile`. For non-root users, if this doesn't exist, `nix profile` will create it as a symlink pointing to `/nix/var/nix/profiles/per-user/$USER/profile`. But you can point `nix profile` to another profile at any writable location with the `--profile` option.
 
 This way, you can just put `~/.nix-profile/bin` on your `PATH`, and any programs installed in your default profile will be available for interactive use or scripts.
 
@@ -432,7 +432,7 @@ nix profile list
     Flake attribute:    packages.x86_64-linux.org2gfm
     Original flake URL: git+file:///home/shajra/src/nix-project
     Locked flake URL:   git+file:///home/shajra/src/nix-project
-    Store paths:        /nix/store/vyvcmfrz5knphhhf0p9h8h0c693hqicw-org2gfm
+    Store paths:        /nix/store/gl4r2qzzhnc2y97kp3msr64l8505s8xq-org2gfm
 
 If we want to uninstall a program from our profile, we can reference it by name:
 
@@ -470,7 +470,7 @@ An obvious place to start learning more about Nix is [the official documentation
 
 Bundled with this project is [a small tutorial on the Nix language](nix-language.md).
 
-All the commands we've covered have more switches and options. See the respective man pages for more.
+All the commands we've covered have more options and options. See the respective man pages for more.
 
 We didn't cover much of [Nixpkgs](https://github.com/NixOS/nixpkgs), the gigantic repository of community-curated Nix expressions.
 

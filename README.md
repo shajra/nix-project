@@ -32,7 +32,7 @@ Among other benefits, Nix gives us an incredible amount of control and repeatabi
 
 If you already know Nix basics, then these documents will help you get started using Nix-project:
 
--   [Flakes Basics Development Guide](doc/project-developing-basics.md)
+-   [Flakes Basic Development Guide](doc/project-developing-basics.md)
 -   [Flake Module (with `flake-parts`) Development Guide](doc/project-developing-modules.md)
 -   [Documenting a Nix Project with Nix-project](doc/project-documenting.md)
 

@@ -70,11 +70,11 @@ The non-experimental way of exploring what's in a Nix expression is to load it i
 nix repl --file .
 ```
 
-Using the `--file` switch tells `nix repl` to load attributes from a Nix file. If the Nix expression in this file evaluates to an attribute set (a map of attribute names to values), the attributes of this set are bound to variables within the REPL session. Nested attribute sets build up our attribute tree.
+Using the `--file` option tells `nix repl` to load attributes from a Nix file. If the Nix expression in this file evaluates to an attribute set (a map of attribute names to values), the attributes of this set are bound to variables within the REPL session. Nested attribute sets build up our attribute tree.
 
-Though experimental, the command `nix search` is safe and helpful. Just be aware that input parameters/switches or output formatting might change with later releases if you script using it.
+Though experimental, the command `nix search` is safe and helpful. Just be aware that input parameters/options or output formatting might change with later releases if you script using it.
 
-We can use an `--extra-experimental-features nix-command` switch to use an experimental feature with `nix` for a single call. Putting this all together, this is how we'd search the provided `default.nix` file:
+We can use an `--extra-experimental-features nix-command` option to use an experimental feature with `nix` for a single call. Putting this all together, this is how we'd search the provided `default.nix` file:
 
 ```sh
 nix --extra-experimental-features nix-command search --file . '' ^
@@ -166,9 +166,9 @@ We can build this package with `nix-build` from the project root:
 nix-build --attr packages.x86_64-linux.org2gfm .
 ```
 
-    /nix/store/vyvcmfrz5knphhhf0p9h8h0c693hqicw-org2gfm
+    /nix/store/gl4r2qzzhnc2y97kp3msr64l8505s8xq-org2gfm
 
-If we omit the path to a Nix file, `nix-build` will try to build `default.nix` in the current directory. If we omit the `--attr` switch and argument, `nix-build` will try to build packages it finds in the root of the attribute tree.
+If we omit the path to a Nix file, `nix-build` will try to build `default.nix` in the current directory. If we omit the `--attr` option and argument, `nix-build` will try to build packages it finds in the root of the attribute tree.
 
 All packages built by Nix are stored in `/nix/store`. Nix won't rebuild packages found there. Once a package is built, its content in `/nix/store` is read-only (until the package is garbage collected, discussed later).
 
@@ -178,7 +178,7 @@ The output of `nix-build` shows us where in `/nix/store` our package has been bu
 readlink result*
 ```
 
-    /nix/store/vyvcmfrz5knphhhf0p9h8h0c693hqicw-org2gfm
+    /nix/store/gl4r2qzzhnc2y97kp3msr64l8505s8xq-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -194,7 +194,7 @@ tree -l result*
 
 It's common to configure these “result” symlinks as ignored in source control tools (for instance, for Git within a `.gitignore` file).
 
-`nix-build` has a `--no-out-link` switch in case you want to build packages without creating “result” symlinks.
+`nix-build` has a `--no-out-link` option in case you want to build packages without creating “result” symlinks.
 
 ## Running commands in a shell<a id="sec-3-5"></a>
 
@@ -221,17 +221,17 @@ nix --extra-experimental-features 'nix-command' \
 
 Like other Nix commands, using `--file .` tells `nix shell` to read a Nix expression from `./default.nix`. The positional arguments when calling `nix shell` with `--file` are the attribute paths selecting packages to put on the `PATH`.
 
-Note, if you don't use the `--file` switch, `nix shell` will assume you are working with a flake.
+Note, if you don't use the `--file` option, `nix shell` will assume you are working with a flake.
 
-The command to run within the shell is specified after the `--command` switch. `nix shell` runs the command in a shell set up with a `PATH` environment variable, including all the `bin` directories provided by the selected packages.
+The command to run within the shell is specified after the `--command` option. `nix shell` runs the command in a shell set up with a `PATH` environment variable, including all the `bin` directories provided by the selected packages.
 
-If you want to enter a shell with the set up `PATH`, you can drop the `--command` switch and following arguments.
+If you want to enter a shell with the set up `PATH`, you can drop the `--command` option and following arguments.
 
 `nix shell` also supports an `--ignore-environment` flag that restricts `PATH` to only packages selected, rather than extending the `PATH` of the caller's environment. With `--ignore-environment`, the invocation is more sandboxed.
 
 ## Running executables<a id="sec-3-6"></a>
 
-The `nix run` command allows us to run executables from packages with a more concise syntax than `nix shell` with a `--command` switch. Like `nix search`, and `nix shell`, this requires enablement of the experimental `nix-command` feature.
+The `nix run` command allows us to run executables from packages with a more concise syntax than `nix shell` with a `--command` option. Like `nix search`, and `nix shell`, this requires enablement of the experimental `nix-command` feature.
 
 Different from what `nix shell` does, `nix run` detects which executable to run from a package. `nix run` assumes the specified package provides an executable with the same name as the package.
 
@@ -274,7 +274,7 @@ If we want something other than what can be detected, then we have to continue u
 
 The previous sections show how to use `nix run` and `nix shell` to run commands in an environment that includes packages from a project local to our filesystem.
 
-We can reference remote projects that have a `default.nix` file using URLs with the `--file` switch. For example, here we reference a tarball of the 25.05 release of Nixpkgs:
+We can reference remote projects that have a `default.nix` file using URLs with the `--file` option. For example, here we reference a tarball of the 25.05 release of Nixpkgs:
 
 ```sh
 nix --extra-experimental-features 'nix-command' \
@@ -285,20 +285,20 @@ nix --extra-experimental-features 'nix-command' \
 
     Hello, world!
 
-Downloads from URLs are cached. In case you feel the URL you've downloaded from has changed, use the `--refresh` switch with your invocation.
+Downloads from URLs are cached. In case you feel the URL you've downloaded from has changed, use the `--refresh` option with your invocation.
 
-Since we can only specify one `--file` switch, we can't make a shell with packages from multiple Nix projects. This is possible with flakes enabled, discussed in the companion [usage guide for flakes](nix-usage-flakes.md).
+Since we can only specify one `--file` option, we can't make a shell with packages from multiple Nix projects. This is possible with flakes enabled, discussed in the companion [usage guide for flakes](nix-usage-flakes.md).
 
 Note the documentation in this project steers people away from `nix-shell`, which provides some conveniences at the expense of compromising reproducible builds. Specifically, `nix-shell` reads from the `NIX_PATH` environment variable. Allowing an environment variable like `NIX_PATH` to affect build results has largely been deemed a mistake by the Nix community. Flakes provide the convenience of `nix-shell` but with better tracking mutable references called *flake registries*.
 
 ## Installing and uninstalling programs<a id="sec-3-8"></a>
 
-We've seen that we can build programs with `nix-build` and execute them using the “result” symlink (`result/bin/*`). Additionally, we've seen that you can run programs with `nix shell` and `nix run`. But these additional steps and switches/arguments can still feel extraneous. It would be nice to have the programs on our `PATH`. This is what `nix-env` is for.
+We've seen that we can build programs with `nix-build` and execute them using the “result” symlink (`result/bin/*`). Additionally, we've seen that you can run programs with `nix shell` and `nix run`. But these additional steps and options/arguments can still feel extraneous. It would be nice to have the programs on our `PATH`. This is what `nix-env` is for.
 
-`nix-env` maintains a symlink tree, called a *profile*, of installed programs. The active profile is pointed to by a symlink at `~/.nix-profile`. By default, this profile points to `/nix/var/nix/profiles/per-user/$USER/profile`. But you can point your `~/.nix-profile` to any writable location with the `--switch-profile` switch:
+`nix-env` maintains a symlink tree, called a *profile*, of installed programs. The active profile is pointed to by a symlink at `~/.nix-profile`. By default, this profile points to `/nix/var/nix/profiles/per-user/$USER/profile`. But you can point your `~/.nix-profile` to any writable location with the `--option-profile` option:
 
 ```sh
-nix-env --switch-profile /nix/var/nix/profiles/per-user/$USER/another-profile
+nix-env --option-profile /nix/var/nix/profiles/per-user/$USER/another-profile
 ```
 
 This way, you can just put `~/.nix-profile/bin` on your `PATH`, and any programs installed in your currently active profile will be available for interactive use or scripts.
@@ -322,7 +322,7 @@ nix-env --query
 
 Note that this name we see in the results of `nix-env` is the package name, not the attribute path we used to select our packages. Sometimes, they are congruent, but not always.
 
-We can see the package name of anything we install by using `nix search` with a `--json` switch to get more details:
+We can see the package name of anything we install by using `nix search` with a `--json` option to get more details:
 
 ```sh
 nix --extra-experimental-features nix-command \
@@ -352,7 +352,7 @@ nix-env --uninstall org2gfm 2>&1
 
 Summarizing what we've done, we've installed our package using its attribute path (`packages.x86_64-linux.org2gfm`) within the referenced Nix expression. But we uninstall it using the package name (“org2gfm”), which may not be the same as the attribute path. When a package is installed, Nix keeps no reference to the expression evaluated to obtain the installed package's derivation. The attribute path is only relevant to this expression. In fact, two different expressions could evaluate to the same derivation, but use different attribute paths. This is why we uninstall packages by their package name.
 
-Also, if you look at the symlink-resolved location for your profile, you'll see that Nix retains the symlink trees of previous generations of your profile. You can even roll back to an earlier profile with the `--rollback` switch. You can also delete old generations of your profile with the `--delete-generations` switch.
+Also, if you look at the symlink-resolved location for your profile, you'll see that Nix retains the symlink trees of previous generations of your profile. You can even roll back to an earlier profile with the `--rollback` option. You can also delete old generations of your profile with the `--delete-generations` option.
 
 ## Garbage collection<a id="sec-3-9"></a>
 
@@ -370,7 +370,7 @@ If you want a package you've built with `nix-build` to be garbage collected, del
 
 Everything under `/nix/var/nix/profiles` is also considered a GC root. This is why users, by convention, use this location to store their Nix profiles with `nix-env`.
 
-Also, note that if you delete a “result\*” link and call `nix-collect-garbage`, though some garbage may be reclaimed, you may find that an old profile keeps the program alive. Use `nix-collect-garbage`'s `--delete-old` switch to delete old profiles (it just calls `nix-env --delete-generations` on your behalf).
+Also, note that if you delete a “result\*” link and call `nix-collect-garbage`, though some garbage may be reclaimed, you may find that an old profile keeps the program alive. Use `nix-collect-garbage`'s `--delete-old` option to delete old profiles (it just calls `nix-env --delete-generations` on your behalf).
 
 It's also good to know that `nix-collect-garbage` won't delete packages referenced by any running processes. In the case of `nix run` no garbage collection root symlink is created under `/nix/var/nix/gcroots`, but while `nix run` is running `nix-collect-garbage` won't delete packages needed by the running command. However, once the `nix run` call exits, any packages pulled from a substituter or built locally are candidates for deletion by `nix-collect-garbage`. If you called `nix run` again after garbage collecting, those packages may be pulled or built again.
 
@@ -382,7 +382,7 @@ An obvious place to start learning more about Nix is [the official documentation
 
 Bundled with this project is [a small tutorial on the Nix language](nix-language.md). It's also not bad to know [how to use this project with flakes](nix-usage-flakes.md). Flakes are broadly used in the Nix ecosystem, and will become the standard.
 
-All the commands we've covered have more switches and options. See the respective man pages for more.
+All the commands we've covered have more options and options. See the respective man pages for more.
 
 We didn't cover much of [Nixpkgs](https://github.com/NixOS/nixpkgs), the gigantic repository of community-curated Nix expressions.
 

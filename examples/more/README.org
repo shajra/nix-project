@@ -1,4 +1,4 @@
-#+title: Example Nix Flake-based Project Using Less
+#+title: Example Nix Flake-based Project Using More
 #+link: _org https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html
 #+link: _nix-project https://github.com/shajra/nix-project
 #+link: _flake-parts https://flake.parts/

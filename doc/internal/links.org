@@ -1,3 +1,4 @@
+
 #+link: cachix https://cachix.org
 #+link: devshell https://github.com/numtide/devshell
 #+link: direnv https://direnv.net
@@ -6,23 +7,25 @@
 #+link: direnv-vscode https://github.com/direnv/direnv-vscode
 #+link: docstring https://en.wikipedia.org/wiki/Docstring
 #+link: fhs https://www.pathname.com/fhs/
+#+link: flake-parts https://github.com/hercules-ci/flake-parts
+#+link: flake-parts-doc https://flake.parts
+#+link: flake-parts-doc-modargs https://flake.parts/module-arguments.html
+#+link: flake-parts-doc-treefmt https://flake.parts/options/treefmt-nix.html
 #+link: garnix https://garnix.io
 #+link: gfm https://github.github.com/gfm/
 #+link: litprog https://en.wikipedia.org/wiki/Literate_programming
+#+link: nix https://nixos.org/nix
 #+link: nix-direnv https://github.com/nix-community/nix-direnv
 #+link: nix-flakes-compat https://github.com/edolstra/flake-compat
-#+link: nix-flakes-parts-doc https://flake.parts
-#+link: nix-flakes-parts-doc-modargs https://flake.parts/module-arguments.html
-#+link: nix-flakes-parts-doc-treefmt https://flake.parts/options/treefmt-nix.html
-#+link: nix-flakes-parts https://github.com/hercules-ci/flake-parts
 #+link: nix-flakes-utils https://github.com/numtide/flake-utils
 #+link: nix-guide-language https://nixos.org/guides/nix-language.html
-#+link: nix https://nixos.org/nix
 #+link: nix-learn https://nixos.org/learn.html
 #+link: nix-manual-flakes-inputs https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake.html#flake-references
 #+link: nix-manual-install https://nixos.org/manual/nix/stable/installation/installation
 #+link: nix-manual-language https://nixos.org/manual/nix/stable/language/index.html
 #+link: nix-manual-uninstall https://nixos.org/manual/nix/stable/installation/uninstall
+#+link: nix-wiki-flakes https://nixos.wiki/wiki/Flakes
+#+link: nix-wiki-flakes-outputs https://nixos.wiki/wiki/Flakes#Output_schema
 #+link: nixos https://nixos.org
 #+link: nixos-manual-modules https://nixos.org/manual/nixos/stable/#sec-writing-modules
 #+link: nixos-manual-releases https://nixos.org/manual/nixos/stable/release-notes.html
@@ -31,8 +34,6 @@
 #+link: nixpkgs https://github.com/NixOS/nixpkgs
 #+link: nixpkgs-manual https://nixos.org/nixpkgs/manual
 #+link: nixpkgs-manual-langs https://nixos.org/manual/nixpkgs/stable/#chap-language-support
-#+link: nix-wiki-flakes https://nixos.wiki/wiki/Flakes
-#+link: nix-wiki-flakes-outputs https://nixos.wiki/wiki/Flakes#Output_schema
 #+link: org https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html
 #+link: org-blocks-src https://orgmode.org/manual/Working-with-Source-Code.html#Working-with-Source-Code
 #+link: org-blocks-src-eval https://orgmode.org/manual/Evaluating-Code-Blocks.html#Evaluating-Code-Blocks

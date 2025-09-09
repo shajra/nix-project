@@ -51,7 +51,7 @@ The following command calls the official installation script for the recommended
 sh <(curl -L https://releases.nixos.org/nix/nix-2.28.4/install) --daemon
 ```
 
-The `--daemon` switch installs Nix in the multi-user mode, which is generally recommended (single-user installation with `--no-daemon` instead is recommended for WSL). The script reports everything it does and touches.
+The `--daemon` option installs Nix in the multi-user mode, which is generally recommended (single-user installation with `--no-daemon` instead is recommended for WSL). The script reports everything it does and touches.
 
 After installation, you may have to exit your terminal session and log back in to have environment variables configured, which puts Nix executables on your `PATH`.
 
@@ -130,7 +130,7 @@ The provided [introduction to Nix](nix-introduction.md) covers in detail what th
 
 As you can guess, the `flakes` feature enables flakes functionality in Nix. The `nix-command` feature enables a variety of subcommands of Nix's newer `nix` command-line tool, some of which allow us to work with flakes.
 
-If you don't enable experimental features globally, there is a switch to enable features local to just a single command-line invocation. For example, to use flakes-related commands, we call `nix --extra-experimental-features 'nix-command flakes' …`. When not configuring globally, setting an alias for this can be useful. The following command illustrates setting an alias in most POSIX-compliant shells:
+If you don't enable experimental features globally, there is a option to enable features local to just a single command-line invocation. For example, to use flakes-related commands, we call `nix --extra-experimental-features 'nix-command flakes' …`. When not configuring globally, setting an alias for this can be useful. The following command illustrates setting an alias in most POSIX-compliant shells:
 
 ```sh
 alias nix-flakes = nix --extra-experimental-features 'nix-command flakes'

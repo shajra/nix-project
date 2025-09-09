@@ -44,7 +44,7 @@ rm --recursive --force /tmp/my-project-more
 * About this document
 
 This document is a continuation of [[file:project-developing-basics.org][Flakes Basics Development Guide]].
-Specifically, it explains how to use and author your own [[nix-flakes-parts][=flake-parts=]] modules,
+Specifically, it explains how to use and author your own [[flake-parts][=flake-parts=]] modules,
 to address some points of tension when using the plain flakes API.
 
 * Prerequisites
@@ -168,7 +168,7 @@ give us some added benefits worth noting:
 
 In summary, modules compose.  The =imports= attribute, standard to all modules is
 central to composition.  For example, if we want attributes that help us
-configure [[treefmt-nix][=treefmt-nix=]], we can import the [[nix-flakes-parts-doc-treefmt][=treefmt-nix= flake module]].  This
+configure [[treefmt-nix][=treefmt-nix=]], we can import the [[flake-parts-doc-treefmt][=treefmt-nix= flake module]].  This
 imports options for attributes we can validly set to configure our formatter:
 
 #+begin_src nix :eval no
@@ -216,7 +216,7 @@ By using =flake-parts=, you get
 * Using =flake-parts=
 
 To help get you started with =flake-parts=, this section covers its API at a
-high-level.  You should eventually read the [[nix-flakes-parts-doc][official =flake-parts= documentation]].
+high-level.  You should eventually read the [[flake-parts-doc][official =flake-parts= documentation]].
 
 The following illustrates how to call the =flake-parts= API in the =outputs=
 attribute of a flake:
@@ -235,7 +235,7 @@ attribute of a flake:
 
 Note that bindings we have in scope include our dependencies (bound to ~inputs~
 above) and =flake-parts= top-level module arguments (bound to the ~topLevelModArgs~
-attribute set above). These top-level module arguments are [[nix-flakes-parts-doc-modargs][documented fully in
+attribute set above). These top-level module arguments are [[flake-parts-doc-modargs][documented fully in
 the =flake-parts= documentation]].
 
 If you don't need the top-level arguments to configure your modules, you can
@@ -292,7 +292,7 @@ three bindings in scope:
 - top-level module arguments (~topLevelModArgs~ above)
 - per-system module arguments (~perSystemModArgs~ above)
 
-The per-system module arguments are also [[nix-flakes-parts-doc-modargs][documented fully in the flake-parts
+The per-system module arguments are also [[flake-parts-doc-modargs][documented fully in the flake-parts
 documentation]]. These arguments help us avoid dealing with the system we're
 targeting.
 
@@ -340,7 +340,7 @@ final outputs we get in our flake are:
 - ~packages.x86_64-linux.my-hello~
 - ~packages.aarch64-darwin.my-hello~
 
-See the [[nix-flakes-parts-doc-modargs][official flake-parts documentation]] for more per-system module arguments
+See the [[flake-parts-doc-modargs][official flake-parts documentation]] for more per-system module arguments
 available beyond =pkgs=. Particularly useful is =inputs'=, which can be traversed
 just like =inputs=, but ignoring the system component of the attribute path. So,
 though a little more verbose, we could use =inputs'= instead of =pkgs= as follows:
@@ -549,7 +549,7 @@ explore more:
 
 - [[nix-wiki-flakes][The Nix wiki page on flakes]]
 - [[nix-manual-flakes-inputs][The Nix manual's section on flake inputs]]
-- [[nix-flakes-parts-doc][=flake-parts= documentation]]
+- [[flake-parts-doc][=flake-parts= documentation]]
 - [[nixos-manual-modules][The NixOS manual's section on modules]]
 - [[nixos-wiki-modules][The Nix wiki's page on modules]]
 

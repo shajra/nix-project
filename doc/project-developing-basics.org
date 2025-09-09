@@ -1,4 +1,4 @@
-#+title: Flakes Basics Development Guide
+#+title: Flakes Basic Development Guide
 #+setupfile: internal/links.org
 
 * Org-mode setup :noexport:
@@ -50,8 +50,8 @@ following in conjunction:
 - this project, Nix-project.
 
 This document focuses on basics, without the added abstraction complexity of
-third-party support like [[nix-flakes-utils][=flake-utils=]] or [[nix-flakes-parts][=flake-parts=]].  A [[file:project-developing-modules.org][separate document]]
-covers modular development with flakes, specifically with =flake-parts=.
+third-party support like [[nix-flakes-utils][=flake-utils=]] or [[flake-parts][=flake-parts=]].  A [[file:project-developing-modules.org][separate document]]
+covers development with flakes modules (using =flake-parts=).
 
 Nix-project exists just as much to provide examples of recommended practices and
 documentation as to offer supporting libraries.  Nothing Nix-project provides is
@@ -83,8 +83,8 @@ tutorial]].
 
 Nix-project provides two templates you can use to scaffold a new project:
 - =less=: uses Nix flakes directly without projects like [[nix-flakes-utils][flake-utils]] or
-  [[nix-flakes-parts][flake-parts]]
-- =more=: uses flakes with more third-party support like [[nix-flakes-parts][flake-parts]].
+  [[flake-parts][flake-parts]]
+- =more=: uses flakes with more third-party support like [[flake-parts][flake-parts]].
 
 Though implemented differently, both =less= and =more= templates have feature
 parity. That way, you can more easily see how to extend your own project

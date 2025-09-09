@@ -61,7 +61,7 @@ nix-project-lib.scripts.writeShellCheckedExe progName
     EXCLUDE_ARGS=()
     QUERY_ANSWER=
 
-    ERR_REGEX="^Babel evaluation exited with code [1-9]"
+    ERR_REGEX="^Babel evaluation exited with code [1-9]+"
     ERR_REGEX="$ERR_REGEX\|^No org-babel-execute function"
     ERR_REGEX="$ERR_REGEX\|^Unable to resolve link"
     ERR_REGEX="$ERR_REGEX\|^Debugger entered--Lisp error"
@@ -99,7 +99,7 @@ nix-project-lib.scripts.writeShellCheckedExe progName
         If using both '-e' and '-E' options the last one is overriding
         (useful for automation/defaults).
 
-        Note, the '-e' switch evaluates the Org-mode file in-place.
+        Note, the '-e' option evaluates the Org-mode file in-place.
         No evaluation occurs during the export to Markdown, which
         will have the same blocks as the Org-mode file.
 
@@ -190,11 +190,11 @@ nix-project-lib.scripts.writeShellCheckedExe progName
     generate_gfm_file()
     {
         local filepath="$1"
-        local eval_switches=()
+        local eval_options=()
         remove_markdown "$filepath"
         if [ "$EVALUATE" = true ]
         then
-            eval_switches+=(
+            eval_options+=(
                 --eval "(org2gfm-log \"EVALUATING\")"
                 --funcall org-babel-execute-buffer
                 --funcall save-buffer
@@ -211,7 +211,7 @@ nix-project-lib.scripts.writeShellCheckedExe progName
             --kill \
             --load ${init} \
             --file "$filepath" \
-            "''${eval_switches[@]}" \
+            "''${eval_options[@]}" \
             --eval "(org2gfm-log \"EXPORTING\")" \
             --funcall org-gfm-export-to-markdown 2>&1
         )

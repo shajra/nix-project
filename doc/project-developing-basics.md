@@ -22,7 +22,7 @@ This document shows how to get started managing a software project using the fol
 -   an experimental feature of Nix called [flakes](https://nixos.wiki/wiki/Flakes)
 -   this project, Nix-project.
 
-This document focuses on basics, without the added abstraction complexity of third-party support like [`flake-utils`](https://github.com/numtide/flake-utils) or [`flake-parts`](https://github.com/hercules-ci/flake-parts). A [separate document](project-developing-modules.md) covers modular development with flakes, specifically with `flake-parts`.
+This document focuses on basics, without the added abstraction complexity of third-party support like [`flake-utils`](https://github.com/numtide/flake-utils) or [`flake-parts`](https://github.com/hercules-ci/flake-parts). A [separate document](project-developing-modules.md) covers development with flakes modules (using `flake-parts`).
 
 Nix-project exists just as much to provide examples of recommended practices and documentation as to offer supporting libraries. Nothing Nix-project provides is essential, but it is actively used by a few projects maintained by the same author.
 
