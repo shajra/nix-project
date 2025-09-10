@@ -50,7 +50,7 @@ following in conjunction:
 - this project, Nix-project.
 
 This document focuses on basics, without the added abstraction complexity of
-third-party support like [[nix-flakes-utils][=flake-utils=]] or [[flake-parts][=flake-parts=]].  A [[file:project-developing-modules.org][separate document]]
+third-party support like [[flake-utils][=flake-utils=]] or [[flake-parts][=flake-parts=]].  A [[file:project-developing-modules.org][separate document]]
 covers development with flakes modules (using =flake-parts=).
 
 Nix-project exists just as much to provide examples of recommended practices and
@@ -82,7 +82,7 @@ tutorial]].
 * Scaffolding
 
 Nix-project provides two templates you can use to scaffold a new project:
-- =less=: uses Nix flakes directly without projects like [[nix-flakes-utils][flake-utils]] or
+- =less=: uses Nix flakes directly without projects like [[flake-utils][flake-utils]] or
   [[flake-parts][flake-parts]]
 - =more=: uses flakes with more third-party support like [[flake-parts][flake-parts]].
 

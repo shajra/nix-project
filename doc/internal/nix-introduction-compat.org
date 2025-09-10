@@ -9,7 +9,7 @@ project-dependent.
 A few users work in organizations or contribute to projects that disallow
 experimental features such as flakes.
 
-For these users, this project uses and encourages the use of the [[nix-flakes-compat][flake-compat]]
+For these users, this project uses and encourages the use of the [[flake-compat][flake-compat]]
 project, which enables an end user who has opted not to enable flakes to at
 least access the flake's contents, packages or otherwise.
 
