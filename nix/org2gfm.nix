@@ -61,10 +61,9 @@ nix-project-lib.scripts.writeShellCheckedExe progName
     EXCLUDE_ARGS=()
     QUERY_ANSWER=
 
-    ERR_REGEX="^Babel evaluation exited with code [1-9]+"
-    ERR_REGEX="$ERR_REGEX\|^No org-babel-execute function"
-    ERR_REGEX="$ERR_REGEX\|^Unable to resolve link"
-    ERR_REGEX="$ERR_REGEX\|^Debugger entered--Lisp error"
+    ERR_REGEX="^Babel evaluation exited with code [1-9][0-9]*"
+    ERR_REGEX="$ERR_REGEX|^Error: user-error"
+    ERR_REGEX="$ERR_REGEX|^Error: error"
 
 
     . "${nix-project-lib.scripts.scriptCommon}/share/nix-project/common.sh"
@@ -204,7 +203,7 @@ nix-project-lib.scripts.writeShellCheckedExe progName
         do
             echo "$line"
             "$KEEP_GOING" \
-                || "${gnugrep}/bin/grep" --invert-match --quiet \
+                || "${gnugrep}/bin/grep" --perl-regexp --invert-match --quiet \
                     "$ERR_REGEX" <(echo "$line")
         done < <("${emacsWithPkgs}/bin/emacs" \
             --batch \
