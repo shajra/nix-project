@@ -324,7 +324,7 @@ some typing:
 
 #+begin_src sh :eval no
 nix search nixpkgs 'gpu|opengl|accel' terminal
-+end_src
+#+end_src
 
 #+name: nix-search-remote-concise
 #+begin_src sh :dir .. :results output :exports results
@@ -333,20 +333,26 @@ nix search nixpkgs 'gpu|opengl|accel' terminal | ansifilter
 
 #+RESULTS: nix-search-remote-concise
 #+begin_example
-,* legacyPackages.x86_64-linux.alacritty (0.13.1)
-  A cross-platform, GPU-accelerated terminal emulator
+,* legacyPackages.x86_64-linux.alacritty (0.15.1)
+  Cross-platform, GPU-accelerated terminal emulator
+
+,* legacyPackages.x86_64-linux.alacritty-graphics (0.15.1-graphics)
+  Cross-platform, GPU-accelerated terminal emulator
 
 ,* legacyPackages.x86_64-linux.darktile (0.0.11)
-  A GPU rendered terminal emulator designed for tiling window managers
+  GPU rendered terminal emulator designed for tiling window managers
 
-,* legacyPackages.x86_64-linux.kitty (0.32.0)
-  A modern, hackable, featureful, OpenGL based terminal emulator
+,* legacyPackages.x86_64-linux.kitty (0.42.2)
+  Fast, feature-rich, GPU based terminal emulator
 
-,* legacyPackages.x86_64-linux.rio (0.0.34)
-  A hardware-accelerated GPU terminal emulator powered by WebGPU
+,* legacyPackages.x86_64-linux.rio (0.2.29)
+  Hardware-accelerated GPU terminal emulator powered by WebGPU
 
-,* legacyPackages.x86_64-linux.wezterm (20230712-072601-f4abf8fd)
+,* legacyPackages.x86_64-linux.wezterm (0-unstable-2025-07-30)
   GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust
+
+,* legacyPackages.x86_64-linux.zutty (0.16-unstable-2024-08-18)
+  X terminal emulator rendering through OpenGL ES Compute Shaders
 #+end_example
 
 If we're curious about what version of WezTerm is available in NixOS's latest
