@@ -53,11 +53,6 @@ This document focuses on basics, without the added abstraction complexity of
 third-party support like [[flake-utils][=flake-utils=]] or [[flake-parts][=flake-parts=]].  A [[file:project-developing-modules.org][separate document]]
 covers development with flakes modules (using =flake-parts=).
 
-Nix-project exists just as much to provide examples of recommended practices and
-documentation as to offer supporting libraries.  Nothing Nix-project provides is
-essential, but it is actively used by a few projects maintained by the same
-author.
-
 #+begin_quote
 *_NOTE:_* To understand more about why to use an experimental feature such as
 flakes, as well as known trade-offs, please read the provided [[file:nix-introduction.org][supplemental

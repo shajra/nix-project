@@ -8,16 +8,19 @@
 
 * About this project
 
-This project, Nix-project, assists the setup of other projects with the [[nix][Nix
+This project exists to help people get software projects set up with the [[nix][Nix
 package manager]] leaning on [[nix-wiki-flakes][flakes]], an experimental Nix feature.
 
-Specifically, this project helps
+Though it offers a little library support, it's really set up to provide
+- templates you can scaffold projects from
+- examples of recommended practices
+- lots of documentation to help absolute beginners navigate
+  complexities/pitfalls
 
-- scaffold new projects
-- maintain dependencies, which may mix different language ecosystems
-- generate Github-oriented documentation with evaluated code blocks
-- build and distribute packages, binary or otherwise
-- document Nix and recommended practices for absolute beginners.
+The custom code in this project supports some actively maintained projects with
+- generation of the GitHub-flavored Markdown you're reading now from [[org][Org-mode
+  files]].
+- slightly augmented functions for authoring scripts beyond what's in [[nixpkgs][Nixpkgs]].
 
 There's not a lot of code in Nix-project. Most of the work is done by Nix and
 third-party libraries. If you scaffolded a new project and removed the
@@ -37,7 +40,7 @@ consider reading the following provided guides:
 - [[file:doc/nix-language.org][Introduction to the Nix Programming Language]]
 
 If you already know Nix basics, then these documents will help you get started
-using Nix-project:
+with a Nix-based project:
 
 - [[file:doc/project-developing-basics.org][Flakes Basic Development Guide]]
 - [[file:doc/project-developing-modules.org][Flake Module (with =flake-parts=) Development Guide]]

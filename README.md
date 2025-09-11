@@ -9,15 +9,18 @@
 
 # About this project<a id="sec-1"></a>
 
-This project, Nix-project, assists the setup of other projects with the [Nix package manager](https://nixos.org/nix) leaning on [flakes](https://nixos.wiki/wiki/Flakes), an experimental Nix feature.
+This project exists to help people get software projects set up with the [Nix package manager](https://nixos.org/nix) leaning on [flakes](https://nixos.wiki/wiki/Flakes), an experimental Nix feature.
 
-Specifically, this project helps
+Though it offers a little library support, it's really set up to provide
 
--   scaffold new projects
--   maintain dependencies, which may mix different language ecosystems
--   generate Github-oriented documentation with evaluated code blocks
--   build and distribute packages, binary or otherwise
--   document Nix and recommended practices for absolute beginners.
+-   templates you can scaffold projects from
+-   examples of recommended practices
+-   lots of documentation to help absolute beginners navigate complexities/pitfalls
+
+The custom code in this project supports some actively maintained projects with
+
+-   generation of the GitHub-flavored Markdown you're reading now from [Org-mode files](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html).
+-   slightly augmented functions for authoring scripts beyond what's in [Nixpkgs](https://github.com/NixOS/nixpkgs).
 
 There's not a lot of code in Nix-project. Most of the work is done by Nix and third-party libraries. If you scaffolded a new project and removed the dependency on Nix-project, then you'd have a small project set up using Nix with recommended practices.
 
@@ -30,7 +33,7 @@ Among other benefits, Nix gives us an incredible amount of control and repeatabi
 -   [Nix End-user Guide](doc/nix-usage-flakes.md)
 -   [Introduction to the Nix Programming Language](doc/nix-language.md)
 
-If you already know Nix basics, then these documents will help you get started using Nix-project:
+If you already know Nix basics, then these documents will help you get started with a Nix-based project:
 
 -   [Flakes Basic Development Guide](doc/project-developing-basics.md)
 -   [Flake Module (with `flake-parts`) Development Guide](doc/project-developing-modules.md)
