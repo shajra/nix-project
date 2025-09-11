@@ -39,8 +39,8 @@ If you're new to Nix consider reading the provided [introduction](nix-introducti
 This project supports
 
 -   Linux on x86-64 machines
--   MacOS on x86-64 machines
--   MacOS on ARM64 machines (M1 or M2).
+-   macOS on x86-64 machines
+-   macOS on ARM64 machines (M1 or M2).
 
 That may affect your ability to follow along with examples.
 

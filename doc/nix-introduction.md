@@ -229,7 +229,7 @@ If you write scripts that call `nix` commands or use flakes, they may break slig
 By calling `nix` with a few extra arguments `--extra-experimental-features 'nix-command flakes'` we can access flakes commands for single invocations without enabling flakes globally. You can even make an alias for your shell that might look like the following:
 
 ```sh
-alias nix-flakes = nix --extra-experimental-features 'nix-command flakes'
+alias nix-flakes='nix --extra-experimental-features "nix-command flakes"'
 ```
 
 This way, there's less to type interactively. Just don't script against this command, so there's no worry of scripts breaking due to experimental features.

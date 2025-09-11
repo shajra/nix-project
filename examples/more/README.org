@@ -1,6 +1,5 @@
 #+title: Example Nix Flake-based Project Using More
 #+link: _org https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html
-#+link: _nix-project https://github.com/shajra/nix-project
 #+link: _flake-parts https://flake.parts/
 #+link: _nix-project https://github.com/shajra/nix-project
 
@@ -9,7 +8,7 @@ build/maintain software projects with Nix, notably with the library assistance o
 [[_flake-parts][flake-parts]].
 
 This project has been configured to set up a developer environment, which you
-can enter by with =nix develop=, which enters an interactive shell.  In this
+can enter with =nix develop=, which enters an interactive shell.  In this
 shell, you'll find a few commands set up on the =PATH=:
 
 #+begin_example
@@ -19,10 +18,10 @@ shell, you'll find a few commands set up on the =PATH=:
 
   menu            - prints this menu
   project-check   - run all checks/tests/linters
-  project-doc-gen - generate Github Markdown from Org files
+  project-doc-gen - generate GitHub Markdown from Org files
   project-format  - format all files in one command
 #+end_example
-  [[_org][Emacs Org-mode]] files (such as this =README.org= file).
+
 
 These tools can be called with no arguments for reasonable defaults.
 

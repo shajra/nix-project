@@ -57,7 +57,7 @@ We can scaffold a project with the `less` template with the following command:
 nix --refresh \
     flake new \
     --template github:shajra/nix-project/main#less \
-    /tmp/my-project-less  # or whereever you want your new project
+    /tmp/my-project-less  # or wherever you want your new project
 ```
 
     wrote: "/tmp/my-project-less/README.org"
@@ -84,7 +84,7 @@ nix develop
     
       menu            - prints this menu
       project-check   - run all checks/tests/linters
-      project-doc-gen - generate Github Markdown from Org files
+      project-doc-gen - generate GitHub Markdown from Org files
       project-format  - format all files in one command
 
 `project-doc-gen` generates documentation tailored for repositories hosted on GitHub. It uses the `org2gfm` script/library provided by Nix-project and is discussed in [another document](project-documenting.md).

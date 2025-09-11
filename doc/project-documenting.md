@@ -17,7 +17,7 @@
 
 # About this document<a id="sec-1"></a>
 
-This document shows one way to document your code with the `org2gfm` script provided by this project, Nix-project. This script converts [Emac's Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html) files into [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/). It can evaluate all source blocks in the Org files to generate results to include in the documentation or check that source code snippets work as intended.
+This document shows one way to document your code with the `org2gfm` script provided by this project, Nix-project. This script converts [Emacs' Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html) files into [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/). It can evaluate all source blocks in the Org files to generate results to include in the documentation or check that source code snippets work as intended.
 
 If you're reading this document right now as Markdown it was generated with `org2gfm`.
 
@@ -31,7 +31,7 @@ Finally, this document explains `org2gfm`'s design decisions and recommends a st
 
 Documenting programming projects often requires embedding code snippets. We generally want to check that these snippets are well-formed. Other times, we might want to process the code to obtain a result to embed in the document.
 
-Some may recognize this as similar to [literate programming](https://en.wikipedia.org/wiki/Literate_programming). The Emacs text editor has long has long shipped with a feature called [Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html) used for this kind of documentation. The Org-mode input files used by `org2gfm` are more-or-less human-readable markdown files, though they support a lot of features for document processing.
+Some may recognize this as similar to [literate programming](https://en.wikipedia.org/wiki/Literate_programming). The Emacs text editor has long shipped with a feature called [Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html) used for this kind of documentation. The Org-mode input files used by `org2gfm` are more-or-less human-readable markdown files, though they support a lot of features for document processing.
 
 Emacs can be run in a headless mode from the command-line to avoid bringing up an entire text editor to generate documentation. This is what `org2gfm` does. The script manages the execution of Emacs on the user's behalf.
 
@@ -57,7 +57,7 @@ If you want to integrate documentation generation with a project scaffolded by N
 
 # Usage<a id="sec-4"></a>
 
-> **<span class="underline">WARNING</span>**: Since =org2gfm by default writes over files in-place, source control is highly recommended to protect against the loss of documentation.
+> **<span class="underline">WARNING</span>**: Since `org2gfm` by default writes over files in-place, source control is highly recommended to protect against the loss of documentation.
 
 ## Calling the `org2gfm` executable directly<a id="sec-4-1"></a>
 
@@ -92,7 +92,7 @@ If you like, you can scaffold a new project with the `less` template:
 nix --refresh \
     flake new \
     --template github:shajra/nix-project/main#less \
-    /tmp/my-project  # or whereever you want your new project
+    /tmp/my-project  # or wherever you want your new project
 ```
 
 See the scaffolded project's `README.org` for a steps to experience `org2gfm` first-hand via a alias set up in the developer environment called `project-doc-gen`.
@@ -113,14 +113,14 @@ If you like, you can scaffold a new project with the `more` template:
 nix --refresh \
     flake new \
     --template github:shajra/nix-project/main#more \
-    /tmp/my-project  # or whereever you want your new project
+    /tmp/my-project  # or wherever you want your new project
 ```
 
 See the scaffolded project's `README.org` for a steps to experience `org2gfm` first-hand via a alias set up in the developer environment called `project-doc-gen`.
 
 # Org2gfm design<a id="sec-5"></a>
 
-The `org2gfm` script provided by this project constrains the total flexibility of [Emac's Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html), particularly with respect to evaluation and exporting. This section discusses the design of `org2gfm` and how to use it as intended.
+The `org2gfm` script provided by this project constrains the total flexibility of [Emacs' Org-mode](https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html), particularly with respect to evaluation and exporting. This section discusses the design of `org2gfm` and how to use it as intended.
 
 ## GitHub Flavored Markdown (GFM) exporting only<a id="sec-5-1"></a>
 

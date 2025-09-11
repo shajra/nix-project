@@ -13,11 +13,11 @@
 
 # About this document<a id="sec-1"></a>
 
-This document is a continuation of [Flakes Basics Development Guide](project-developing-basics.md). Specifically, it explains how to use and author your own [`flake-parts`](https://github.com/hercules-ci/flake-parts) modules, to address some points of tension when using the plain flakes API.
+This document is a continuation of [Flakes Basic Development Guide](project-developing-basics.md). Specifically, it explains how to use and author your own [`flake-parts`](https://github.com/hercules-ci/flake-parts) modules, to address some points of tension when using the plain flakes API.
 
 # Prerequisites<a id="sec-2"></a>
 
-Before diving into flake-parts modules, you should be familiar with the [Flakes Basics Development Guide](project-developing-basics.md).
+Before diving into flake-parts modules, you should be familiar with the [Flakes Basic Development Guide](project-developing-basics.md).
 
 Additionally, the following guides may be helpful:
 
@@ -27,13 +27,13 @@ Additionally, the following guides may be helpful:
 
 # Scaffolding<a id="sec-3"></a>
 
-If you followed the [Flakes Basics Development Guide](project-developing-basics.md), you already scaffolded a project using the provided `less` template, which by design doesn't use `flake-parts`. To follow along with this guide, you can scaffold a project from the `more` template, which illustrates usage of `flake-parts`:
+If you followed the [Flakes Basic Development Guide](project-developing-basics.md), you already scaffolded a project using the provided `less` template, which by design doesn't use `flake-parts`. To follow along with this guide, you can scaffold a project from the `more` template, which illustrates usage of `flake-parts`:
 
 ```sh
 nix --refresh \
     flake new \
     --template github:shajra/nix-project/main#more \
-    /tmp/my-project-more  # or whereever you want your new project
+    /tmp/my-project-more  # or wherever you want your new project
 ```
 
     wrote: "/tmp/my-project-more/README.org"

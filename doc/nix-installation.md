@@ -24,8 +24,8 @@ If you're unsure if you want to enable flakes or not, read the provided [introdu
 This project supports
 
 -   Linux on x86-64 machines
--   MacOS on x86-64 machines
--   MacOS on ARM64 machines (M1 or M2).
+-   macOS on x86-64 machines
+-   macOS on ARM64 machines (M1 or M2).
 
 All we need to use this project is to install Nix, which this document covers. Nix can be installed on a variety of Linux and Mac systems. Nix can also be installed in Windows via the Windows Subsystem for Linux (WSL). Installation on WSL may involve steps not covered in this documentation, though.
 
@@ -71,7 +71,7 @@ The Nix manual describes [other methods of installing Nix](https://nixos.org/man
 
 This project pushes built Nix packages to two substituters, [Garnix](https://garnix.io) and [Cachix](https://cachix.org), as part of its continuous integration. It's recommended to install at least one of these. Configuring both to have a fallback works as well. Garnix caches a few more packages than Cachix. Both should have similar availability.
 
-We need to extend two settings in either the system-level Nix configuration file at `/etc/nix/nix.conf`, or the user-level configuration at `~/.config/nix/nix.config` (which may not exist yet).
+We need to extend two settings in either the system-level Nix configuration file at `/etc/nix/nix.conf`, or the user-level configuration at `~/.config/nix/nix.conf` (which may not exist yet).
 
 The choice of whether to perform these settings system-level or user-level is up to your preference.
 
@@ -117,7 +117,7 @@ nix show-config substituters
 nix show-config trusted-public-keys
 ```
 
-Make sure still have settings for <https://cache.nixos.org>.
+Make sure you still have settings for <https://cache.nixos.org>.
 
 # Setting up experimental features<a id="sec-6"></a>
 
@@ -133,7 +133,7 @@ As you can guess, the `flakes` feature enables flakes functionality in Nix. The 
 If you don't enable experimental features globally, there is a option to enable features local to just a single command-line invocation. For example, to use flakes-related commands, we call `nix --extra-experimental-features 'nix-command flakes' …`. When not configuring globally, setting an alias for this can be useful. The following command illustrates setting an alias in most POSIX-compliant shells:
 
 ```sh
-alias nix-flakes = nix --extra-experimental-features 'nix-command flakes'
+alias nix-flakes='nix --extra-experimental-features "nix-command flakes"'
 ```
 
 As discussed in the introduction, `nix-command` is enabled by default. You don't need to enable it explicitly (though you could disable it).

@@ -114,7 +114,7 @@ more packages than Cachix. Both should have similar availability.
 
 We need to extend two settings in either the system-level Nix configuration file
 at =/etc/nix/nix.conf=, or the user-level configuration at
-=~/.config/nix/nix.config= (which may not exist yet).
+=~/.config/nix/nix.conf= (which may not exist yet).
 
 The choice of whether to perform these settings system-level or user-level is up
 to your preference.
@@ -172,7 +172,7 @@ nix show-config substituters
 nix show-config trusted-public-keys
 #+end_src
 
-Make sure still have settings for https://cache.nixos.org.
+Make sure you still have settings for https://cache.nixos.org.
 
 * Setting up experimental features
 
@@ -195,7 +195,7 @@ useful. The following command illustrates setting an alias in most
 POSIX-compliant shells:
 
 #+begin_src sh :eval no
-alias nix-flakes = nix --extra-experimental-features 'nix-command flakes'
+alias nix-flakes='nix --extra-experimental-features "nix-command flakes"'
 #+end_src
 
 As discussed in the introduction, =nix-command= is enabled by default. You don't

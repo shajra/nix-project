@@ -1,6 +1,5 @@
 #+title: Example Nix Flake-based Project Using Less
 #+link: _org https://www.gnu.org/software/emacs/manual/html_node/emacs/Org-Mode.html
-#+link: _nix-project https://github.com/shajra/nix-project
 #+link: _flake-utils https://github.com/numtide/flake-utils
 #+link: _flake-parts https://flake.parts/
 #+link: _nix-project https://github.com/shajra/nix-project
@@ -10,7 +9,7 @@ build/maintain software projects with Nix, but without library assistance like
 [[_flake-utils][flake-utils]] or [[_flake-parts][flake-parts]].
 
 This project has been configured to set up a developer environment, which you
-can enter by with =nix develop=, which enters an interactive shell.  In this
+can enter with =nix develop=, which enters an interactive shell.  In this
 shell, you'll find a few commands set up on the =PATH=:
 
 #+begin_example
@@ -20,7 +19,7 @@ shell, you'll find a few commands set up on the =PATH=:
 
   menu            - prints this menu
   project-check   - run all checks/tests/linters
-  project-doc-gen - generate Github Markdown from Org files
+  project-doc-gen - generate GitHub Markdown from Org files
   project-format  - format all files in one command
 #+end_example
 

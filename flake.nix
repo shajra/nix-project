@@ -73,7 +73,7 @@
               }
               {
                 name = "project-doc-gen";
-                help = "generate Github Markdown from Org files";
+                help = "generate GitHub Markdown from Org files";
                 command = ''org2gfm-hermetic "$@"'';
               }
             ];
