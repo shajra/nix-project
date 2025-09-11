@@ -108,7 +108,7 @@ We can scaffold a project with the =less= template with the following command:
 nix --refresh \
     flake new \
     --template github:shajra/nix-project/main#less \
-    /tmp/my-project-less  # or whereever you want your new project
+    /tmp/my-project-less  # or wherever you want your new project
 #+end_src
 
 #+name: scaffold-less
@@ -160,7 +160,7 @@ nix develop /tmp/my-project-less#default \
 : 
 :   menu            - prints this menu
 :   project-check   - run all checks/tests/linters
-:   project-doc-gen - generate Github Markdown from Org files
+:   project-doc-gen - generate GitHub Markdown from Org files
 :   project-format  - format all files in one command
 : 
 

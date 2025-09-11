@@ -43,14 +43,14 @@ rm --recursive --force /tmp/my-project-more
 
 * About this document
 
-This document is a continuation of [[file:project-developing-basics.org][Flakes Basics Development Guide]].
+This document is a continuation of [[file:project-developing-basics.org][Flakes Basic Development Guide]].
 Specifically, it explains how to use and author your own [[flake-parts][=flake-parts=]] modules,
 to address some points of tension when using the plain flakes API.
 
 * Prerequisites
 
 Before diving into flake-parts modules, you should be familiar with the [[file:project-developing-basics.org][Flakes
-Basics Development Guide]].
+Basic Development Guide]].
 
 Additionally, the following guides may be helpful:
 - [[file:nix-introduction.org][Introduction to Nix and Motivations to Use It]]
@@ -59,7 +59,7 @@ Additionally, the following guides may be helpful:
 
 * Scaffolding
 
-If you followed the [[file:project-developing-basics.org][Flakes Basics Development Guide]], you already scaffolded a
+If you followed the [[file:project-developing-basics.org][Flakes Basic Development Guide]], you already scaffolded a
 project using the provided =less= template, which by design doesn't use
 =flake-parts=.  To follow along with this guide, you can scaffold a project from
 the =more= template, which illustrates usage of =flake-parts=:
@@ -68,7 +68,7 @@ the =more= template, which illustrates usage of =flake-parts=:
 nix --refresh \
     flake new \
     --template github:shajra/nix-project/main#more \
-    /tmp/my-project-more  # or whereever you want your new project
+    /tmp/my-project-more  # or wherever you want your new project
 #+end_src
 
 #+name: scaffold-more

@@ -98,7 +98,7 @@ To continue following this usage guide, you will need Nix's experimental flakes
 feature. You can enable this globally or use an alias such as the following:
 
 #+begin_src sh :eval no
-alias nix-flakes = nix --extra-experimental-features 'nix-command flakes'
+alias nix-flakes='nix --extra-experimental-features "nix-command flakes"'
 #+end_src
 
 * Working with Nix

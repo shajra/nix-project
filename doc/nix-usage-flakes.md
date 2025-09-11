@@ -36,8 +36,8 @@ If you're new to Nix consider reading the provided [introduction](nix-introducti
 This project supports
 
 -   Linux on x86-64 machines
--   MacOS on x86-64 machines
--   MacOS on ARM64 machines (M1 or M2).
+-   macOS on x86-64 machines
+-   macOS on ARM64 machines (M1 or M2).
 
 That may affect your ability to follow along with examples.
 
@@ -46,7 +46,7 @@ Otherwise, see the provided [Nix installation and configuration guide](nix-insta
 To continue following this usage guide, you will need Nix's experimental flakes feature. You can enable this globally or use an alias such as the following:
 
 ```sh
-alias nix-flakes = nix --extra-experimental-features 'nix-command flakes'
+alias nix-flakes='nix --extra-experimental-features "nix-command flakes"'
 ```
 
 # Working with Nix<a id="sec-4"></a>

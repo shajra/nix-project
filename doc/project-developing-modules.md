@@ -13,11 +13,11 @@
 
 # About this document<a id="sec-1"></a>
 
-This document is a continuation of [Flakes Basics Development Guide](project-developing-basics.md). Specifically, it explains how to use and author your own [`flake-parts`](https://github.com/hercules-ci/flake-parts) modules, to address some points of tension when using the plain flakes API.
+This document is a continuation of [Flakes Basic Development Guide](project-developing-basics.md). Specifically, it explains how to use and author your own [`flake-parts`](https://github.com/hercules-ci/flake-parts) modules, to address some points of tension when using the plain flakes API.
 
 # Prerequisites<a id="sec-2"></a>
 
-Before diving into flake-parts modules, you should be familiar with the [Flakes Basics Development Guide](project-developing-basics.md).
+Before diving into flake-parts modules, you should be familiar with the [Flakes Basic Development Guide](project-developing-basics.md).
 
 Additionally, the following guides may be helpful:
 
@@ -27,13 +27,13 @@ Additionally, the following guides may be helpful:
 
 # Scaffolding<a id="sec-3"></a>
 
-If you followed the [Flakes Basics Development Guide](project-developing-basics.md), you already scaffolded a project using the provided `less` template, which by design doesn't use `flake-parts`. To follow along with this guide, you can scaffold a project from the `more` template, which illustrates usage of `flake-parts`:
+If you followed the [Flakes Basic Development Guide](project-developing-basics.md), you already scaffolded a project using the provided `less` template, which by design doesn't use `flake-parts`. To follow along with this guide, you can scaffold a project from the `more` template, which illustrates usage of `flake-parts`:
 
 ```sh
 nix --refresh \
     flake new \
     --template github:shajra/nix-project/main#more \
-    /tmp/my-project-more  # or whereever you want your new project
+    /tmp/my-project-more  # or wherever you want your new project
 ```
 
     wrote: "/tmp/my-project-more/README.org"
@@ -50,7 +50,7 @@ Beyond what's in the `less` template, the `more` template also provides two file
 
 # Motivating using `flake-parts`<a id="sec-4"></a>
 
-As covered in the [Flakes Basics Development Guide](project-developing-basics.md), the code in our `less` template has a few points of tension:
+As covered in the [Flakes Basic Development Guide](project-developing-basics.md), the code in our `less` template has a few points of tension:
 
 -   The `forAllSystems` boilerplate in [`flake.nix`](../examples/less/flake.nix), while not too many lines, is distracting.
 -   Lots of dependencies in [`nix/overlay.nix`](../examples/less/nix/overlay.nix) seem to build slightly differently and we have to figure out how to place their results in the appropriate flake output.

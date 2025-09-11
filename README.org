@@ -15,7 +15,7 @@ Specifically, this project helps
 
 - scaffold new projects
 - maintain dependencies, which may mix different language ecosystems
-- generate Github-oriented documentation with evaluated code blocks
+ - generate GitHub-oriented documentation with evaluated code blocks
 - build and distribute packages, binary or otherwise
 - document Nix and recommended practices for absolute beginners.
 

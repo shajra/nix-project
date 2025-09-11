@@ -15,5 +15,5 @@
  (nixos-latest         . "25.05")
  (platforms            . "\n\
 - Linux on x86-64 machines\n\
-- MacOS on x86-64 machines\n\
-- MacOS on ARM64 machines (M1 or M2)"))
+- macOS on x86-64 machines\n\
+- macOS on ARM64 machines (M1 or M2)"))
