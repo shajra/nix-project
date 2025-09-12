@@ -69,7 +69,7 @@
               {
                 name = "project-check";
                 help = "run all checks/tests/linters";
-                command = "nix -L flake check --show-trace";
+                command = "nix --print-build-logs flake check --show-trace";
               }
               {
                 name = "project-format";
