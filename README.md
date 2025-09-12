@@ -9,9 +9,11 @@
 
 # About this project<a id="sec-1"></a>
 
-This project exists to help people get software projects set up with the [Nix package manager](https://nixos.org/nix) leaning on [flakes](https://nixos.wiki/wiki/Flakes), an experimental Nix feature.
+Nix-project exists to help people use the [Nix package manager](https://nixos.org/nix) to provide the build, developer tooling, and developer environments for a software project.
 
-Though it offers a little library support, it's really set up to provide
+Among other benefits, Nix gives us an incredible amount of control and repeatability of our software projects. The approach of this project leans heavily on [flakes](https://nixos.wiki/wiki/Flakes), an experimental Nix feature.
+
+Though Nix-project offers a little library support, it's intended to be an educational resource providing
 
 -   templates you can scaffold projects from
 -   examples of recommended practices
@@ -26,7 +28,7 @@ There's not a lot of code in Nix-project. Most of the work is done by Nix and th
 
 This source's [doc directory](doc) provides a variety of documents to not only help you use this project, but also to get an introduction to the Nix ecosystem.
 
-Among other benefits, Nix gives us an incredible amount of control and repeatability of our software projects. If you don't know much about Nix, consider reading the following provided guides:
+If you don't know much about Nix, consider reading the following provided guides:
 
 -   [Introduction to Nix and Motivations to Use It](doc/nix-introduction.md)
 -   [Nix Installation and Configuration Guide](doc/nix-installation.md)
