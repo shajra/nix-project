@@ -62,6 +62,11 @@
           devshells.default = {
             commands = [
               {
+                name = "project-update";
+                help = "update project dependencies";
+                command = "nix flake update --commit-lock-file";
+              }
+              {
                 name = "project-check";
                 help = "run all checks/tests/linters";
                 command = "nix -L flake check --show-trace";
