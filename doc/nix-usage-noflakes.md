@@ -86,7 +86,7 @@ nix --extra-experimental-features nix-command search --file . '' ^
     * packages.aarch64-darwin.default
       Exports Org-mode files to GitHub Flavored Markdown (GFM)
     
-    * packages.aarch64-darwin.org2gfm
+    * packages.aarch64-darwin.org2gfm-impure
       Exports Org-mode files to GitHub Flavored Markdown (GFM)
     
     …
@@ -107,13 +107,10 @@ Note, there are some projects for which `nix search` won't work. These projects 
 
 ```sh
 nix --extra-experimental-features nix-command \
-    search --file . '' linux org2gfm
+    search --file . '' linux org2gfm-impure
 ```
 
-    * packages.x86_64-linux.default
-      Exports Org-mode files to GitHub Flavored Markdown (GFM)
-    
-    * packages.x86_64-linux.org2gfm
+    * packages.x86_64-linux.org2gfm-impure
       Exports Org-mode files to GitHub Flavored Markdown (GFM)
 
 We can also use `--json` to get more details about found packages:
@@ -151,22 +148,22 @@ This document intentionally doesn't cover the `nix-channel` command or the `NIX_
 The following result is one returned by an execution of `nix search` or tab-completing from within a `nix repl` session:
 
     {
-      "packages.x86_64-linux.org2gfm": {
+      "packages.x86_64-linux.org2gfm-impure": {
         "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
         "pname": "org2gfm",
         "version": ""
       }
     }
 
-We can see that a package can be accessed with the `packages.x86_64-linux.org2gfm` output attribute path of the project's flake. Not shown in the search results above, this package happens to provide the executable `bin/org2gfm`.
+We can see that a package can be accessed with the `packages.x86_64-linux.org2gfm-impure` output attribute path of the project's flake. Not shown in the search results above, this package happens to provide the executable `bin/org2gfm`.
 
 We can build this package with `nix-build` from the project root:
 
 ```sh
-nix-build --attr packages.x86_64-linux.org2gfm .
+nix-build --attr packages.x86_64-linux.org2gfm-impure .
 ```
 
-    /nix/store/di6pz8v3hdg4mxnfndzdz4mr3zildmnn-org2gfm
+    /nix/store/dfnm0xmaz3vwfk1gfms0d1whk7zny97f-org2gfm
 
 If we omit the path to a Nix file, `nix-build` will try to build `default.nix` in the current directory. If we omit the `--attr` option and argument, `nix-build` will try to build packages it finds in the root of the attribute tree.
 
@@ -178,7 +175,7 @@ The output of `nix-build` shows us where in `/nix/store` our package has been bu
 readlink result*
 ```
 
-    /nix/store/di6pz8v3hdg4mxnfndzdz4mr3zildmnn-org2gfm
+    /nix/store/dfnm0xmaz3vwfk1gfms0d1whk7zny97f-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -202,13 +199,13 @@ We can run commands in Nix-curated environments with `nix shell`, provided we're
 
 With `nix shell`, you don't even have to build the package first with `nix build` or mess around with “result” symlinks. `nix shell` will build any necessary packages required.
 
-For example, to get the help message for the `org2gfm` executable provided by the package selected by the `packages.x86_64-linux.org2gfm` attribute path output by this project's flake, we can call the following:
+For example, to get the help message for the `org2gfm` executable provided by the package selected by the `packages.x86_64-linux.org2gfm-impure` attribute path output by this project's flake, we can call the following:
 
 ```sh
 nix --extra-experimental-features 'nix-command' \
     shell \
     --file . \
-    packages.x86_64-linux.org2gfm \
+    packages.x86_64-linux.org2gfm-impure \
     --command org2gfm --help
 ```
 
@@ -239,7 +236,7 @@ Remember, the package's *name* is not the same as the *attribute* used to select
 
 ```sh
 nix --extra-experimental-features \
-    nix-command search --file . --json 'packages.x86_64-linux.org2gfm' ^ | jq .
+    nix-command search --file . --json 'packages.x86_64-linux.org2gfm-impure' ^ | jq .
 ```
 
     {
@@ -256,7 +253,7 @@ Here's an example of calling `nix run` with this project:
 
 ```sh
 nix --extra-experimental-features nix-command \
-    run --file . packages.x86_64-linux.org2gfm -- --help
+    run --file . packages.x86_64-linux.org2gfm-impure -- --help
 ```
 
     USAGE: org2gfm [OPTION]...  [FILE]...
@@ -266,7 +263,7 @@ nix --extra-experimental-features nix-command \
         Uses Emacs to export Org-mode files to GitHub Flavored
     …
 
-This works because the package selected by `packages.x86_64-linux.org2gfm` selects a package with name “org2gfm” that is the same as the executable provided at `bin/org2gfm`.
+This works because the package selected by `packages.x86_64-linux.org2gfm-impure` selects a package with name “org2gfm” that is the same as the executable provided at `bin/org2gfm`.
 
 If we want something other than what can be detected, then we have to continue using `nix shell` with `--command`.
 
@@ -303,10 +300,10 @@ nix-env --option-profile /nix/var/nix/profiles/per-user/$USER/another-profile
 
 This way, you can just put `~/.nix-profile/bin` on your `PATH`, and any programs installed in your currently active profile will be available for interactive use or scripts.
 
-To install the `org2gfm` executable, which is provided by the `packages.x86_64-linux.org2gfm` attribute path, we'd run the following:
+To install the `org2gfm` executable, which is provided by the `packages.x86_64-linux.org2gfm-impure` attribute path, we'd run the following:
 
 ```sh
-nix-env --install --file . --attr packages.x86_64-linux.org2gfm 2>&1
+nix-env --install --file . --attr packages.x86_64-linux.org2gfm-impure 2>&1
 ```
 
     installing 'org2gfm'
@@ -326,16 +323,11 @@ We can see the package name of anything we install by using `nix search` with a 
 
 ```sh
 nix --extra-experimental-features nix-command \
-    search --json --file . '' linux 'org2gfm'
+    search --json --file . '' linux 'org2gfm-impure'
 ```
 
     {
-      "packages.x86_64-linux.default": {
-        "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
-        "pname": "org2gfm",
-        "version": ""
-      },
-      "packages.x86_64-linux.org2gfm": {
+      "packages.x86_64-linux.org2gfm-impure": {
         "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
         "pname": "org2gfm",
         "version": ""
@@ -350,7 +342,7 @@ nix-env --uninstall org2gfm 2>&1
 
     uninstalling 'org2gfm'
 
-Summarizing what we've done, we've installed our package using its attribute path (`packages.x86_64-linux.org2gfm`) within the referenced Nix expression. But we uninstall it using the package name (“org2gfm”), which may not be the same as the attribute path. When a package is installed, Nix keeps no reference to the expression evaluated to obtain the installed package's derivation. The attribute path is only relevant to this expression. In fact, two different expressions could evaluate to the same derivation, but use different attribute paths. This is why we uninstall packages by their package name.
+Summarizing what we've done, we've installed our package using its attribute path (`packages.x86_64-linux.org2gfm-impure`) within the referenced Nix expression. But we uninstall it using the package name (“org2gfm”), which may not be the same as the attribute path. When a package is installed, Nix keeps no reference to the expression evaluated to obtain the installed package's derivation. The attribute path is only relevant to this expression. In fact, two different expressions could evaluate to the same derivation, but use different attribute paths. This is why we uninstall packages by their package name.
 
 Also, if you look at the symlink-resolved location for your profile, you'll see that Nix retains the symlink trees of previous generations of your profile. You can even roll back to an earlier profile with the `--rollback` option. You can also delete old generations of your profile with the `--delete-generations` option.
 

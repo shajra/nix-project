@@ -44,19 +44,21 @@
         {
           _module.args.pkgs = nixpkgs.stable;
           packages = rec {
-            default = org2gfm;
-            org2gfm = build.nix-project-org2gfm;
+            default = org2gfm-impure;
+            org2gfm-impure = build.nix-project-org2gfm-impure;
           };
           apps = rec {
-            default = org2gfm;
-            org2gfm = {
+            default = org2gfm-impure;
+            org2gfm-impure = {
               type = "app";
-              program = "${build.nix-project-org2gfm}/bin/org2gfm";
+              inherit (build.nix-project-org2gfm-impure) meta;
+              program = "${build.nix-project-org2gfm-impure}/bin/org2gfm";
             };
           };
           lib = build.nix-project-lib;
           checks.build = build.nix-project-checks;
-          checks.org2gfm-hermetic = config.org2gfm.finalPackage;
+          checks.org2gfm-flake = config.org2gfm.finalPackage;
+          checks.org2gfm-build = build.nix-project-checks;
           legacyPackages.lib = build.nix-project-lib;
           legacyPackages.nixpkgs = nixpkgs;
           devshells.default = {
@@ -79,7 +81,7 @@
               {
                 name = "project-doc-gen";
                 help = "generate GitHub Markdown from Org files";
-                command = ''org2gfm-hermetic "$@"'';
+                command = ''org2gfm "$@"'';
               }
             ];
             packages = [
@@ -95,10 +97,12 @@
           };
           org2gfm = {
             settings = {
-              ignoreEnvironment = true;
-              keepEnvVars = [
+              envKeep = [
                 "LANG"
                 "LOCALE_ARCHIVE"
+              ];
+              pathImpureSelected = [
+                "nix"
               ];
               pathPackages = [
                 nixpkgs.stable.ansifilter
@@ -111,11 +115,9 @@
                 nixpkgs.stable.nixfmt-rfc-style
                 nixpkgs.stable.tree
               ];
-              extraPaths = [
+              pathExtras = [
                 "/bin"
               ];
-              pathIncludesActiveNix = true;
-              pathIncludesPrevious = false;
               exclude = [
                 "internal"
                 "examples"

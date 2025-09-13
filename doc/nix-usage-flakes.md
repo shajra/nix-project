@@ -124,13 +124,13 @@ nix flake show .
     ├───packages
     │   ├───aarch64-darwin
     │   │   ├───default omitted (use '--all-systems' to show)
-    │   │   └───org2gfm omitted (use '--all-systems' to show)
+    │   │   └───org2gfm-impure omitted (use '--all-systems' to show)
     │   ├───x86_64-darwin
     │   │   ├───default omitted (use '--all-systems' to show)
-    │   │   └───org2gfm omitted (use '--all-systems' to show)
+    │   │   └───org2gfm-impure omitted (use '--all-systems' to show)
     │   └───x86_64-linux
     │       ├───default: package 'org2gfm'
-    │       └───org2gfm: package 'org2gfm'
+    │       └───org2gfm-impure: package 'org2gfm'
     └───templates
         ├───default: template: Starter project including hercules-ci/flake-parts.
         ├───less: template: Starter project with less third-party dependencies
@@ -155,10 +155,10 @@ When the installable is just a flake reference, the called `nix` subcommand will
 
 Installables can also reference an output of a flake (`<output reference>` above) directly in a couple of ways:
 
-| Output reference                     | Example installable               |
-|------------------------------------ |--------------------------------- |
-| `<output attribute>.<system>.<name>` | `.#packages.x86_64-linux.org2gfm` |
-| `<name>`                             | `.#org2gfm`                       |
+| Output reference                     | Example installable                      |
+|------------------------------------ |---------------------------------------- |
+| `<output attribute>.<system>.<name>` | `.#packages.x86_64-linux.org2gfm-impure` |
+| `<name>`                             | `.#org2gfm-impure`                       |
 
 The first way is the most explicit, by providing the full attribute path we can see with `nix flake show`. But this requires specifying the package's system architecture.
 
@@ -183,7 +183,7 @@ nix search . ^
     * packages.x86_64-linux.default
       Exports Org-mode files to GitHub Flavored Markdown (GFM)
     
-    * packages.x86_64-linux.org2gfm
+    * packages.x86_64-linux.org2gfm-impure
       Exports Org-mode files to GitHub Flavored Markdown (GFM)
 
 We're required to pass regexes as final arguments to prune down the search. Above we've passed `^` to match everything and return all results.
@@ -238,21 +238,18 @@ You may also notice that the Nixpkgs flake outputs packages under the `legacyPac
 
 The following result is one returned by our prior execution of `nix search .`:
 
-    * packages.x86_64-linux.default
-      Exports Org-mode files to GitHub Flavored Markdown (GFM)
-    
-    * packages.x86_64-linux.org2gfm
+    * packages.x86_64-linux.org2gfm-impure
       Exports Org-mode files to GitHub Flavored Markdown (GFM)
 
-We can see that a package can be accessed with the `packages.x86_64-linux.org2gfm` output attribute path of the project's flake. Not shown in the search results above, this package happens to provide the executable `bin/org2gfm`.
+We can see that a package can be accessed with the `packages.x86_64-linux.org2gfm-impure` output attribute path of the project's flake. Not shown in the search results above, this package happens to provide the executable `bin/org2gfm`.
 
 We can build this package with `nix build` from the project root:
 
 ```sh
-nix build .#org2gfm
+nix build .#org2gfm-impure
 ```
 
-As discussed in prior sections, the positional arguments to `nix build` are *installables*. Here, the `.` indicates that our flake should be found from the current directory. Within this flake, we look for a package with an attribute name of `org2gfm`. We didn't have to use the full attribute path `packages.x86_64-linux.org2gfm` because `nix build` will automatically look in the `packages` attribute for the system it detects we're on.
+As discussed in prior sections, the positional arguments to `nix build` are *installables*. Here, the `.` indicates that our flake should be found from the current directory. Within this flake, we look for a package with an attribute name of `org2gfm-impure`. We didn't have to use the full attribute path `packages.x86_64-linux.org2gfm-impure` because `nix build` will automatically look in the `packages` attribute for the system it detects we're on.
 
 If we omit the attribute path of our installable, Nix tries to build a default package, which it expects to find under the flake's `packages.<system>.default`. For example, if we ran just `nix build .`, Nix would expect to find a `flake.nix` in the current directory with an output providing a `packages.<system>.default` attribute with a package to build.
 
@@ -270,7 +267,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/di6pz8v3hdg4mxnfndzdz4mr3zildmnn-org2gfm
+    /nix/store/dfnm0xmaz3vwfk1gfms0d1whk7zny97f-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -289,10 +286,10 @@ It's common to configure these “result” symlinks as ignored in source contro
 `nix build` has a `--no-link` option in case you want to build packages without creating “result” symlinks. To get the paths where your packages are located, you can use `nix path-info` after a successful build:
 
 ```sh
-nix path-info .#org2gfm
+nix path-info .#org2gfm-impure
 ```
 
-    /nix/store/di6pz8v3hdg4mxnfndzdz4mr3zildmnn-org2gfm
+    /nix/store/dfnm0xmaz3vwfk1gfms0d1whk7zny97f-org2gfm
 
 ## Running commands in a shell<a id="sec-4-6"></a>
 
@@ -300,11 +297,11 @@ We can run commands in Nix-curated environments with `nix shell`. Nix will take 
 
 With `nix shell`, you don't have to build the package first with `nix build` or mess around with “result” symlinks. `nix shell` will build any necessary packages required.
 
-For example, to get the help message for the `org2gfm` executable provided by the package selected by the `org2gfm` attribute path output by this project's flake, we can call the following:
+For example, to get the help message for the `org2gfm` executable provided by the package selected by the `org2gfm-impure` attribute path output by this project's flake, we can call the following:
 
 ```sh
 nix shell \
-    .#org2gfm \
+    .#org2gfm-impure \
     --command org2gfm --help
 ```
 
@@ -355,7 +352,7 @@ And as always, we can specify a full output attribute path explicitly if `nix ru
 Here's the `nix run` equivalent of the `nix shell` invocation from the previous section:
 
 ```sh
-nix run .#org2gfm  -- --help
+nix run .#org2gfm-impure  -- --help
 ```
 
     USAGE: org2gfm [OPTION]...  [FILE]...
@@ -368,11 +365,11 @@ nix run .#org2gfm  -- --help
 We can see some of the metadata of this package with the `--json` option of `nix search`:
 
 ```sh
-nix search --json .#org2gfm ^ | jq .
+nix search --json .#org2gfm-impure ^ | jq .
 ```
 
     {
-      "packages.x86_64-linux.org2gfm": {
+      "packages.x86_64-linux.org2gfm-impure": {
         "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
         "pname": "org2gfm",
         "version": ""
@@ -380,13 +377,13 @@ nix search --json .#org2gfm ^ | jq .
 
 The “pname” field in the JSON above indicates the package's name. In practice, the package's name may or may not differ from flake output name of the installable.
 
-`nix run` works because the package selected by the output attribute name `org2gfm` selects a package with a package name “org2gfm” that is the same as the executable provided at `bin/org2gfm`.
+`nix run` works because the package selected by the output attribute name `org2gfm-impure` selects a package with a package name “org2gfm” that is the same as the executable provided at `bin/org2gfm`.
 
 If we want something other than what can be detected, then we have to continue using `nix shell` with `--command`.
 
 ## `nix run` and `nix shell` with remote flakes<a id="sec-4-8"></a>
 
-In the examples above, we've used selected packages from this project's flake, like `.#org2gfm`. But one benefit of flakes is that we can refer to remote flakes just as easily, like `nixpkgs#hello`. Referencing remote flakes helps us quickly build environments with `nix shell` or run commands with `nix run` without committing to install software.
+In the examples above, we've used selected packages from this project's flake, like `.#org2gfm-impure`. But one benefit of flakes is that we can refer to remote flakes just as easily, like `nixpkgs#hello`. Referencing remote flakes helps us quickly build environments with `nix shell` or run commands with `nix run` without committing to install software.
 
 Here's a small example.
 
@@ -401,11 +398,11 @@ When using `nix shell`, we can even mix local flake references with remote ones,
 ```sh
 nix shell --ignore-environment \
     nixpkgs#which \
-    .#org2gfm \
+    .#org2gfm-impure \
     --command which org2gfm
 ```
 
-    /nix/store/di6pz8v3hdg4mxnfndzdz4mr3zildmnn-org2gfm/bin/org2gfm
+    /nix/store/dfnm0xmaz3vwfk1gfms0d1whk7zny97f-org2gfm/bin/org2gfm
 
 What we do with local flake references can work just as well with remote flake references.
 
@@ -417,10 +414,10 @@ We've seen that we can build programs with `nix build` and execute them using th
 
 This way, you can just put `~/.nix-profile/bin` on your `PATH`, and any programs installed in your default profile will be available for interactive use or scripts.
 
-To install the `org2gfm` executable, which is provided by the `org2gfm` output of our flake, we'd run the following:
+To install the `org2gfm` executable, which is provided by the `org2gfm-impure` output of our flake, we'd run the following:
 
 ```sh
-nix profile install .#org2gfm
+nix profile install .#org2gfm-impure
 ```
 
 We can see this installation by querying what's been installed:
@@ -429,16 +426,16 @@ We can see this installation by querying what's been installed:
 nix profile list
 ```
 
-    Name:               org2gfm
-    Flake attribute:    packages.x86_64-linux.org2gfm
+    Name:               org2gfm-impure
+    Flake attribute:    packages.x86_64-linux.org2gfm-impure
     Original flake URL: git+file:///home/shajra/src/nix-project
     Locked flake URL:   git+file:///home/shajra/src/nix-project
-    Store paths:        /nix/store/di6pz8v3hdg4mxnfndzdz4mr3zildmnn-org2gfm
+    Store paths:        /nix/store/dfnm0xmaz3vwfk1gfms0d1whk7zny97f-org2gfm
 
 If we want to uninstall a program from our profile, we can reference it by name:
 
 ```sh
-nix profile remove org2gfm
+nix profile remove org2gfm-impure
 ```
 
 Also, if you look at the symlink-resolved location for your profile, you'll see that Nix retains the symlink trees of previous generations of your profile. You can even roll back to an earlier profile with the `nix profile rollback` subcommand. You can delete old generations of your profile with the `nix profile wipe-history` subcommand.

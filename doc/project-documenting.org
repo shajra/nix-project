@@ -82,21 +82,20 @@ is highly recommended to protect against the loss of documentation.
 ** Calling the =org2gfm= executable directly
 
 You can call =org2gfm= directly, either with or without flakes. Using flakes,
-you can run =org2gfm= directly from GitHub with =nix shell= without even
+you can run =org2gfm= directly from GitHub with =nix run= without even
 installing =org2gfm=:
 
 #+begin_src sh :eval no
 nix --extra-experimental-features 'nix-command flakes' \
-    shell \
-    github:shajra/nix-project#org2gfm \
-    --command org2gfm
+    run \
+    github:shajra/nix-project#org2gfm-impure
 #+end_src
 
 #+begin_src sh :dir .. :results output silent :exports none
 nix --experimental-features 'nix-command flakes' \
-    shell \
-    .#org2gfm \
-    --command org2gfm --help
+    run \
+    .#org2gfm-impure \
+    -- --help
 #+end_src
 
 By default, =org2gfm= finds all Org files recursively from the current directory
@@ -109,16 +108,22 @@ If you don't want to evaluate all Org files found, files can be explicitly
 specified as positional arguments, or the =--exclude= option can be used to
 exclude filenames matching a regular expression.
 
+Note the "-impure" name of the package indicates that all environment variables,
+including =PATH= are available to the script during execution.  You could control
+the environment with the =--ignore-environment= and =--keep-env-var= options of =nix
+run=.  Alternatively, the next sections show how to generate a script with
+locked-down environments using provided library support.
+
 Use the =--help= option to see a complete list of options (or look at [[file:../nix/org2gfm.nix][the =org2gfm=
 source code]]).
 
-** Controlling the environment with =org2gfm-hermetic=
+** Controlling the environment with the =org2gfm= library function
 
-The Nix-project flake exports at =#lib.<system>.org2gfm-hermetic= a function you
+The Nix-project flake exports at =#lib.<system>.org2gfm= a function you
 can use to wrap the =org2gfm= script with another script to tightly control the
-environment =org2gfm= executes in.
+environment =org2gfm= executes in, including the =PATH=.
 
-See the [[file:../nix/org2gfm-hermetic.nix][comments in the source code]] for details on how to call this function.
+See the [[file:../nix/org2gfm.nix][comments in the source code]] for details on how to call this function.
 
 See the [[file:../examples/less][=less= template]] for an example of integrating this flake module into a
 project. This template is discussed in the [[file:project-developing-basics.org][Flakes Basic Development Guide]].
@@ -143,7 +148,7 @@ template.
 
 The Nix-project flake exports a flake module at =#flakeModules.org2gfm= that
 allows you to configure your project using [[flake-parts][=flake-parts=]] to compile a version of
-=org2gfm=hermetic= tailored to your needs.
+=org2gfm= tailored to your needs.
 
 See the [[file:../nix/module/org2gfm.nix][flake module source code]] for details on the options this module accepts.
 

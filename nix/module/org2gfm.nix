@@ -11,7 +11,7 @@
     let
       system = pkgs.stdenv.hostPlatform.system;
       cfg = config.org2gfm;
-      makeScript = self.lib.${system}.org2gfm-hermetic;
+      makeScript = self.lib.${system}.org2gfm-static;
     in
     {
       _file = ./org2gfm.nix;
@@ -26,12 +26,12 @@
             with lib.types;
             submodule {
               options = {
-                ignoreEnvironment = lib.mkOption {
+                envImpure = lib.mkOption {
                   type = bool;
-                  default = true;
+                  default = false;
                   description = "rebuild environment from a clean slate";
                 };
-                keepEnvVars = lib.mkOption {
+                envKeep = lib.mkOption {
                   type = listOf str;
                   default = [
                     "LANG"
@@ -44,7 +44,7 @@
                   default = [ ];
                   description = "packages to explicitly put on PATH (even when ignoring environment)";
                 };
-                extraPaths = lib.mkOption {
+                pathExtras = lib.mkOption {
                   type = listOf str;
                   default = [
                     "/bin"
@@ -52,12 +52,12 @@
                   ];
                   description = "include paths like /bin (even when ignoring environment)";
                 };
-                pathIncludesActiveNix = lib.mkOption {
-                  type = bool;
-                  default = false;
-                  description = "include path to 'nix' binary on PATH (even when ignoring environment)";
+                pathImpureSelected = lib.mkOption {
+                  type = listOf str;
+                  default = [ ];
+                  description = "include path to selected executable names on PATH (even when ignoring environment)";
                 };
-                pathIncludesPrevious = lib.mkOption {
+                pathImpureAll = lib.mkOption {
                   type = bool;
                   default = false;
                   description = "include previous PATH (even when ignoring environment)";

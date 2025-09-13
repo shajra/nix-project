@@ -1,43 +1,44 @@
 {
   lib,
-  coreutils,
   nix-project-lib,
-  nix-project-org2gfm,
 }:
 
 /**
-  Exports Org-mode files to GitHub-flavored Markdown (GFM) in a hermetic
-  environment.
+  Creates a fully parameterized "org2gfm" script.
+
+  Function arguments completely specify not only how to run "org2gfm," but also
+  how to constrain the environment it runs in.  Further CLI options can be
+  provided for overriding.
 
   # Example
 
   ```nix
   # Basic usage with default settings
-  org2gfm-hermetic { }
+  org2gfm-static { }
 
   # Custom configuration with evaluation enabled
-  org2gfm-hermetic {
+  org2gfm-static {
     evaluate = true;
     exclude = [ "tmp-*" ];
   }
 
   # Preserve specific environment variables
-  org2gfm-hermetic {
-    ignoreEnvironment = true;
-    keepEnvVars = [ "LANG" "LOCALE_ARCHIVE" "HOME" ];
+  org2gfm-static {
+    envImpure = true;
+    envKeep = [ "LANG" "LOCALE_ARCHIVE" "HOME" ];
   }
   ```
 
   # Type
 
   ```
-  org2gfm-hermetic :: {
-    ignoreEnvironment ? Bool,
-    keepEnvVars ? [String],
+  org2gfm-static :: {
+    envImpure ? Bool,
+    envKeep ? [String],
+    pathImpureAll ? Bool,
+    pathImpureSelected ? [String],
     pathPackages ? [Derivation],
-    extraPaths ? [String],
-    pathIncludesActiveNix ? Bool,
-    pathIncludesPrevious ? Bool,
+    pathExtras ? [String],
     evaluate ? Bool,
     exclude ? [String],
     keepGoing ? Bool,
@@ -48,23 +49,23 @@
 
   # Arguments
 
-  ignoreEnvironment
-  : Whether to ignore the current environment when running the tool. Defaults to `true` for maximum hermeticity.
+  envImpure
+  : Whether to use the current environment when running the tool. Defaults to `false` for maximum hermeticity.
 
-  keepEnvVars
+  envKeep
   : List of environment variable names to preserve from the current environment. Defaults to `["LANG" "LOCALE_ARCHIVE"]`.
+
+  pathImpureAll
+  : Whether to include all paths from the current environment. Defaults to `false`.
+
+  pathImpureSelected
+  : List of specific paths to include from the current environment. Defaults to `[]`.
 
   pathPackages
   : List of Nix packages to include in the PATH. Defaults to `[]`.
 
-  extraPaths
+  pathExtras
   : Additional paths to include in the PATH. Defaults to `["/bin" "/usr/bin"]`.
-
-  pathIncludesActiveNix
-  : Whether to include the active Nix environment in the PATH. Defaults to `false`.
-
-  pathIncludesPrevious
-  : Whether to carry over the previous environment's PATH into the new PATH. Defaults to `false`.
 
   evaluate
   : Whether to evaluate Org-mode code blocks during conversion. Defaults to `true`.
@@ -83,22 +84,21 @@
 
   # Returns
 
-  A derivation that produces a shell script executable named `org2gfm-hermetic` which
-  runs the `org2gfm` tool in a hermetic environment with the specified configuration.
+  A derivation  providing the `bin/org2gfm` exectuable.
 */
 {
-  ignoreEnvironment ? true,
-  keepEnvVars ? [
+  envImpure ? false,
+  envKeep ? [
     "LANG"
     "LOCALE_ARCHIVE"
   ],
+  pathImpureAll ? false,
+  pathImpureSelected ? [ ],
   pathPackages ? [ ],
-  extraPaths ? [
+  pathExtras ? [
     "/bin"
     "/usr/bin"
   ],
-  pathIncludesActiveNix ? false,
-  pathIncludesPrevious ? false,
   evaluate ? true,
   exclude ? [ ],
   keepGoing ? false,
@@ -119,29 +119,30 @@ let
     ]) exclude
   );
 
-  envArgs =
-    lib.optionalString ignoreEnvironment "--ignore-environment "
-    + lib.concatStringsSep " " (map (var: ''"${var}=$'' + ''{${var}:-}"'') keepEnvVars)
-    + " PATH=\"$PATH\"";
+  org2gfm = nix-project-lib.org2gfm {
+    inherit
+      envImpure
+      envKeep
+      pathImpureAll
+      pathImpureSelected
+      pathPackages
+      pathExtras
+      ;
+  };
 
-  progName = "org2gfm-hermetic";
-  meta.description = "Exports Org-mode files to GitHub Flavored Markdown (GFM) in a hermetic environment";
+  meta.description = "Exports Org-mode files to GitHub Flavored Markdown (GFM) in a controlled environment";
 
 in
 
-nix-project-lib.scripts.writeShellCheckedExe progName
+nix-project-lib.scripts.writeShellCheckedExe "org2gfm-static"
   {
-    inherit
-      meta
-      pathIncludesPrevious
-      pathIncludesActiveNix
-      pathPackages
-      extraPaths
-      ;
+    exeName = "org2gfm";
+    inherit meta;
+    envImpure = true;
+    pathImpureAll = true;
   }
   ''
     set -eu
     set -o pipefail
-    exec "${coreutils}/bin/env" ${envArgs} \
-      "${nix-project-org2gfm}/bin/org2gfm" ${org2gfmArgs} "$@"
+    exec "${org2gfm}/bin/org2gfm" ${org2gfmArgs} "$@"
   ''

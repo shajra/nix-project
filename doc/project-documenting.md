@@ -3,7 +3,7 @@
 - [Prerequisites](#sec-3)
 - [Usage](#sec-4)
   - [Calling the `org2gfm` executable directly](#sec-4-1)
-  - [Controlling the environment with `org2gfm-hermetic`](#sec-4-2)
+  - [Controlling the environment with the `org2gfm` library function](#sec-4-2)
   - [Using the `org2gfm` flake module](#sec-4-3)
 - [Org2gfm design](#sec-5)
   - [GitHub Flavored Markdown (GFM) exporting only](#sec-5-1)
@@ -61,13 +61,12 @@ If you want to integrate documentation generation with a project scaffolded by N
 
 ## Calling the `org2gfm` executable directly<a id="sec-4-1"></a>
 
-You can call `org2gfm` directly, either with or without flakes. Using flakes, you can run `org2gfm` directly from GitHub with `nix shell` without even installing `org2gfm`:
+You can call `org2gfm` directly, either with or without flakes. Using flakes, you can run `org2gfm` directly from GitHub with `nix run` without even installing `org2gfm`:
 
 ```sh
 nix --extra-experimental-features 'nix-command flakes' \
-    shell \
-    github:shajra/nix-project#org2gfm \
-    --command org2gfm
+    run \
+    github:shajra/nix-project#org2gfm-impure
 ```
 
 By default, `org2gfm` finds all Org files recursively from the current directory and exports each one to a sibling Markdown file.
@@ -76,13 +75,15 @@ If called with the `--evaluate` option, the code snippets in the Org file are ev
 
 If you don't want to evaluate all Org files found, files can be explicitly specified as positional arguments, or the `--exclude` option can be used to exclude filenames matching a regular expression.
 
+Note the "-impure" name of the package indicates that all environment variables, including `PATH` are available to the script during execution. You could control the environment with the `--ignore-environment` and `--keep-env-var` options of `nix run`. Alternatively, the next sections show how to generate a script with locked-down environments using provided library support.
+
 Use the `--help` option to see a complete list of options (or look at [the `org2gfm` source code](../nix/org2gfm.nix)).
 
-## Controlling the environment with `org2gfm-hermetic`<a id="sec-4-2"></a>
+## Controlling the environment with the `org2gfm` library function<a id="sec-4-2"></a>
 
-The Nix-project flake exports at `#lib.<system>.org2gfm-hermetic` a function you can use to wrap the `org2gfm` script with another script to tightly control the environment `org2gfm` executes in.
+The Nix-project flake exports at `#lib.<system>.org2gfm` a function you can use to wrap the `org2gfm` script with another script to tightly control the environment `org2gfm` executes in, including the `PATH`.
 
-See the [comments in the source code](../nix/org2gfm-hermetic.nix) for details on how to call this function.
+See the [comments in the source code](../nix/org2gfm.nix) for details on how to call this function.
 
 See the [`less` template](../examples/less) for an example of integrating this flake module into a project. This template is discussed in the [Flakes Basic Development Guide](project-developing-basics.md).
 
@@ -101,7 +102,7 @@ You can control the execution of `org2gfm` by modifying [`config.nix`](../exampl
 
 ## Using the `org2gfm` flake module<a id="sec-4-3"></a>
 
-The Nix-project flake exports a flake module at `#flakeModules.org2gfm` that allows you to configure your project using [`flake-parts`](https://github.com/hercules-ci/flake-parts) to compile a version of `org2gfm=hermetic` tailored to your needs.
+The Nix-project flake exports a flake module at `#flakeModules.org2gfm` that allows you to configure your project using [`flake-parts`](https://github.com/hercules-ci/flake-parts) to compile a version of `org2gfm` tailored to your needs.
 
 See the [flake module source code](../nix/module/org2gfm.nix) for details on the options this module accepts.
 

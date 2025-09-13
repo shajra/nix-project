@@ -11,6 +11,9 @@
 
 let
 
+  progName = "org2gfm";
+  meta.description = "Exports Org-mode files to GitHub Flavored Markdown (GFM)";
+
   emacsWithPkgs = emacs.pkgs.withPackages (epkgs: [
     epkgs.melpaStablePackages.dash
     epkgs.melpaStablePackages.f
@@ -41,195 +44,286 @@ let
              'external-debugging-output))
   '';
 
-  progName = "org2gfm";
-  meta.description = "Exports Org-mode files to GitHub Flavored Markdown (GFM)";
+  org2gfm =
+    {
+      pathImpureAll ? false,
+      pathImpureSelected ? [ ],
+      pathPackages ? [ ],
+      pathExtras ? [ ],
+      envImpure ? false,
+      envKeep ? [
+        "LANG"
+        "LOCALE_ARCHIVE"
+      ],
+    }:
+    nix-project-lib.scripts.writeShellCheckedExe progName
+      {
+        inherit
+          meta
+          pathImpureAll
+          pathImpureSelected
+          pathPackages
+          pathExtras
+          envImpure
+          envKeep
+          ;
+      }
+      ''
+        set -eu
+        set -o pipefail
+
+
+        EVALUATE=false
+        KEEP_GOING=false
+        EXCLUDE_ARGS=()
+        QUERY_ANSWER=
+
+        ERR_REGEX="^Babel evaluation exited with code [1-9][0-9]*"
+        ERR_REGEX="$ERR_REGEX|^Error: user-error"
+        ERR_REGEX="$ERR_REGEX|^Error: error"
+
+        print_usage()
+        {
+            "${coreutils}/bin/cat" - <<EOF
+        USAGE: ${progName} [OPTION]...  [FILE]...
+
+        DESCRIPTION:
+
+            Uses Emacs to export Org-mode files to GitHub Flavored
+            Markdown, which are written to sibling ".md" files.  If no
+            files are specified, then all '*.org' files found recursively
+            from the current working directory are used instead.
+
+        OPTIONS:
+
+            -h --help            print this help message
+            -e --evaluate        evaluate all SRC blocks before exporting
+            -E --no-evaluate     don't evaluate before exporting (default)
+            -x --exclude PATTERN exclude matched when searching
+            -k --keep-going      don't stop if Babel executes non-zero
+            -K --no-keep-going   stop if Babel executes non-zero (default)
+            -y --yes             answer "yes" to all queries for evaluation
+            -n --no              answer "no" to all queries for evaluation
+
+            Recommended usage is with a clean environment using Nix to
+            control the PATH.  This helps make executed source blocks more
+            deterministic.
+
+            If using both '-e' and '-E' options the last one is overriding
+            (useful for automation/defaults).
+
+            Note, the '-e' option evaluates the Org-mode file in-place.
+            No evaluation occurs during the export to Markdown, which
+            will have the same blocks as the Org-mode file.
+
+
+        EOF
+        }
+
+        main()
+        {
+            while ! [ "''${1:-}" = "" ]
+            do
+                case "$1" in
+                -h|--help)
+                    print_usage
+                    exit 0
+                    ;;
+                -e|--evaluate)
+                    EVALUATE="true"
+                    ;;
+                -E|--no-evaluate)
+                    EVALUATE="false"
+                    ;;
+                -k|--keep-going)
+                    KEEP_GOING="true"
+                    ;;
+                -K|--no-keep-going)
+                    KEEP_GOING="false"
+                    ;;
+                -y|--yes)
+                    QUERY_ANSWER=yes
+                    ;;
+                -n|--no)
+                    QUERY_ANSWER=no
+                    ;;
+                -x|--exclude)
+                    if [ -z "''${2:-}" ]
+                    then die "$1 requires argument"
+                    fi
+                    EXCLUDE_ARGS+=(--exclude "''${2:-}")
+                    shift
+                    ;;
+                --)
+                    break
+                    ;;
+                -*)
+                    die "$1 not a valid argument"
+                    ;;
+                *)
+                    break
+                    ;;
+                esac
+                shift
+            done
+
+            if [ -n "$QUERY_ANSWER" ]
+            then "${coreutils}/bin/yes" "$QUERY_ANSWER" | generate_gfm "$@"
+            else generate_gfm "$@"
+            fi
+        }
+
+        generate_gfm()
+        {
+            if [ "$#" -gt 0 ]
+            then generate_gfm_args "$@"
+            else generate_gfm_found
+            fi
+        }
+
+        generate_gfm_args()
+        {
+            for f in "$@"
+            do generate_gfm_file "$f"
+            done
+        }
+
+        generate_gfm_found()
+        {
+            {
+                "${fd}/bin/fd" '[.]org$' "''${EXCLUDE_ARGS[@]}" \
+                | {
+                    while read -r f
+                    do generate_gfm_file "$f" <&3
+                    done
+                }
+            } 3<&0
+        }
+
+        generate_gfm_file()
+        {
+            local filepath="$1"
+            local eval_options=()
+            remove_markdown "$filepath"
+            if [ "$EVALUATE" = true ]
+            then
+                eval_options+=(
+                    --eval "(org2gfm-log \"EVALUATING\")"
+                    --funcall org-babel-execute-buffer
+                    --funcall save-buffer
+                )
+            fi
+            while read -r line
+            do
+                echo "$line"
+                "$KEEP_GOING" \
+                    || "${gnugrep}/bin/grep" --perl-regexp --invert-match --quiet \
+                        "$ERR_REGEX" <(echo "$line")
+            done < <("${emacsWithPkgs}/bin/emacs" \
+                --batch \
+                --kill \
+                --load ${init} \
+                --file "$filepath" \
+                "''${eval_options[@]}" \
+                --eval "(org2gfm-log \"EXPORTING\")" \
+                --funcall org-gfm-export-to-markdown 2>&1
+            )
+        }
+
+        remove_markdown()
+        {
+            local filepath="$1"
+            if [[ "$filepath" =~ \.org$ ]]
+            then
+                local md_path="''${filepath/%.org/.md}"
+                if [ -e "$md_path" ]
+                then
+                    printf "\n%s\n" "REMOVING: $md_path" >&2
+                    rm "$md_path"
+                fi
+            fi
+        }
+
+
+        main "$@"
+      '';
 
 in
 
-nix-project-lib.scripts.writeShellCheckedExe progName
-  {
-    inherit meta;
-    pathIncludesPrevious = true;
-  }
-  ''
-    set -eu
-    set -o pipefail
+{
 
+  /**
+    Creates a shell script executable for exporting Org-mode files to
+    GitHub-flavored Markdown (GFM).  Run-time CLI options control the script,
+    and function arguments statically control the environment it runs in.
 
-    EVALUATE=false
-    KEEP_GOING=false
-    EXCLUDE_ARGS=()
-    QUERY_ANSWER=
+    # Example
 
-    ERR_REGEX="^Babel evaluation exited with code [1-9][0-9]*"
-    ERR_REGEX="$ERR_REGEX|^Error: user-error"
-    ERR_REGEX="$ERR_REGEX|^Error: error"
+    ```nix
+    # Basic usage with default settings
+    org2gfm { }
 
-
-    . "${nix-project-lib.scripts.scriptCommon}/share/nix-project/common.sh"
-
-    print_usage()
-    {
-        "${coreutils}/bin/cat" - <<EOF
-    USAGE: ${progName} [OPTION]...  [FILE]...
-
-    DESCRIPTION:
-
-        Uses Emacs to export Org-mode files to GitHub Flavored
-        Markdown, which are written to sibling ".md" files.  If no
-        files are specified, then all '*.org' files found recursively
-        from the current working directory are used instead.
-
-    OPTIONS:
-
-        -h --help            print this help message
-        -e --evaluate        evaluate all SRC blocks before exporting
-        -E --no-evaluate     don't evaluate before exporting (default)
-        -x --exclude PATTERN exclude matched when searching
-        -k --keep-going      don't stop if Babel executes non-zero
-        -K --no-keep-going   stop if Babel executes non-zero (default)
-        -y --yes             answer "yes" to all queries for evaluation
-        -n --no              answer "no" to all queries for evaluation
-
-        Recommended usage is with a clean environment using Nix to
-        control the PATH.  This helps make executed source blocks more
-        deterministic.
-
-        If using both '-e' and '-E' options the last one is overriding
-        (useful for automation/defaults).
-
-        Note, the '-e' option evaluates the Org-mode file in-place.
-        No evaluation occurs during the export to Markdown, which
-        will have the same blocks as the Org-mode file.
-
-
-    EOF
+    # Custom configuration with impure environment
+    org2gfm {
+      envKeep = [ "LANG" "LOCALE_ARCHIVE" "HOME" ];
     }
 
-    main()
-    {
-        while ! [ "''${1:-}" = "" ]
-        do
-            case "$1" in
-            -h|--help)
-                print_usage
-                exit 0
-                ;;
-            -e|--evaluate)
-                EVALUATE="true"
-                ;;
-            -E|--no-evaluate)
-                EVALUATE="false"
-                ;;
-            -k|--keep-going)
-                KEEP_GOING="true"
-                ;;
-            -K|--no-keep-going)
-                KEEP_GOING="false"
-                ;;
-            -y|--yes)
-                QUERY_ANSWER=yes
-                ;;
-            -n|--no)
-                QUERY_ANSWER=no
-                ;;
-            -x|--exclude)
-                if [ -z "''${2:-}" ]
-                then die "$1 requires argument"
-                fi
-                EXCLUDE_ARGS+=(--exclude "''${2:-}")
-                shift
-                ;;
-            --)
-                break
-                ;;
-            -*)
-                die "$1 not a valid argument"
-                ;;
-            *)
-                break
-                ;;
-            esac
-            shift
-        done
-
-        if [ -n "$QUERY_ANSWER" ]
-        then "${coreutils}/bin/yes" "$QUERY_ANSWER" | generate_gfm "$@"
-        else generate_gfm "$@"
-        fi
+    # Include specific packages  and paths in PATH
+    org2gfm {
+      pathPackages = with pkgs; [ python3 nodejs ];
+      pathExtras = [ "/usr/local/bin" ];
     }
 
-    generate_gfm()
-    {
-        if [ "$#" -gt 0 ]
-        then generate_gfm_args "$@"
-        else generate_gfm_found
-        fi
+    # Resolve the directory putting "nix" on the PATH, and include it
+    org2gfm {
+      pathImpureSelected = [ "nix" ];
     }
+    ```
 
-    generate_gfm_args()
-    {
-        for f in "$@"
-        do generate_gfm_file "$f"
-        done
-    }
+    # Type
 
-    generate_gfm_found()
-    {
-        {
-            "${fd}/bin/fd" '[.]org$' "''${EXCLUDE_ARGS[@]}" \
-            | {
-                while read -r f
-                do generate_gfm_file "$f" <&3
-                done
-            }
-        } 3<&0
-    }
+    ```
+    org2gfm :: {
+      pathImpureAll ? Bool,
+      pathImpureSelected ? [String],
+      pathPackages ? [Derivation],
+      pathExtras ? [String],
+      envImpure ? Bool,
+      envKeep ? [String]
+    } -> Derivation
+    ```
 
-    generate_gfm_file()
-    {
-        local filepath="$1"
-        local eval_options=()
-        remove_markdown "$filepath"
-        if [ "$EVALUATE" = true ]
-        then
-            eval_options+=(
-                --eval "(org2gfm-log \"EVALUATING\")"
-                --funcall org-babel-execute-buffer
-                --funcall save-buffer
-            )
-        fi
-        while read -r line
-        do
-            echo "$line"
-            "$KEEP_GOING" \
-                || "${gnugrep}/bin/grep" --perl-regexp --invert-match --quiet \
-                    "$ERR_REGEX" <(echo "$line")
-        done < <("${emacsWithPkgs}/bin/emacs" \
-            --batch \
-            --kill \
-            --load ${init} \
-            --file "$filepath" \
-            "''${eval_options[@]}" \
-            --eval "(org2gfm-log \"EXPORTING\")" \
-            --funcall org-gfm-export-to-markdown 2>&1
-        )
-    }
+    # Arguments
 
-    remove_markdown()
-    {
-        local filepath="$1"
-        if [[ "$filepath" =~ \.org$ ]]
-        then
-            local md_path="''${filepath/%.org/.md}"
-            if [ -e "$md_path" ]
-            then
-                printf "\n%s\n" "REMOVING: $md_path" >&2
-                rm "$md_path"
-            fi
-        fi
-    }
+    pathImpureAll
+    : Whether to include all paths from the current environment. Defaults to `false`.
 
+    pathImpureSelected
+    : Names of executables to include the paths of from the current environment. Defaults to `[]`.
 
-    main "$@"
-  ''
+    pathPackages
+    : List of Nix packages to include in the PATH. Defaults to `[]`.
+
+    pathExtras
+    : Additional paths to include in the PATH. Defaults to `[]`.
+
+    envImpure
+    : Whether to use the current environment when running the tool. Defaults to `false` for maximum hermeticity.
+
+    envKeep
+    : List of environment variable names to preserve from the current environment. Defaults to `["LANG" "LOCALE_ARCHIVE"]`.
+
+    # Returns
+
+    A derivation that produces a shell script executable named `org2gfm` which
+    runs the Org-mode to GFM conversion with the specified environment and PATH
+    configuration.
+  */
+  inherit org2gfm;
+
+  org2gfm-impure = org2gfm {
+    pathImpureAll = true;
+    envImpure = true;
+  };
+
+}

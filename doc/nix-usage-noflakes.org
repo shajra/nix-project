@@ -177,7 +177,7 @@ nix --experimental-features nix-command search --file . '' ^ | ansifilter
 ,* packages.aarch64-darwin.default
   Exports Org-mode files to GitHub Flavored Markdown (GFM)
 
-,* packages.aarch64-darwin.org2gfm
+,* packages.aarch64-darwin.org2gfm-impure
   Exports Org-mode files to GitHub Flavored Markdown (GFM)
 
 …
@@ -217,10 +217,7 @@ nix --experimental-features nix-command \
 #+end_src
 
 #+RESULTS: nix-search-filtered
-: * packages.x86_64-linux.default
-:   Exports Org-mode files to GitHub Flavored Markdown (GFM)
-: 
-: * packages.x86_64-linux.org2gfm
+: * packages.x86_64-linux.org2gfm-impure
 :   Exports Org-mode files to GitHub Flavored Markdown (GFM)
 
 We can also use =--json= to get more details about found packages:
@@ -289,7 +286,7 @@ nix --experimental-features 'nix-command' \
 
 #+RESULTS: nix-search-specific
 : {
-:   "packages.x86_64-linux.org2gfm": {
+:   "packages.x86_64-linux.org2gfm-impure": {
 :     "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
 :     "pname": "org2gfm",
 :     "version": ""
@@ -309,7 +306,7 @@ nix-build --attr <<get("package-attr-long")>> .
 #+end_src
 
 #+RESULTS: nix-build
-: /nix/store/di6pz8v3hdg4mxnfndzdz4mr3zildmnn-org2gfm
+: /nix/store/dfnm0xmaz3vwfk1gfms0d1whk7zny97f-org2gfm
 
 If we omit the path to a Nix file, =nix-build= will try to build =default.nix=
 in the current directory. If we omit the =--attr= option and argument,
@@ -332,7 +329,7 @@ readlink result*
 #+end_src
 
 #+RESULTS: nix-build-link
-: /nix/store/di6pz8v3hdg4mxnfndzdz4mr3zildmnn-org2gfm
+: /nix/store/dfnm0xmaz3vwfk1gfms0d1whk7zny97f-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -597,20 +594,13 @@ nix --experimental-features nix-command \
 #+end_src
 
 #+RESULTS: nix-search-2
-#+begin_example
-{
-  "packages.x86_64-linux.default": {
-    "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
-    "pname": "org2gfm",
-    "version": ""
-  },
-  "packages.x86_64-linux.org2gfm": {
-    "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
-    "pname": "org2gfm",
-    "version": ""
-  }
-}
-#+end_example
+: {
+:   "packages.x86_64-linux.org2gfm-impure": {
+:     "description": "Exports Org-mode files to GitHub Flavored Markdown (GFM)",
+:     "pname": "org2gfm",
+:     "version": ""
+:   }
+: }
 
 And if we want to uninstall a program from our active profile, we do so by the
 package's name (“pname” above), in this case {{{package-name}}}:
