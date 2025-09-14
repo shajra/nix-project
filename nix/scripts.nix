@@ -46,53 +46,52 @@ rec {
       meta ? { },
       exeName ? name,
       runtimeShell ? runtimeShell',
-      envImpure ? false,
+      envCleaned ? true,
       envKeep ? [
         "LANG"
         "LOCALE_ARCHIVE"
       ],
-      pathImpureAll ? false,
-      pathImpureSelected ? [ ],
+      pathCleaned ? true,
+      pathKeep ? [ ],
       pathPackages ? [ ],
       pathExtras ? [ ],
     }:
     body:
     let
       destination = "/bin/${exeName}";
-      envPure = !envImpure;
       pathComponents =
         (lib.optionals (pathPackages != [ ]) [ (lib.makeBinPath pathPackages) ])
         ++ (lib.optionals (pathExtras != [ ]) [ (lib.concatStringsSep ":" pathExtras) ])
-        ++ (lib.concatMap (exe: [ ''$(path_for "$(command -v ${exe})")'' ]) pathImpureSelected)
-        ++ (lib.optionals pathImpureAll [ "$PATH" ]);
+        ++ (lib.concatMap (exe: [ ''$(path_for "$(command -v ${exe})")'' ]) pathKeep)
+        ++ (lib.optionals (!pathCleaned) [ "$PATH" ]);
       pathExport = ''
         # DESIGN: Dynamically constructed PATH has allowable corner cases
         # shellcheck disable=SC2123 disable=SC2269
         ${"PATH=\"" + lib.concatStringsSep ":" pathComponents + "\""}
         export PATH
       '';
-      envArgs =
-        lib.optionalString envPure "--ignore-environment "
+      envCleanedArgs =
+        "--ignore-environment "
         + lib.concatStringsSep " " (map (var: ''"${var}=$'' + ''{${var}:-}"'') envKeep)
         + " PATH=\"$PATH\"";
       scriptArgs = {
         inherit meta destination;
         executable = true;
       };
-      envImpureScript = writeShellChecked name scriptArgs ''
+      scriptBase = writeShellChecked name scriptArgs ''
         #!${runtimeShell}
         . "${scriptCommon}/share/nix-project/common.sh"
-        ${lib.optionalString envImpure pathExport}
+        ${lib.optionalString (!envCleaned) pathExport}
         ${body}
       '';
-      envPureScript = writeShellChecked (name + "-pure") scriptArgs ''
+      scriptEnvCleaned = writeShellChecked (name + "-env") scriptArgs ''
         #!${runtimeShell'}
         . "${scriptCommon}/share/nix-project/common.sh"
         ${pathExport}
-        exec "${coreutils}/bin/env" ${envArgs} "${envImpureScript}${destination}" "$@"
+        exec "${coreutils}/bin/env" ${envCleanedArgs} "${scriptBase}${destination}" "$@"
       '';
     in
-    if envImpure then envImpureScript else envPureScript;
+    if envCleaned then scriptEnvCleaned else scriptBase;
 
   writeShellCheckedShareLib =
     name: packagePath:

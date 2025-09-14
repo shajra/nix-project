@@ -24,7 +24,7 @@
 
   # Preserve specific environment variables
   org2gfm-static {
-    envImpure = true;
+    envCleaned = true;
     envKeep = [ "LANG" "LOCALE_ARCHIVE" "HOME" ];
   }
   ```
@@ -33,10 +33,10 @@
 
   ```
   org2gfm-static :: {
-    envImpure ? Bool,
+    envCleaned ? Bool,
     envKeep ? [String],
-    pathImpureAll ? Bool,
-    pathImpureSelected ? [String],
+    pathCleaned ? Bool,
+    pathKeep ? [String],
     pathPackages ? [Derivation],
     pathExtras ? [String],
     evaluate ? Bool,
@@ -49,32 +49,32 @@
 
   # Arguments
 
-  envImpure
-  : Whether to use the current environment when running the tool. Defaults to `false` for maximum hermeticity.
+  envCleaned
+  : Rebuild environment variables from a clean slate. Defaults to `true`.
 
   envKeep
-  : List of environment variable names to preserve from the current environment. Defaults to `["LANG" "LOCALE_ARCHIVE"]`.
+  : Variables to keep from the current environment. Defaults to `["LANG" "LOCALE_ARCHIVE"]`.
 
-  pathImpureAll
-  : Whether to include all paths from the current environment. Defaults to `false`.
+  pathCleaned
+  : Rebuild PATH from a clean slate. Defaults to `true`.
 
-  pathImpureSelected
-  : List of specific paths to include from the current environment. Defaults to `[]`.
+  pathKeep
+  : Basenames of executables whose paths to include from the current environment. Defaults to `[]`.
 
   pathPackages
-  : List of Nix packages to include in the PATH. Defaults to `[]`.
+  : Packages to add to the PATH. Defaults to `[]`.
 
   pathExtras
-  : Additional paths to include in the PATH. Defaults to `["/bin" "/usr/bin"]`.
+  : Additional paths to add to the PATH. Defaults to `[]`.
 
   evaluate
-  : Whether to evaluate Org-mode code blocks during conversion. Defaults to `true`.
+  : Evaluate all SRC blocks in Org files before exporting. Defaults to `true`.
 
   exclude
-  : List of glob patterns for files/directories to exclude from processing. Defaults to `[]`.
+  : Glob patterns for files/directories to exclude. Defaults to `[]`.
 
   keepGoing
-  : Whether to continue processing other files if one fails. Defaults to `false`.
+  : Whether to ignore failures where possible. Defaults to `false`.
 
   alwaysYes
   : Whether to automatically answer "yes" to all prompts. Defaults to `false`.
@@ -87,13 +87,13 @@
   A derivation  providing the `bin/org2gfm` exectuable.
 */
 {
-  envImpure ? false,
+  envCleaned ? true,
   envKeep ? [
     "LANG"
     "LOCALE_ARCHIVE"
   ],
-  pathImpureAll ? false,
-  pathImpureSelected ? [ ],
+  pathCleaned ? true,
+  pathKeep ? [ ],
   pathPackages ? [ ],
   pathExtras ? [
     "/bin"
@@ -121,10 +121,10 @@ let
 
   org2gfm = nix-project-lib.org2gfm {
     inherit
-      envImpure
+      envCleaned
       envKeep
-      pathImpureAll
-      pathImpureSelected
+      pathCleaned
+      pathKeep
       pathPackages
       pathExtras
       ;
@@ -138,8 +138,8 @@ nix-project-lib.scripts.writeShellCheckedExe "org2gfm-static"
   {
     exeName = "org2gfm";
     inherit meta;
-    envImpure = true;
-    pathImpureAll = true;
+    envCleaned = false;
+    pathCleaned = false;
   }
   ''
     set -eu

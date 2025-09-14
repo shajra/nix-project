@@ -26,10 +26,10 @@
             with lib.types;
             submodule {
               options = {
-                envImpure = lib.mkOption {
+                envCleaned = lib.mkOption {
                   type = bool;
-                  default = false;
-                  description = "rebuild environment from a clean slate";
+                  default = true;
+                  description = "rebuild environment variables from a clean slate";
                 };
                 envKeep = lib.mkOption {
                   type = listOf str;
@@ -37,12 +37,22 @@
                     "LANG"
                     "LOCALE_ARCHIVE"
                   ];
-                  description = "variables to keep when ignoring environment";
+                  description = "variables to keep from the current environment";
+                };
+                pathCleaned = lib.mkOption {
+                  type = bool;
+                  default = true;
+                  description = "rebuild PATH from a clean slate";
+                };
+                pathKeep = lib.mkOption {
+                  type = listOf str;
+                  default = [ ];
+                  description = "basenames of executables whose paths to include from current environment";
                 };
                 pathPackages = lib.mkOption {
                   type = listOf package;
                   default = [ ];
-                  description = "packages to explicitly put on PATH (even when ignoring environment)";
+                  description = "packages to add to PATH";
                 };
                 pathExtras = lib.mkOption {
                   type = listOf str;
@@ -50,42 +60,32 @@
                     "/bin"
                     "/usr/bin"
                   ];
-                  description = "include paths like /bin (even when ignoring environment)";
-                };
-                pathImpureSelected = lib.mkOption {
-                  type = listOf str;
-                  default = [ ];
-                  description = "include path to selected executable names on PATH (even when ignoring environment)";
-                };
-                pathImpureAll = lib.mkOption {
-                  type = bool;
-                  default = false;
-                  description = "include previous PATH (even when ignoring environment)";
+                  description = "additional paths to add to PATH";
                 };
                 evaluate = lib.mkOption {
                   type = bool;
                   default = true;
-                  description = "evaluate all SRC blocks before exporting";
+                  description = "evaluate all SRC blocks in Org files before exporting";
                 };
                 exclude = lib.mkOption {
                   type = listOf str;
                   default = [ ];
-                  description = "exclude matched when searching";
+                  description = "glob patterns for files/directories to exclude";
                 };
                 keepGoing = lib.mkOption {
                   type = bool;
                   default = false;
-                  description = "don't stop if Babel executes non-zero";
+                  description = "whether to ignore failures where possible";
                 };
                 alwaysYes = lib.mkOption {
                   type = bool;
                   default = false;
-                  description = "answer \"yes\" to all queries for evaluation";
+                  description = "answer \"yes\" to all interactive prompts";
                 };
                 alwaysNo = lib.mkOption {
                   type = bool;
                   default = false;
-                  description = "answer \"no\" to all queries for evaluation";
+                  description = "answer \"no\" to all interactive prompts";
                 };
               };
             };

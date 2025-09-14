@@ -46,26 +46,26 @@ let
 
   org2gfm =
     {
-      pathImpureAll ? false,
-      pathImpureSelected ? [ ],
-      pathPackages ? [ ],
-      pathExtras ? [ ],
-      envImpure ? false,
+      envCleaned ? true,
       envKeep ? [
         "LANG"
         "LOCALE_ARCHIVE"
       ],
+      pathCleaned ? true,
+      pathKeep ? [ ],
+      pathPackages ? [ ],
+      pathExtras ? [ ],
     }:
     nix-project-lib.scripts.writeShellCheckedExe progName
       {
         inherit
           meta
-          pathImpureAll
-          pathImpureSelected
+          envCleaned
+          envKeep
+          pathCleaned
+          pathKeep
           pathPackages
           pathExtras
-          envImpure
-          envKeep
           ;
       }
       ''
@@ -276,7 +276,7 @@ in
 
     # Resolve the directory putting "nix" on the PATH, and include it
     org2gfm {
-      pathImpureSelected = [ "nix" ];
+      pathKeep = [ "nix" ];
     }
     ```
 
@@ -284,34 +284,34 @@ in
 
     ```
     org2gfm :: {
-      pathImpureAll ? Bool,
-      pathImpureSelected ? [String],
+      envCleaned ? Bool,
+      envKeep ? [String]
+      pathCleaned ? Bool,
+      pathKeep ? [String],
       pathPackages ? [Derivation],
       pathExtras ? [String],
-      envImpure ? Bool,
-      envKeep ? [String]
     } -> Derivation
     ```
 
     # Arguments
 
-    pathImpureAll
-    : Whether to include all paths from the current environment. Defaults to `false`.
-
-    pathImpureSelected
-    : Names of executables to include the paths of from the current environment. Defaults to `[]`.
-
-    pathPackages
-    : List of Nix packages to include in the PATH. Defaults to `[]`.
-
-    pathExtras
-    : Additional paths to include in the PATH. Defaults to `[]`.
-
-    envImpure
-    : Whether to use the current environment when running the tool. Defaults to `false` for maximum hermeticity.
+    envCleaned
+    : Rebuild environment variables from a clean slate. Defaults to `true`.
 
     envKeep
-    : List of environment variable names to preserve from the current environment. Defaults to `["LANG" "LOCALE_ARCHIVE"]`.
+    : Variables to keep from the current environment. Defaults to `["LANG" "LOCALE_ARCHIVE"]`.
+
+    pathCleaned
+    : Rebuild PATH from a clean slate. Defaults to `true`.
+
+    pathKeep
+    : Basenames of executables whose paths to include from the current environment. Defaults to `[]`.
+
+    pathPackages
+    : Packages to add to the PATH. Defaults to `[]`.
+
+    pathExtras
+    : Additional paths to add to the PATH. Defaults to `[]`.
 
     # Returns
 
@@ -322,8 +322,8 @@ in
   inherit org2gfm;
 
   org2gfm-impure = org2gfm {
-    pathImpureAll = true;
-    envImpure = true;
+    envCleaned = false;
+    pathCleaned = false;
   };
 
 }

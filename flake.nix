@@ -58,7 +58,6 @@
           lib = build.nix-project-lib;
           checks.build = build.nix-project-checks;
           checks.org2gfm-flake = config.org2gfm.finalPackage;
-          checks.org2gfm-build = build.nix-project-checks;
           legacyPackages.lib = build.nix-project-lib;
           legacyPackages.nixpkgs = nixpkgs;
           devshells.default = {
@@ -101,7 +100,7 @@
                 "LANG"
                 "LOCALE_ARCHIVE"
               ];
-              pathImpureSelected = [
+              pathKeep = [
                 "nix"
               ];
               pathPackages = [
