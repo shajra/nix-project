@@ -102,12 +102,12 @@ nix run
     Nix Community Survey 2025 is here! Take the Survey
      
     Explore Download Learn Values Community Blog Donate Search
-    Nix Community Survey 2025 is here!Help us improve by sharing your feedback.
+    Second Steering Committee Election
     
-    Take the Survey
+    Registration for voters and candidates is now open!
     
-    Declarative builds
-    and deployments.
+    Read more
+    
     …
 
 ## Additional caching of Nix evaluations<a id="sec-3-3"></a>
