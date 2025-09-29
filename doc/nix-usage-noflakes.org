@@ -306,7 +306,7 @@ nix-build --attr <<get("package-attr-long")>> .
 #+end_src
 
 #+RESULTS: nix-build
-: /nix/store/dfnm0xmaz3vwfk1gfms0d1whk7zny97f-org2gfm
+: /nix/store/vvaidfnmb22bav27nv5qiq71kn5q6x4h-org2gfm
 
 If we omit the path to a Nix file, =nix-build= will try to build =default.nix=
 in the current directory. If we omit the =--attr= option and argument,
@@ -329,7 +329,7 @@ readlink result*
 #+end_src
 
 #+RESULTS: nix-build-link
-: /nix/store/dfnm0xmaz3vwfk1gfms0d1whk7zny97f-org2gfm
+: /nix/store/vvaidfnmb22bav27nv5qiq71kn5q6x4h-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 

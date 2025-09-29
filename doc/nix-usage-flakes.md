@@ -212,7 +212,7 @@ nix search nixpkgs 'gpu|opengl|accel' terminal
     * legacyPackages.x86_64-linux.kitty (0.42.2)
       Fast, feature-rich, GPU based terminal emulator
     
-    * legacyPackages.x86_64-linux.rio (0.2.29)
+    * legacyPackages.x86_64-linux.rio (0.2.30)
       Hardware-accelerated GPU terminal emulator powered by WebGPU
     
     * legacyPackages.x86_64-linux.wezterm (0-unstable-2025-08-14)
@@ -267,7 +267,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/dfnm0xmaz3vwfk1gfms0d1whk7zny97f-org2gfm
+    /nix/store/vvaidfnmb22bav27nv5qiq71kn5q6x4h-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -289,7 +289,7 @@ It's common to configure these “result” symlinks as ignored in source contro
 nix path-info .#org2gfm-impure
 ```
 
-    /nix/store/dfnm0xmaz3vwfk1gfms0d1whk7zny97f-org2gfm
+    /nix/store/vvaidfnmb22bav27nv5qiq71kn5q6x4h-org2gfm
 
 ## Running commands in a shell<a id="sec-4-6"></a>
 
@@ -402,7 +402,7 @@ nix shell --ignore-environment \
     --command which org2gfm
 ```
 
-    /nix/store/dfnm0xmaz3vwfk1gfms0d1whk7zny97f-org2gfm/bin/org2gfm
+    /nix/store/vvaidfnmb22bav27nv5qiq71kn5q6x4h-org2gfm/bin/org2gfm
 
 What we do with local flake references can work just as well with remote flake references.
 
@@ -430,7 +430,7 @@ nix profile list
     Flake attribute:    packages.x86_64-linux.org2gfm-impure
     Original flake URL: git+file:///home/shajra/src/nix-project
     Locked flake URL:   git+file:///home/shajra/src/nix-project
-    Store paths:        /nix/store/dfnm0xmaz3vwfk1gfms0d1whk7zny97f-org2gfm
+    Store paths:        /nix/store/vvaidfnmb22bav27nv5qiq71kn5q6x4h-org2gfm
 
 If we want to uninstall a program from our profile, we can reference it by name:
 
