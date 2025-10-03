@@ -209,7 +209,7 @@ nix search nixpkgs 'gpu|opengl|accel' terminal
     * legacyPackages.x86_64-linux.darktile (0.0.11)
       GPU rendered terminal emulator designed for tiling window managers
     
-    * legacyPackages.x86_64-linux.kitty (0.42.2)
+    * legacyPackages.x86_64-linux.kitty (0.43.1)
       Fast, feature-rich, GPU based terminal emulator
     
     * legacyPackages.x86_64-linux.rio (0.2.30)
