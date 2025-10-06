@@ -64,6 +64,12 @@
           devshells.default = {
             commands = [
               {
+                category = "[general commands]";
+                name = "project-format";
+                help = "format all files in one command";
+                command = ''treefmt "$@"'';
+              }
+              {
                 category = "[release]";
                 name = "project-update";
                 help = "1) update project dependencies";
@@ -80,12 +86,6 @@
                 name = "project-doc-gen";
                 help = "3) generate GitHub Markdown from Org files";
                 command = ''org2gfm "$@"'';
-              }
-              {
-                category = "[general commands]";
-                name = "project-format";
-                help = "format all files in one command";
-                command = ''treefmt "$@"'';
               }
             ];
             packages = [
