@@ -64,24 +64,28 @@
           devshells.default = {
             commands = [
               {
+                category = "[release]";
                 name = "project-update";
-                help = "update project dependencies";
+                help = "1) update project dependencies";
                 command = ''nix flake update --commit-lock-file "$@"'';
               }
               {
+                category = "[release]";
                 name = "project-check";
-                help = "run all checks/tests/linters";
+                help = "2) run all checks/tests/linters";
                 command = "nix --print-build-logs flake check --show-trace";
               }
               {
+                category = "[release]";
+                name = "project-doc-gen";
+                help = "3) generate GitHub Markdown from Org files";
+                command = ''org2gfm "$@"'';
+              }
+              {
+                category = "[general commands]";
                 name = "project-format";
                 help = "format all files in one command";
                 command = ''treefmt "$@"'';
-              }
-              {
-                name = "project-doc-gen";
-                help = "generate GitHub Markdown from Org files";
-                command = ''org2gfm "$@"'';
               }
             ];
             packages = [
