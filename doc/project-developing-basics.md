@@ -100,14 +100,14 @@ nix run
 ```
 
     Nix Community Survey 2025 is here! Take the Survey
-     
+    Nixos Logo
     Explore Download Learn Values Community Blog Donate Search
+    
     Second Steering Committee Election
     
     Registration for voters and candidates is now open!
     
     Read more
-    
     …
 
 ## Additional caching of Nix evaluations<a id="sec-3-3"></a>
