@@ -617,7 +617,6 @@ nix-env --profile /tmp/nix-profile \
 
 #+RESULTS: nix-env-uninstall
 : uninstalling 'org2gfm'
-: building '/nix/store/xsk9wjy0dpp7w7d3r3bkzxzaklqdzq6q-user-environment.drv'...
 
 Summarizing what we've done, we've installed our package using its attribute
 path ({{{package-attr-long}}}) within the referenced Nix expression. But we
