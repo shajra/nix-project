@@ -333,10 +333,10 @@ nix search nixpkgs 'gpu|opengl|accel' terminal | ansifilter
 
 #+RESULTS: nix-search-remote-concise
 #+begin_example
-,* legacyPackages.x86_64-linux.alacritty (0.15.1)
+,* legacyPackages.x86_64-linux.alacritty (0.16.1)
   Cross-platform, GPU-accelerated terminal emulator
 
-,* legacyPackages.x86_64-linux.alacritty-graphics (0.15.1-graphics)
+,* legacyPackages.x86_64-linux.alacritty-graphics (0.16.1-graphics)
   Cross-platform, GPU-accelerated terminal emulator
 
 ,* legacyPackages.x86_64-linux.darktile (0.0.11)

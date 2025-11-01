@@ -341,6 +341,7 @@ nix-env --uninstall org2gfm 2>&1
 ```
 
     uninstalling 'org2gfm'
+    building '/nix/store/xsk9wjy0dpp7w7d3r3bkzxzaklqdzq6q-user-environment.drv'...
 
 Summarizing what we've done, we've installed our package using its attribute path (`packages.x86_64-linux.org2gfm-impure`) within the referenced Nix expression. But we uninstall it using the package name (“org2gfm”), which may not be the same as the attribute path. When a package is installed, Nix keeps no reference to the expression evaluated to obtain the installed package's derivation. The attribute path is only relevant to this expression. In fact, two different expressions could evaluate to the same derivation, but use different attribute paths. This is why we uninstall packages by their package name.
 

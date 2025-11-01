@@ -200,10 +200,10 @@ As discussed in a previous section, we can use the flakes registry identifier of
 nix search nixpkgs 'gpu|opengl|accel' terminal
 ```
 
-    * legacyPackages.x86_64-linux.alacritty (0.15.1)
+    * legacyPackages.x86_64-linux.alacritty (0.16.1)
       Cross-platform, GPU-accelerated terminal emulator
     
-    * legacyPackages.x86_64-linux.alacritty-graphics (0.15.1-graphics)
+    * legacyPackages.x86_64-linux.alacritty-graphics (0.16.1-graphics)
       Cross-platform, GPU-accelerated terminal emulator
     
     * legacyPackages.x86_64-linux.darktile (0.0.11)

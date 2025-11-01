@@ -105,7 +105,7 @@ nix run
     
     Second Steering Committee Election
     
-    Registration for voters and candidates is now open!
+    Voter registration is still open and voting has started. Click for details.
     
     Read more
     …
