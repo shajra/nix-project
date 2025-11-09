@@ -99,15 +99,15 @@ As with all Nix flake-based projects, all normal `nix` commands apply, as docume
 nix run
 ```
 
-    Nix Community Survey 2025 is here! Take the Survey
+    Nix Community Survey 2025 is still running! Take the Survey
     Nixos Logo
     Explore Download Learn Values Community Blog Donate Search
     
-    Second Steering Committee Election
+    Nix Community Survey 2025 is still running!
     
-    Voter registration is still open and voting has started. Click for details.
+    Help us improve by sharing your feedback.
     
-    Read more
+    Take the Survey
     …
 
 ## Additional caching of Nix evaluations<a id="sec-3-3"></a>
