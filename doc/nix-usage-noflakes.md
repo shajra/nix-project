@@ -163,7 +163,7 @@ We can build this package with `nix-build` from the project root:
 nix-build --attr packages.x86_64-linux.org2gfm-impure .
 ```
 
-    /nix/store/9av38712k9s6lhn9ly83zwqzr56lyrnz-org2gfm
+    /nix/store/kcfhsdxpzv0im5bjjj796f8rfkl27kgr-org2gfm
 
 If we omit the path to a Nix file, `nix-build` will try to build `default.nix` in the current directory. If we omit the `--attr` option and argument, `nix-build` will try to build packages it finds in the root of the attribute tree.
 
@@ -175,7 +175,7 @@ The output of `nix-build` shows us where in `/nix/store` our package has been bu
 readlink result*
 ```
 
-    /nix/store/9av38712k9s6lhn9ly83zwqzr56lyrnz-org2gfm
+    /nix/store/kcfhsdxpzv0im5bjjj796f8rfkl27kgr-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -271,12 +271,12 @@ If we want something other than what can be detected, then we have to continue u
 
 The previous sections show how to use `nix run` and `nix shell` to run commands in an environment that includes packages from a project local to our filesystem.
 
-We can reference remote projects that have a `default.nix` file using URLs with the `--file` option. For example, here we reference a tarball of the 25.05 release of Nixpkgs:
+We can reference remote projects that have a `default.nix` file using URLs with the `--file` option. For example, here we reference a tarball of the 25.11 release of Nixpkgs:
 
 ```sh
 nix --extra-experimental-features 'nix-command' \
     run \
-    --file https://github.com/NixOS/nixpkgs/archive/nixos-25.05.tar.gz \
+    --file https://github.com/NixOS/nixpkgs/archive/nixos-25.11.tar.gz \
     hello
 ```
 

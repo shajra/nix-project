@@ -99,15 +99,15 @@ As with all Nix flake-based projects, all normal `nix` commands apply, as docume
 nix run
 ```
 
-    Nix Community Survey 2025 is still running! Take the Survey
     Nixos Logo
     Explore Download Learn Values Community Blog Donate Search
+    NixOS 25.11 released Read Announcement
     
-    Nix Community Survey 2025 is still running!
+    Declarative builds
+    and deployments.
     
-    Help us improve by sharing your feedback.
-    
-    Take the Survey
+    Nix is a tool that takes a unique approach to package management and system
+    configuration. Learn how to make reproducible, declarative and reliable
     …
 
 ## Additional caching of Nix evaluations<a id="sec-3-3"></a>
@@ -152,7 +152,7 @@ Every `flake.nix` file must conform to a standard structure of an attribute set 
 
   inputs = {
     devshell.url = "github:numtide/devshell";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nix-project.url = "github:shajra/nix-project";
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };

@@ -190,15 +190,15 @@ nix run
 
 #+RESULTS: scaffold-run
 #+begin_example
-Nix Community Survey 2025 is still running! Take the Survey
 Nixos Logo
 Explore Download Learn Values Community Blog Donate Search
+NixOS 25.11 released Read Announcement
 
-Nix Community Survey 2025 is still running!
+Declarative builds
+and deployments.
 
-Help us improve by sharing your feedback.
-
-Take the Survey
+Nix is a tool that takes a unique approach to package management and system
+configuration. Learn how to make reproducible, declarative and reliable
 …
 #+end_example
 

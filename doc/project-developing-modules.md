@@ -212,7 +212,7 @@ The following illustrates this GNU Hello example in a tiny, but complete `flake.
     description = "Illustrating flake-parts";
     inputs = {
         flake-parts.url = "github:hercules-ci/flake-parts";
-        nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     };
     outputs = inputs@{ flake-parts, ... }:
         flake-parts.lib.mkFlake { inherit inputs; } {
@@ -240,7 +240,7 @@ See the [official flake-parts documentation](https://flake.parts/module-argument
     description = "Illustrating flake-parts";
     inputs = {
         flake-parts.url = "github:hercules-ci/flake-parts";
-        nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     };
     outputs = inputs@{ flake-parts, ... }:
         flake-parts.lib.mkFlake { inherit inputs; } {
