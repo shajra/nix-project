@@ -6,8 +6,8 @@
     flake-compat.url = "https://flakehub.com/f/edolstra/flake-compat/*.tar.gz";
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";
-    nixpkgs-stable-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
-    nixpkgs-stable-linux.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs-stable-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
+    nixpkgs-stable-linux.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     sops-nix.url = "github:Mic92/sops-nix";
     treefmt-nix.url = "github:numtide/treefmt-nix";

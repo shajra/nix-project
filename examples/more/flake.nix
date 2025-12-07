@@ -5,7 +5,7 @@
     devshell.url = "github:numtide/devshell";
     flake-compat.url = "https://flakehub.com/f/edolstra/flake-compat/*.tar.gz";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nix-project.url = "github:shajra/nix-project";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     systems-darwin.url = "github:nix-systems/aarch64-darwin";

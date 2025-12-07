@@ -10,9 +10,9 @@
  ;; run-type must be "executable"
  (run-target-short     . "org2gfm")
  ;; run-target-long will always prefix "bin/"
- (nix-latest           . "2.32.3")
- (nix-stable           . "2.28.5")
- (nixos-latest         . "25.05")
+ (nix-latest           . "2.32.4")
+ (nix-stable           . "2.31.2")
+ (nixos-latest         . "25.11")
  (platforms            . "\n\
 - Linux on x86-64 machines\n\
 - macOS on x86-64 machines\n\

@@ -3,7 +3,7 @@
 
   inputs = {
     devshell.url = "github:numtide/devshell";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nix-project.url = "github:shajra/nix-project";
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
