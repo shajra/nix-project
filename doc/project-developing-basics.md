@@ -100,7 +100,7 @@ nix run
 ```
 
     Nixos Logo
-    Explore Download Learn Values Community Blog Donate Search
+    Explore Download Learn Governance Community Blog Donate Search
     NixOS 25.11 released Read Announcement
     
     Declarative builds
