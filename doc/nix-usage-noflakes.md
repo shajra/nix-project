@@ -307,6 +307,7 @@ nix-env --install --file . --attr packages.x86_64-linux.org2gfm-impure 2>&1
 ```
 
     installing 'org2gfm'
+    building '/nix/store/hs9xz17vlb2m4qn6kxfmccgjq4jyrvqg-user-environment.drv'...
 
 We can see this installation by querying what's been installed:
 
