@@ -163,7 +163,7 @@ We can build this package with `nix-build` from the project root:
 nix-build --attr packages.x86_64-linux.org2gfm-impure .
 ```
 
-    /nix/store/2q8czdx7635qhbhxsmv7grm5icxxqjl0-org2gfm
+    /nix/store/6i3xa551bbx9z16l4pfbzbx0z93yf89y-org2gfm
 
 If we omit the path to a Nix file, `nix-build` will try to build `default.nix` in the current directory. If we omit the `--attr` option and argument, `nix-build` will try to build packages it finds in the root of the attribute tree.
 
@@ -175,7 +175,7 @@ The output of `nix-build` shows us where in `/nix/store` our package has been bu
 readlink result*
 ```
 
-    /nix/store/2q8czdx7635qhbhxsmv7grm5icxxqjl0-org2gfm
+    /nix/store/6i3xa551bbx9z16l4pfbzbx0z93yf89y-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -341,6 +341,7 @@ nix-env --uninstall org2gfm 2>&1
 ```
 
     uninstalling 'org2gfm'
+    building '/nix/store/xsk9wjy0dpp7w7d3r3bkzxzaklqdzq6q-user-environment.drv'...
 
 Summarizing what we've done, we've installed our package using its attribute path (`packages.x86_64-linux.org2gfm-impure`) within the referenced Nix expression. But we uninstall it using the package name (“org2gfm”), which may not be the same as the attribute path. When a package is installed, Nix keeps no reference to the expression evaluated to obtain the installed package's derivation. The attribute path is only relevant to this expression. In fact, two different expressions could evaluate to the same derivation, but use different attribute paths. This is why we uninstall packages by their package name.
 

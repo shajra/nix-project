@@ -101,7 +101,7 @@ nix run
 
     Nixos Logo
     Explore Download Learn Governance Community Blog Donate Search
-    NixOS 25.11 released Read Announcement
+    Framework Partnership Announcement Read Announcement
     
     Declarative builds
     and deployments.
