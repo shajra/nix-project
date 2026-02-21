@@ -99,7 +99,7 @@ As with all Nix flake-based projects, all normal `nix` commands apply, as docume
 nix run
 ```
 
-    Nixos Logo
+    NixOS - Go to homepage
     Explore Download Learn Governance Community Blog Donate Search
     Framework Partnership Announcement Read Announcement
     

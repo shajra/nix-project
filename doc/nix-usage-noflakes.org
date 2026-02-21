@@ -306,7 +306,7 @@ nix-build --attr <<get("package-attr-long")>> .
 #+end_src
 
 #+RESULTS: nix-build
-: /nix/store/6i3xa551bbx9z16l4pfbzbx0z93yf89y-org2gfm
+: /nix/store/3s5lr2g8829c4gpih3x8irw9ips7836h-org2gfm
 
 If we omit the path to a Nix file, =nix-build= will try to build =default.nix=
 in the current directory. If we omit the =--attr= option and argument,
@@ -329,7 +329,7 @@ readlink result*
 #+end_src
 
 #+RESULTS: nix-build-link
-: /nix/store/6i3xa551bbx9z16l4pfbzbx0z93yf89y-org2gfm
+: /nix/store/3s5lr2g8829c4gpih3x8irw9ips7836h-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -617,7 +617,6 @@ nix-env --profile /tmp/nix-profile \
 
 #+RESULTS: nix-env-uninstall
 : uninstalling 'org2gfm'
-: building '/nix/store/xsk9wjy0dpp7w7d3r3bkzxzaklqdzq6q-user-environment.drv'...
 
 Summarizing what we've done, we've installed our package using its attribute
 path ({{{package-attr-long}}}) within the referenced Nix expression. But we

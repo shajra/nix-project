@@ -348,7 +348,7 @@ nix search nixpkgs 'gpu|opengl|accel' terminal | ansifilter
 ,* legacyPackages.x86_64-linux.rio (0.2.37)
   Hardware-accelerated GPU terminal emulator powered by WebGPU
 
-,* legacyPackages.x86_64-linux.wezterm (0-unstable-2026-01-09)
+,* legacyPackages.x86_64-linux.wezterm (0-unstable-2026-01-17)
   GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust
 
 ,* legacyPackages.x86_64-linux.zutty (0.16-unstable-2024-08-18)
@@ -444,7 +444,7 @@ readlink result*
 #+end_src
 
 #+RESULTS: nix-build-link
-: /nix/store/6i3xa551bbx9z16l4pfbzbx0z93yf89y-org2gfm
+: /nix/store/3s5lr2g8829c4gpih3x8irw9ips7836h-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -473,7 +473,7 @@ nix path-info .#<<get("package-attr-short")>>
 #+end_src
 
 #+results: nix-build-path
-: /nix/store/6i3xa551bbx9z16l4pfbzbx0z93yf89y-org2gfm
+: /nix/store/3s5lr2g8829c4gpih3x8irw9ips7836h-org2gfm
 
 ** Running commands in a shell
 
@@ -635,7 +635,7 @@ nix shell --ignore-environment \
 #+end_src
 
 #+RESULTS: nix-shell-remote
-: /nix/store/6i3xa551bbx9z16l4pfbzbx0z93yf89y-org2gfm/bin/org2gfm
+: /nix/store/3s5lr2g8829c4gpih3x8irw9ips7836h-org2gfm/bin/org2gfm
 
 What we do with local flake references can work just as well with remote flake
 references.
@@ -686,7 +686,7 @@ nix profile list --profile /tmp/nix-profile | ansifilter
 : Flake attribute:    packages.x86_64-linux.org2gfm-impure
 : Original flake URL: git+file:///home/shajra/src/nix-project
 : Locked flake URL:   git+file:///home/shajra/src/nix-project
-: Store paths:        /nix/store/6i3xa551bbx9z16l4pfbzbx0z93yf89y-org2gfm
+: Store paths:        /nix/store/3s5lr2g8829c4gpih3x8irw9ips7836h-org2gfm
 
 If we want to uninstall a program from our profile, we can reference it by name:
 
