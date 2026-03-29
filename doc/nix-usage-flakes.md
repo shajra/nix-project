@@ -115,17 +115,17 @@ nix flake show .
     ├───apps
     │   ├───aarch64-darwin
     …
+    ├───formatter
+    │   ├───aarch64-darwin omitted (use '--all-systems' to show)
+    │   └───x86_64-linux: package 'treefmt'
+    ├───legacyPackages
     │   ├───aarch64-darwin omitted (use '--legacy' to show)
-    │   ├───x86_64-darwin omitted (use '--legacy' to show)
     │   └───x86_64-linux omitted (use '--legacy' to show)
     ├───lib: unknown
     ├───overlays
     │   └───default: Nixpkgs overlay
     ├───packages
     │   ├───aarch64-darwin
-    │   │   ├───default omitted (use '--all-systems' to show)
-    │   │   └───org2gfm-impure omitted (use '--all-systems' to show)
-    │   ├───x86_64-darwin
     │   │   ├───default omitted (use '--all-systems' to show)
     │   │   └───org2gfm-impure omitted (use '--all-systems' to show)
     │   └───x86_64-linux
@@ -206,10 +206,13 @@ nix search nixpkgs 'gpu|opengl|accel' terminal
     * legacyPackages.x86_64-linux.alacritty-graphics (0.16.1)
       Cross-platform, GPU-accelerated terminal emulator
     
+    * legacyPackages.x86_64-linux.attyx (0.2.47)
+      Fast GPU-accelerated terminal emulator built with Zig
+    
     * legacyPackages.x86_64-linux.darktile (0.0.11)
       GPU rendered terminal emulator designed for tiling window managers
     
-    * legacyPackages.x86_64-linux.kitty (0.45.0)
+    * legacyPackages.x86_64-linux.kitty (0.46.1)
       Fast, feature-rich, GPU based terminal emulator
     
     * legacyPackages.x86_64-linux.rio (0.2.37)
@@ -267,7 +270,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/3s5lr2g8829c4gpih3x8irw9ips7836h-org2gfm
+    /nix/store/6y10pq9631drgvb3y83ffx3aipghyx6k-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -289,7 +292,7 @@ It's common to configure these “result” symlinks as ignored in source contro
 nix path-info .#org2gfm-impure
 ```
 
-    /nix/store/3s5lr2g8829c4gpih3x8irw9ips7836h-org2gfm
+    /nix/store/6y10pq9631drgvb3y83ffx3aipghyx6k-org2gfm
 
 ## Running commands in a shell<a id="sec-4-6"></a>
 
@@ -402,7 +405,7 @@ nix shell --ignore-environment \
     --command which org2gfm
 ```
 
-    /nix/store/3s5lr2g8829c4gpih3x8irw9ips7836h-org2gfm/bin/org2gfm
+    /nix/store/6y10pq9631drgvb3y83ffx3aipghyx6k-org2gfm/bin/org2gfm
 
 What we do with local flake references can work just as well with remote flake references.
 
@@ -430,7 +433,7 @@ nix profile list
     Flake attribute:    packages.x86_64-linux.org2gfm-impure
     Original flake URL: git+file:///home/shajra/src/nix-project
     Locked flake URL:   git+file:///home/shajra/src/nix-project
-    Store paths:        /nix/store/3s5lr2g8829c4gpih3x8irw9ips7836h-org2gfm
+    Store paths:        /nix/store/6y10pq9631drgvb3y83ffx3aipghyx6k-org2gfm
 
 If we want to uninstall a program from our profile, we can reference it by name:
 
