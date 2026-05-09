@@ -206,7 +206,7 @@ nix search nixpkgs 'gpu|opengl|accel' terminal
     * legacyPackages.x86_64-linux.alacritty-graphics (0.17.0)
       Cross-platform, GPU-accelerated terminal emulator
     
-    * legacyPackages.x86_64-linux.attyx (0.3.6)
+    * legacyPackages.x86_64-linux.attyx (0.3.15)
       Fast GPU-accelerated terminal emulator built with Zig
     
     * legacyPackages.x86_64-linux.darktile (0.0.11)
@@ -215,7 +215,7 @@ nix search nixpkgs 'gpu|opengl|accel' terminal
     * legacyPackages.x86_64-linux.kitty (0.46.2)
       Fast, feature-rich, GPU based terminal emulator
     
-    * legacyPackages.x86_64-linux.rio (0.3.4)
+    * legacyPackages.x86_64-linux.rio (0.3.11)
       Hardware-accelerated GPU terminal emulator powered by WebGPU
     
     * legacyPackages.x86_64-linux.wezterm (0-unstable-2026-03-31)
@@ -270,7 +270,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/xv87zmf8643k2vgpbpxs0mcqxv21307v-org2gfm
+    /nix/store/8k8y9mbd1wn7ln4j01mb5r1k3bnrsvf8-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -292,7 +292,7 @@ It's common to configure these “result” symlinks as ignored in source contro
 nix path-info .#org2gfm-impure
 ```
 
-    /nix/store/xv87zmf8643k2vgpbpxs0mcqxv21307v-org2gfm
+    /nix/store/8k8y9mbd1wn7ln4j01mb5r1k3bnrsvf8-org2gfm
 
 ## Running commands in a shell<a id="sec-4-6"></a>
 
@@ -405,7 +405,7 @@ nix shell --ignore-environment \
     --command which org2gfm
 ```
 
-    /nix/store/xv87zmf8643k2vgpbpxs0mcqxv21307v-org2gfm/bin/org2gfm
+    /nix/store/8k8y9mbd1wn7ln4j01mb5r1k3bnrsvf8-org2gfm/bin/org2gfm
 
 What we do with local flake references can work just as well with remote flake references.
 
@@ -433,7 +433,7 @@ nix profile list
     Flake attribute:    packages.x86_64-linux.org2gfm-impure
     Original flake URL: git+file:///home/shajra/src/nix-project
     Locked flake URL:   git+file:///home/shajra/src/nix-project
-    Store paths:        /nix/store/xv87zmf8643k2vgpbpxs0mcqxv21307v-org2gfm
+    Store paths:        /nix/store/8k8y9mbd1wn7ln4j01mb5r1k3bnrsvf8-org2gfm
 
 If we want to uninstall a program from our profile, we can reference it by name:
 

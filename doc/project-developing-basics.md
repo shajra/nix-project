@@ -99,15 +99,15 @@ As with all Nix flake-based projects, all normal `nix` commands apply, as docume
 nix run
 ```
 
+    Summer of Nix is Here! Apply now
     NixOS - Go to homepage
     Explore Download Learn Governance Community Blog Donate Search
-    Framework Partnership Announcement Read Announcement
+    Applications for Summer of Nix 2026 are now open!
+    
+    Learn more
     
     Declarative builds
     and deployments.
-    
-    Nix is a tool that takes a unique approach to package management and system
-    configuration. Learn how to make reproducible, declarative and reliable
     …
 
 ## Additional caching of Nix evaluations<a id="sec-3-3"></a>
