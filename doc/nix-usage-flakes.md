@@ -206,16 +206,19 @@ nix search nixpkgs 'gpu|opengl|accel' terminal
     * legacyPackages.x86_64-linux.alacritty-graphics (0.17.0)
       Cross-platform, GPU-accelerated terminal emulator
     
-    * legacyPackages.x86_64-linux.attyx (0.3.15)
+    * legacyPackages.x86_64-linux.attyx (0.4.0)
       Fast GPU-accelerated terminal emulator built with Zig
     
     * legacyPackages.x86_64-linux.darktile (0.0.11)
       GPU rendered terminal emulator designed for tiling window managers
     
-    * legacyPackages.x86_64-linux.kitty (0.46.2)
+    * legacyPackages.x86_64-linux.kitty (0.47.0)
       Fast, feature-rich, GPU based terminal emulator
     
-    * legacyPackages.x86_64-linux.rio (0.3.11)
+    * legacyPackages.x86_64-linux.ratty (0.3.0)
+      GPU-rendered terminal emulator with inline 3D graphics
+    
+    * legacyPackages.x86_64-linux.rio (0.4.4)
       Hardware-accelerated GPU terminal emulator powered by WebGPU
     
     * legacyPackages.x86_64-linux.wezterm (0-unstable-2026-03-31)
