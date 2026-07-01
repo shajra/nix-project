@@ -10,7 +10,7 @@ jobs:
     name: ${{ matrix.os }} build
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - uses: cachix/install-nix-action@v31
       with:
         # DESIGN: matching current in NixOS 26.05
