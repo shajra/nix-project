@@ -163,7 +163,7 @@ We can build this package with `nix-build` from the project root:
 nix-build --attr packages.x86_64-linux.org2gfm-impure .
 ```
 
-    /nix/store/cvp5rr8ygpy7l91vwmhjr8gd8rp2s2av-org2gfm
+    /nix/store/p7i8qvm92d3scyqqh5z2kqmsrk57a8s5-org2gfm
 
 If we omit the path to a Nix file, `nix-build` will try to build `default.nix` in the current directory. If we omit the `--attr` option and argument, `nix-build` will try to build packages it finds in the root of the attribute tree.
 
@@ -175,7 +175,7 @@ The output of `nix-build` shows us where in `/nix/store` our package has been bu
 readlink result*
 ```
 
-    /nix/store/cvp5rr8ygpy7l91vwmhjr8gd8rp2s2av-org2gfm
+    /nix/store/p7i8qvm92d3scyqqh5z2kqmsrk57a8s5-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
