@@ -101,7 +101,7 @@ nix run
 
     NixOS - Go to homepage (Main Navigation Toggle)
     Explore Download Learn Governance Community Blog Donate Search
-    NixOS 26.05 released Read Announcement
+    Documentation team funding Read Announcement
     
     Declarative builds
     and deployments.
