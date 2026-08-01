@@ -99,15 +99,15 @@ As with all Nix flake-based projects, all normal `nix` commands apply, as docume
 nix run
 ```
 
+    NixCon 2026 ticket sales open! Ticket-Shop
     NixOS - Go to homepage (Main Navigation Toggle)
     Explore Download Learn Governance Community Blog Donate Search
-    Documentation team funding Read Announcement
+    NixCon 2026 ticket sales open!
     
-    Declarative builds
-    and deployments.
+    NixCon 2026 in Kraków, Poland, 25–28 September!
     
-    Nix is a tool that takes a unique approach to package management and system
-    configuration. Learn how to make reproducible, declarative and reliable
+    Get tickets here
+    
     …
 
 ## Additional caching of Nix evaluations<a id="sec-3-3"></a>
