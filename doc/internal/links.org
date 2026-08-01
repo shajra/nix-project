@@ -13,7 +13,6 @@
 #+link: flake-parts-doc-modargs https://flake.parts/module-arguments.html
 #+link: flake-parts-doc-treefmt https://flake.parts/options/treefmt-nix.html
 #+link: flake-utils https://github.com/numtide/flake-utils
-#+link: garnix https://garnix.io
 #+link: gfm https://github.github.com/gfm/
 #+link: litprog https://en.wikipedia.org/wiki/Literate_programming
 #+link: nix https://nixos.org/nix

@@ -1,5 +1,0 @@
-builds:
-  include:
-  - 'packages.*.*'
-  - 'checks.*.*'
-  branch: main
