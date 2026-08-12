@@ -206,7 +206,7 @@ nix search nixpkgs 'gpu|opengl|accel' terminal
     * legacyPackages.x86_64-linux.alacritty-graphics (0.17.0)
       Cross-platform, GPU-accelerated terminal emulator
     
-    * legacyPackages.x86_64-linux.attyx (0.4.15)
+    * legacyPackages.x86_64-linux.attyx (0.4.16)
       Fast GPU-accelerated terminal emulator built with Zig
     
     * legacyPackages.x86_64-linux.darktile (0.0.11)
@@ -224,10 +224,10 @@ nix search nixpkgs 'gpu|opengl|accel' terminal
     * legacyPackages.x86_64-linux.ratty (0.5.0)
       GPU-rendered terminal emulator with inline 3D graphics
     
-    * legacyPackages.x86_64-linux.rio (0.4.7)
+    * legacyPackages.x86_64-linux.rio (0.5.10)
       Hardware-accelerated GPU terminal emulator powered by WebGPU
     
-    * legacyPackages.x86_64-linux.wezterm (0-unstable-2026-07-16)
+    * legacyPackages.x86_64-linux.wezterm (0-unstable-2026-08-05)
       GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust
     
     * legacyPackages.x86_64-linux.zutty (0.16-unstable-2024-08-18)
@@ -279,7 +279,7 @@ After a successful call of `nix build`, you'll see one or more symlinks for each
 readlink result*
 ```
 
-    /nix/store/xvwv32b5gbzq0yzyf7hmf4r1x9fk7b4g-org2gfm
+    /nix/store/bbfa1bv0qfvk8lbdn8hq3lrgxa9rgwiq-org2gfm
 
 Following these symlinks, we can see the files the project provides:
 
@@ -301,7 +301,7 @@ It's common to configure these “result” symlinks as ignored in source contro
 nix path-info .#org2gfm-impure
 ```
 
-    /nix/store/xvwv32b5gbzq0yzyf7hmf4r1x9fk7b4g-org2gfm
+    /nix/store/bbfa1bv0qfvk8lbdn8hq3lrgxa9rgwiq-org2gfm
 
 ## Running commands in a shell<a id="sec-4-6"></a>
 
@@ -414,7 +414,7 @@ nix shell --ignore-environment \
     --command which org2gfm
 ```
 
-    /nix/store/xvwv32b5gbzq0yzyf7hmf4r1x9fk7b4g-org2gfm/bin/org2gfm
+    /nix/store/bbfa1bv0qfvk8lbdn8hq3lrgxa9rgwiq-org2gfm/bin/org2gfm
 
 What we do with local flake references can work just as well with remote flake references.
 
@@ -442,7 +442,7 @@ nix profile list
     Flake attribute:    packages.x86_64-linux.org2gfm-impure
     Original flake URL: git+file:///home/shajra/src/nix-project
     Locked flake URL:   git+file:///home/shajra/src/nix-project
-    Store paths:        /nix/store/xvwv32b5gbzq0yzyf7hmf4r1x9fk7b4g-org2gfm
+    Store paths:        /nix/store/bbfa1bv0qfvk8lbdn8hq3lrgxa9rgwiq-org2gfm
 
 If we want to uninstall a program from our profile, we can reference it by name:
 
