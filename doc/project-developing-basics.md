@@ -103,11 +103,11 @@ nix run
     [nixos-logo-default-gradient-black-regular-horizontal-none] (Main Navigation
     Toggle)
     Explore Download Learn Governance Community Blog Backing Search
-    One Billion Objects and No Database: Inside cache.nixos.org Read Announcement
+    Nix Community Survey 2026 is here!
+    
+    Take the Survey
     
     NixOS - Reproducible, Declarative, Reliable
-    
-      • Reproducible
     …
 
 ## Additional caching of Nix evaluations<a id="sec-3-3"></a>
